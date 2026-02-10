@@ -1,0 +1,127 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Gacoan Call Pro - Pak Yudi</title>
+    <style>
+        body { font-family: sans-serif; background: #f1f5f9; margin: 0; padding: 15px; text-align: center; }
+        .header { background: #1e3a8a; color: white; padding: 15px; border-radius: 15px; margin-bottom: 10px; }
+        .btn-test { background: none; border: none; color: #bfdbfe; font-size: 12px; cursor: pointer; text-decoration: underline; margin-bottom: 10px; }
+        
+        /* Navigasi Tab Utama */
+        .nav-tabs { display: flex; gap: 10px; margin-bottom: 15px; }
+        .tab-btn { flex: 1; padding: 15px; border-radius: 12px; border: none; font-weight: bold; font-size: 14px; cursor: pointer; background: #cbd5e1; color: #475569; }
+        .tab-btn.active { background: #f97316; color: white; box-shadow: 0 4px 6px rgba(0,0,0,0.1); }
+        .tab-btn.ojol-tab.active { background: #10b981; } /* Warna hijau khusus Ojol */
+
+        .card { background: white; padding: 15px; border-radius: 15px; box-shadow: 0 4px 6px rgba(0,0,0,0.1); margin-bottom: 20px; }
+        input { width: 85%; padding: 12px; margin: 5px; border: 1px solid #ddd; border-radius: 10px; font-size: 16px; }
+        
+        .btn-call { color: white; border: none; padding: 15px; border-radius: 12px; width: 100%; font-weight: bold; margin-top: 10px; font-size: 16px; }
+        .bg-orange { background: #f97316; }
+        .bg-green { background: #10b981; }
+
+        /* Panel Pengumuman */
+        .announcement-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 8px; margin-bottom: 20px; }
+        .btn-ann { color: white; border: none; padding: 12px 5px; border-radius: 10px; font-weight: bold; font-size: 12px; }
+        .bg-blue { background: #3b82f6; }
+        .bg-red { background: #ef4444; }
+        .bg-purple { background: #8b5cf6; }
+
+        .slider { width: 90%; margin: 10px 0; }
+        .grid-meja { display: grid; grid-template-columns: repeat(4, 1fr); gap: 8px; margin-top: 20px; }
+        .meja { background: white; border: 2px solid #1e3a8a; padding: 15px 0; border-radius: 10px; font-weight: bold; }
+        
+        /* Konten Tab */
+        .tab-content { display: none; }
+        .tab-content.active { display: block; }
+    </style>
+</head>
+<body>
+
+    <div class="header">
+        <h2 style="margin:0">GACOAN CALL PRO</h2>
+        <button class="btn-test" onclick="bc('ini adalah Test suara sistem. Test suara sistem Berhasil')">[ KLIK UNTUK TEST SUARA ]</button>
+    </div>
+
+    <div class="nav-tabs">
+        <button class="tab-btn active" onclick="openTab('customer')">👤 CUSTOMER</button>
+        <button class="tab-btn ojol-tab" onclick="openTab('ojol')">🛵 DRIVER OJOL</button>
+    </div>
+
+    <div id="customer" class="tab-content active">
+        <div class="card">
+            <input type="text" id="nm" placeholder="Nama Pelanggan">
+            <input type="text" id="mj" placeholder="No Meja">
+            <button class="btn-call bg-orange" onclick="sp()">📢 PANGGIL PELANGGAN</button>
+            <div style="margin-top:10px;">
+                <small style="font-weight:bold; color:#1e3a8a;">KECEPATAN SUARA</small><br>
+                <input type="range" id="rate" class="slider" min="0.5" max="1.5" step="0.1" value="0.9">
+            </div>
+        </div>
+
+        <div class="announcement-grid">
+            <button class="btn-ann bg-blue" onclick="bc('Bagi pelanggan yang menemukan atau kehilangan barang, diharapkan melapor ke kasir. Terima kasih')">📦 BARANG HILANG</button>
+            <button class="btn-ann bg-green" onclick="bc('Diharapkan bagi pelanggan untuk duduk sesuai dengan kapasitas meja. Terima kasih.')">🪑 KAPASITAS MEJA</button>
+            <button class="btn-ann bg-purple" onclick="bc('Mari kita jaga kebersihan bersama dengan membuang sampah pada tempatnya. Terimakasih')">🧹 JAGA KEBERSIHAN</button>
+            <button class="btn-ann bg-red" onclick="bc('bagi Para pelanggan diMohon untuk bersabar menunggu antrian, pesanan akan dipanggil ketika sudah Siap. Terima kasih')">⏳ HARAP BERSABAR</button>
+        </div>
+
+        <div style="color: #64748b; font-size: 11px; font-weight: bold;">DAFTAR MEJA CEPAT (1-100)</div>
+        <div id="gt" class="grid-meja"></div>
+    </div>
+
+    <div id="ojol" class="tab-content">
+        <div class="card" style="border-top: 5px solid #10b981;">
+            <h3 style="color:#10b981;">Menu Panggilan Ojol</h3>
+            <p style="font-size: 14px; color: #64748b;">Fitur khusus driver ojek online (Grab/Gojek/ShopeeFood)</p>
+            <div style="background: #ecfdf5; padding: 20px; border-radius: 12px; border: 1px dashed #10b981; margin: 15px 0;">
+                <strong style="color: #047857;">PEMBERITAHUAN:</strong><br>
+                <span style="font-size: 13px;">Mohon maaf untuk fitur Panggilan Ojol dengan tampilan baru ini masih dalam tahap <strong>perbaikan dan pengembangan</strong> oleh developer kami. Terimakasih</span>
+            </div>
+            <button class="btn-call bg-green" style="opacity: 0.6;">📢 PANGGIL DRIVER (OFFLINE)</button>
+        </div>
+    </div>
+
+    <script>
+        // Fungsi pindah tab
+        function openTab(tabName) {
+            let contents = document.getElementsByClassName('tab-content');
+            let tabs = document.getElementsByClassName('tab-btn');
+            
+            for (let i = 0; i < contents.length; i++) {
+                contents[i].classList.remove('active');
+                tabs[i].classList.remove('active');
+            }
+            
+            document.getElementById(tabName).classList.add('active');
+            event.currentTarget.classList.add('active');
+        }
+
+        // Generate Meja
+        const container = document.getElementById('gt');
+        for (let i = 1; i <= 100; i++) {
+            let b = document.createElement('button');
+            b.className = 'meja'; b.innerText = i;
+            b.onclick = () => bc("Panggilan untuk Nomor meja " + i + ", pesanan anda sudah siap. Harap Menuju Meja Self Service sekarang juga, Terimakasih");
+            container.appendChild(b);
+        }
+
+        function bc(t) {
+            window.speechSynthesis.cancel();
+            const u = new SpeechSynthesisUtterance(t);
+            u.lang = 'id-ID';
+            u.rate = document.getElementById('rate').value;
+            window.speechSynthesis.speak(u);
+        }
+
+        function sp() {
+            let n = document.getElementById('nm').value;
+            let m = document.getElementById('mj').value;
+            if(n && m) bc("Panggilan Atas Nama Kak " + n + ". Dengan nomor Meja " + m + " .pesanan anda sudah siap. Harap Menuju Meja Self Service sekarang juga, " + ",Sekali lagi, Panggilan Atas Nama Kak " + n + ". Dengan nomor Meja " + m + " .pesanan anda sudah siap. Harap Menuju Meja Self Service sekarang juga, Terimakasih");
+            else alert("Isi nama dan meja dulu yaa");
+        }
+    </script>
+</body>
+</html>
