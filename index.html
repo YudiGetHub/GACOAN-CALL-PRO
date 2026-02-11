@@ -5,15 +5,15 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Gacoan Call Pro - Pak Yudi</title>
     <style>
-    body { font-family: sans-serif; background: #4B1F6F; margin: 0; padding: 15px; text-align: center; }
+    /* Background kembali ke warna Biru sesuai permintaan */
+    body { font-family: sans-serif; background: #1e3a8a; margin: 0; padding: 15px; text-align: center; }
 
-    /* Gaya Tampilan Hari, Tanggal, Jam */
     .info-waktu { background: white; padding: 10px; border-radius: 12px; margin-bottom: 10px; box-shadow: 0 2px 4px rgba(0,0,0,0.1); }
     #hariTxt { font-weight: bold; color: #1e3a8a; font-size: 18px; margin: 0; }
     #tglTxt { color: #64748b; font-size: 14px; margin: 2px 0; }
     #jamTxt { font-size: 22px; font-weight: bold; color: #f97316; margin: 0; }
 
-    .header { background: #351450; color: white; padding: 15px; border-radius: 15px; margin-bottom: 10px; border: 1px solid #f97316; }
+    .header { background: #172554; color: white; padding: 15px; border-radius: 15px; margin-bottom: 10px; border: 1px solid #bfdbfe; }
     .btn-test { background: none; border: none; color: #bfdbfe; font-size: 12px; cursor: pointer; text-decoration: underline; margin-bottom: 10px; }
 
     .nav-tabs { display: flex; gap: 10px; margin-bottom: 15px; }
@@ -26,16 +26,13 @@
     .btn-call { color: white; border: none; padding: 15px; border-radius: 12px; width: 100%; font-weight: bold; margin-top: 10px; font-size: 16px; cursor: pointer; }
     .bg-orange { background: #f97316; }
     .bg-green { background: #10b981; }
-
-    .announcement-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 8px; margin-bottom: 20px; }
-    .btn-ann { color: white; border: none; padding: 12px 5px; border-radius: 10px; font-weight: bold; font-size: 12px; cursor: pointer; }
     .bg-blue { background: #3b82f6; }
     .bg-red { background: #ef4444; }
     .bg-purple { background: #8b5cf6; }
 
     .slider { width: 90%; margin: 10px 0; }
     .grid-meja { display: grid; grid-template-columns: repeat(4, 1fr); gap: 8px; margin-top: 20px; }
-    .meja { background: white; border: 2px solid #4B1F6F; padding: 15px 0; border-radius: 10px; font-weight: bold; cursor: pointer; color: #4B1F6F; }
+    .meja { background: white; border: 2px solid #1e3a8a; padding: 15px 0; border-radius: 10px; font-weight: bold; cursor: pointer; color: #1e3a8a; }
 
     .tab-content { display: none; }
     .tab-content.active { display: block; }
@@ -56,7 +53,7 @@
 
     <div class="nav-tabs">
         <button class="tab-btn active" onclick="openTab('customer')">👤 CUSTOMER</button>
-        <button class="tab-btn ojol-tab" onclick="openTab('ojol')">🛵 DRIVER OJOL</button>
+        <button class="tab-btn ojol-tab" onclick="openTab('ojol')">🛵 OJOL & TAKE AWAY</button>
     </div>
 
     <div id="customer" class="tab-content active">
@@ -83,11 +80,15 @@
 
     <div id="ojol" class="tab-content">
         <div class="card" style="border-top: 5px solid #10b981;">
-            <h3 style="color:#10b981;">Menu Panggilan Ojol</h3>
-            <p style="font-size: 14px; color: #64748b;">Masukkan nomor antrian atau kode ojol</p>
+            <h3 style="color:#10b981;">Panggilan Ojol & Take Away</h3>
+            <p style="font-size: 13px; color: #64748b;">Masukkan nomor antrian Ojol atau Nama pemesan Take Away</p>
             
-            <input type="text" id="oj" placeholder="Nomor Antrean Ojol">
-            <button class="btn-call bg-green" onclick="so()">📢 PANGGIL DRIVER OJOL</button>
+            <input type="text" id="oj" placeholder="Nomor Ojol / Nama Take Away">
+            
+            <div style="display: flex; gap: 8px;">
+                <button class="btn-call bg-green" style="flex: 1;" onclick="so()">📢 PANGGIL OJOL</button>
+                <button class="btn-call bg-blue" style="flex: 1;" onclick="sta()">📢 PANGGIL TAKE AWAY</button>
+            </div>
 
             <div style="margin-top: 15px; display: grid; grid-template-columns: 1fr 1fr; gap: 8px;">
                 <button class="btn-ann bg-blue" onclick="bc('Panggilan untuk Driver Shopee Food, pesanan sudah siap. Terimakasih')">🧡 SHOPEE FOOD</button>
@@ -150,6 +151,12 @@
             let o = document.getElementById("oj").value;
             if (o) bc("Panggilan untuk Driver Ojol dengan nomor antrian " + o + ". Pesanan anda sudah siap, harap menuju meja pengambilan sekarang juga. Terimakasih");
             else alert("Isi nomor antrian ojol dulu yaa Pak Yudi");
+        }
+
+        function sta() {
+            let o = document.getElementById("oj").value;
+            if (o) bc("Panggilan pesanan Take Away atas nama Kak " + o + ". Pesanan anda sudah siap, harap menuju meja pengambilan sekarang juga. Terimakasih");
+            else alert("Isi nama pemesan take away dulu yaa Pak Yudi");
         }
     </script>
 </body>
