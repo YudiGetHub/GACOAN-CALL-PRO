@@ -3,37 +3,14 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Gacoan Call Pro - Dibuat oleh Yudi</title>
+    <title>Gacoan Call Pro - Premium AI Voice</title>
     <style>
-    /* CSS UNTUK TAMPILAN PREMIUM */
     body { font-family: sans-serif; background: #1e3a8a; margin: 0; padding: 0; overflow-x: hidden; }
-    
-    /* LAYAR TIRAI / WELCOME SCREEN */
-    #welcomeScreen {
-        position: fixed; top: 0; left: 0; width: 100%; height: 100%;
-        background: radial-gradient(circle, #1e3a8a, #172554);
-        display: flex; flex-direction: column; align-items: center; justify-content: center;
-        z-index: 9999; transition: transform 1s ease-in-out;
-    }
-    .logo-gacoan { width: 180px; height: 180px; margin-bottom: 20px; border-radius: 50%; border: 5px solid white; box-shadow: 0 0 20px rgba(255,255,255,0.3); }
-    .btn-mulai { 
-        padding: 15px 40px; background: #f97316; color: white; border: none; 
-        border-radius: 30px; font-weight: bold; font-size: 18px; cursor: pointer;
-        box-shadow: 0 5px 15px rgba(0,0,0,0.3); transition: 0.3s;
-    }
-    .btn-mulai:active { transform: scale(0.9); }
-
-    /* TUTORIAL BOX */
-    #tutorialOverlay {
-        position: fixed; top: 0; left: 0; width: 100%; height: 100%;
-        background: rgba(0,0,0,0.8); display: none; z-index: 10000;
-        color: white; padding: 20px; text-align: center; justify-content: center; align-items: center; flex-direction: column;
-    }
+    #welcomeScreen { position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: radial-gradient(circle, #1e3a8a, #172554); display: flex; flex-direction: column; align-items: center; justify-content: center; z-index: 9999; transition: transform 1s ease-in-out; }
+    .logo-gacoan { width: 180px; height: 180px; margin-bottom: 20px; border-radius: 50%; border: 5px solid white; box-shadow: 0 0 20px rgba(255,255,255,0.3); background: white; object-fit: contain; }
+    .btn-mulai { padding: 15px 40px; background: #f97316; color: white; border: none; border-radius: 30px; font-weight: bold; font-size: 18px; cursor: pointer; box-shadow: 0 5px 15px rgba(0,0,0,0.3); }
+    #tutorialOverlay { position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: rgba(0,0,0,0.8); display: none; z-index: 10000; color: white; padding: 20px; text-align: center; justify-content: center; align-items: center; flex-direction: column; }
     .tuto-box { background: white; color: #333; padding: 20px; border-radius: 15px; width: 80%; max-width: 300px; position: relative; }
-    .tuto-arrow { font-size: 30px; color: #f97316; position: absolute; animation: bounce 1s infinite; }
-    @keyframes bounce { 0%, 100% { transform: translateY(0); } 50% { transform: translateY(-10px); } }
-
-    /* LAYAR UTAMA (Aplikasi Bapak) */
     .main-app { padding: 15px; text-align: center; }
     .info-waktu { background: white; padding: 10px; border-radius: 12px; margin-bottom: 10px; }
     #hariTxt { font-weight: bold; color: #1e3a8a; font-size: 18px; margin: 0; }
@@ -57,16 +34,15 @@
 <body onload="mulaiAplikasi()">
 
     <div id="welcomeScreen">
-        <img src="https://i.ibb.co.com/ycrmLMHf/Logo-Mie-Gacoan-1.png" id="logoGacoan" class="logo-gacoan">
+        <img src="https://i.ibb.co.com/ycrmLMHf/Logo-Mie-Gacoan-1.png" class="logo-gacoan">
         <h1 style="color:white; margin-bottom:30px;">Gacoan Call Pro</h1>
         <button class="btn-mulai" onclick="startTutorial()">BUKA LAYAR PANGGILAN</button>
         <p style="color:#bfdbfe; font-size:12px; margin-top:20px;">Versi Premium - By : Nur Wahyudi</p>
     </div>
 
     <div id="tutorialOverlay">
-        <div class="tuto-box" id="tutoBox">
-            <div class="tuto-arrow" style="top:-40px; left:45%;">⬇</div>
-            <p id="tutoText">Selamat datang! Silahkan Gunakan tombol ini untuk memanggil pelanggan secara beruntun tanpa menunggu.</p>
+        <div class="tuto-box">
+            <p id="tutoText">Selamat datang! Silahkan gunakan tombol ini untuk memanggil pelanggan secara beruntun.</p>
             <button onclick="nextTuto()" style="background:#f97316; color:white; border:none; padding:10px 20px; border-radius:10px; font-weight:bold;">Lanjut</button>
         </div>
     </div>
@@ -75,7 +51,7 @@
         <div class="info-waktu">
             <p id="hariTxt"></p>
             <p id="jamTxt"></p>
-            <button style="background:none; border:none; color:#10b981; text-decoration:underline; font-weight:bold;" onclick="bc('Cek suara sistem, berhasil.')">[ TEST SUARA ]</button>
+            <button style="background:none; border:none; color:#10b981; text-decoration:underline; font-weight:bold;" onclick="bc('Cek suara Gemini, berhasil aktif.')">[ TEST SUARA AI ]</button>
         </div>
 
         <div class="header">
@@ -84,18 +60,18 @@
         </div>
 
         <div class="nav-tabs">
-            <button class="tab-btn active" id="tabCustomer" onclick="openTab('customer')">👤 CUSTOMER</button>
-            <button class="tab-btn" id="tabOjol" onclick="openTab('ojol')">🛵 OJOL & TA</button>
+            <button class="tab-btn active" onclick="openTab('customer')">👤 CUSTOMER</button>
+            <button class="tab-btn" onclick="openTab('ojol')">🛵 OJOL & TA</button>
         </div>
 
         <div id="customer" class="tab-content active">
-            <div class="card" id="cardInput">
+            <div class="card">
                 <input type="text" id="nm" placeholder="Nama Pelanggan">
                 <input type="text" id="mj" placeholder="No Meja">
                 <button class="btn-call bg-orange" onclick="tambahAntreanCustomer()">📢 PANGGIL (MULTI-CALL)</button>
                 <div style="margin-top:10px;">
                     <small style="font-weight:bold; color:#1e3a8a;">KECEPATAN SUARA</small><br>
-                    <input type="range" id="rate" style="width:90%" min="0.5" max="1.5" step="0.1" value="0.9">
+                    <input type="range" id="rate" style="width:90%" min="0.5" max="1.2" step="0.05" value="0.9">
                 </div>
             </div>
 
@@ -105,8 +81,6 @@
                 <button class="btn-ann bg-grab" onclick="bc('Diharapkan bagi pelanggan untuk duduk sesuai dengan kapasitas meja demi kenyamanan bersama. Terima kasih.')">🪑 KAPASITAS MEJA</button>
                 <button class="btn-ann bg-purple" onclick="bc('Mari kita jaga kebersihan bersama dengan membuang sampah pada tempatnya. Terimakasih')">🧹 JAGA KEBERSIHAN</button>
             </div>
-
-            <div style="color: white; font-size: 11px; font-weight: bold; margin-bottom: 10px;">DAFTAR MEJA (1-100)</div>
             <div id="gt" class="grid-meja"></div>
         </div>
 
@@ -125,28 +99,29 @@
         let antreanSuara = [];
         let sedangBicara = false;
         let stepTuto = 0;
+        let voices = [];
+
+        // Load voices segera saat tersedia
+        window.speechSynthesis.onvoiceschanged = () => {
+            voices = window.speechSynthesis.getVoices();
+        };
 
         async function mulaiAplikasi() {
             mulaiJam();
-            if ('wakeLock' in navigator) { await navigator.wakeLock.request('screen'); }
+            if ('wakeLock' in navigator) { try { await navigator.wakeLock.request('screen'); } catch (err) {} }
         }
 
-        // LOGIKA TUTORIAL
         function startTutorial() {
-            document.getElementById('welcomeScreen').style.transform = 'translateY(-100%)'; // Tirai terbuka
-            setTimeout(() => {
-                document.getElementById('tutorialOverlay').style.display = 'flex';
-            }, 1000);
+            document.getElementById('welcomeScreen').style.transform = 'translateY(-100%)';
+            setTimeout(() => { document.getElementById('tutorialOverlay').style.display = 'flex'; }, 1000);
         }
 
         function nextTuto() {
             stepTuto++;
             const tutoText = document.getElementById('tutoText');
-            if(stepTuto === 1) {
-                tutoText.innerText = "Tombol Ojol & TA sekarang dipisah per brand (Grab, Gojek, Shopee) agar driver tidak bingung.";
-            } else if(stepTuto === 2) {
-                tutoText.innerText = "Slider ini untuk mengatur kecepatan bicara. Default sudah diatur agar suara jelas dan tidak terpotong.";
-            } else {
+            if(stepTuto === 1) { tutoText.innerText = "Fitur Multi-Call aktif otomatis. Panggilan akan mengantre dengan cerdas."; }
+            else if(stepTuto === 2) { tutoText.innerText = "Suara telah dioptimalkan agar terdengar seperti asisten AI Gemini."; }
+            else {
                 document.getElementById('tutorialOverlay').style.display = 'none';
                 bc("Sistem panggilan sudah aktif. Diharapkan para pelanggan untuk dapat mendengarkan panggilan system ini. Terimakasih");
             }
@@ -162,28 +137,37 @@
 
         function bc(teks) {
             antreanSuara.push(teks);
-            updateInfoAntrean();
             prosesAntrean();
         }
 
         function prosesAntrean() {
             if (sedangBicara || antreanSuara.length === 0) return;
             sedangBicara = true;
+            
             let teksSekarang = antreanSuara.shift();
             let kalimatFinal = teksSekarang;
             if (antreanSuara.length > 0) {
-                kalimatFinal = teksSekarang.replace(", Terimakasih", "").replace(", terimakasih", "");
+                kalimatFinal = teksSekarang.replace(/Terimakasih|terimakasih/gi, "");
             }
-            updateInfoAntrean();
+
+            document.getElementById('antreanInfo').innerText = "Antrean: " + antreanSuara.length + " Panggilan";
+
             const u = new SpeechSynthesisUtterance(kalimatFinal);
+            
+            // LOGIKA SUARA GEMINI-LIKE
+            // Mencari suara Indonesia yang paling premium (biasanya milik Google)
+            let voiceGemini = voices.find(v => v.lang.includes('id') && v.name.includes('Google') && v.name.includes('Natural'));
+            if (!voiceGemini) voiceGemini = voices.find(v => v.lang.includes('id') && v.name.includes('Google'));
+            if (!voiceGemini) voiceGemini = voices.find(v => v.lang.includes('id'));
+
+            u.voice = voiceGemini;
             u.lang = 'id-ID';
             u.rate = document.getElementById('rate').value;
+            u.pitch = 1.05; // Sedikit lebih tinggi agar terdengar ramah
+            u.volume = 1;
+
             u.onend = function() { sedangBicara = false; prosesAntrean(); };
             window.speechSynthesis.speak(u);
-        }
-
-        function updateInfoAntrean() {
-            document.getElementById('antreanInfo').innerText = "Antrean: " + antreanSuara.length + " Panggilan";
         }
 
         function tambahAntreanCustomer() {
@@ -192,7 +176,7 @@
             if(n && m) {
                 bc("Panggilan Atas Nama Kak " + n + ". Dengan nomor Meja " + m + " .pesanan anda sudah siap. Harap Menuju Meja Self Service sekarang juga, Terimakasih");
                 document.getElementById('nm').value = ""; document.getElementById('mj').value = "";
-            } else { alert("Isi nama & meja!"); }
+            }
         }
 
         function tambahOjol(brand) {
