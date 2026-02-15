@@ -5,8 +5,7 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Gacoan Call Pro - Pak Yudi</title>
     <style>
-    /* Background kembali ke warna Biru sesuai permintaan */
-    body { font-family: sans-serif; background: #1e3a8a; margin: 0; padding: 15px; text-align: center; }
+    body { font-family: sans-serif; background: #1e3a8a; margin: 0; padding: 15px; text-align: center; padding-bottom: 100px; }
 
     .info-waktu { background: white; padding: 10px; border-radius: 12px; margin-bottom: 10px; box-shadow: 0 2px 4px rgba(0,0,0,0.1); }
     #hariTxt { font-weight: bold; color: #1e3a8a; font-size: 18px; margin: 0; }
@@ -34,21 +33,26 @@
     .grid-meja { display: grid; grid-template-columns: repeat(4, 1fr); gap: 8px; margin-top: 20px; }
     .meja { background: white; border: 2px solid #1e3a8a; padding: 15px 0; border-radius: 10px; font-weight: bold; cursor: pointer; color: #1e3a8a; }
 
+    /* Musik Player Style */
+    .music-card { background: #f8fafc; border: 2px solid #f97316; padding: 10px; border-radius: 15px; margin-top: 20px; }
+    .music-select { width: 90%; padding: 10px; border-radius: 8px; border: 1px solid #cbd5e1; margin-bottom: 10px; }
+    
     .tab-content { display: none; }
     .tab-content.active { display: block; }
     </style>
 </head>
-<body onload="mulaiJam()">
+<body onload="mulaiAplikasi()">
 
     <div class="info-waktu">
         <p id="hariTxt"></p>
         <p id="tglTxt"></p>
         <p id="jamTxt"></p>
+        <small id="statusLayar" style="color: #10b981; font-weight: bold;">Layar: Aktif ✅</small>
     </div>
 
     <div class="header">
         <h2 style="margin:0">GACOAN CALL PRO</h2>
-        <button class="btn-test" onclick="bc('ini adalah Test suara sistem. Test suara sistem Berhasil')">[ KLIK UNTUK TEST SUARA ]</button>
+        <button class="btn-test" onclick="bc('ini adalah Test suara sistem Berhasil')">[ TEST SUARA ]</button>
     </div>
 
     <div class="nav-tabs">
@@ -69,48 +73,105 @@
 
         <div class="announcement-grid">
             <button class="btn-ann bg-blue" onclick="bc('Bagi pelanggan yang menemukan atau kehilangan barang, diharapkan melapor ke kasir. Terima kasih')">📦 BARANG HILANG</button>
-            <button class="btn-ann bg-green" onclick="bc('Diharapkan bagi pelanggan untuk duduk sesuai dengan kapasitas meja. Terima kasih.')">🪑 KAPASITAS MEJA</button>
+            <button class="btn-ann bg-red" onclick="bc('Pemberitahuan, karena cuaca sedang hujan, dimohon untuk berhati-hati karena lantai licin. Terima kasih.')">⚠️ LANTAI LICIN</button>
             <button class="btn-ann bg-purple" onclick="bc('Mari kita jaga kebersihan bersama dengan membuang sampah pada tempatnya. Terimakasih')">🧹 JAGA KEBERSIHAN</button>
             <button class="btn-ann bg-red" onclick="bc('bagi Para pelanggan diMohon untuk bersabar menunggu antrian, pesanan akan dipanggil ketika sudah Siap. Terima kasih')">⏳ HARAP BERSABAR</button>
         </div>
 
-        <div style="color: #ffffff; font-size: 11px; font-weight: bold; margin-bottom: 10px;">DAFTAR MEJA CEPAT (1-100)</div>
+        <div class="music-card">
+            <h4 style="margin: 5px 0; color: #1e3a8a;">🎵 MUSIK RESTORAN</h4>
+            <select id="musicSelect" class="music-select">
+                <option value="https://www.soundhelix.com/examples/mp3/SoundHelix-Song-1.mp3">Suasana Ceria (Instrumental 1)</option>
+                <option value="https://www.soundhelix.com/examples/mp3/SoundHelix-Song-2.mp3">Makan Santai (Instrumental 2)</option>
+                <option value="https://www.soundhelix.com/examples/mp3/SoundHelix-Song-8.mp3">Keluarga Bahagia (Instrumental 3)</option>
+            </select>
+            <div style="display: flex; gap: 5px; justify-content: center;">
+                <button onclick="playMusic()" style="background: #10b981; color: white; border: none; padding: 8px 15px; border-radius: 8px; font-weight: bold;">▶ PLAY</button>
+                <button onclick="stopMusic()" style="background: #ef4444; color: white; border: none; padding: 8px 15px; border-radius: 8px; font-weight: bold;">⏹ STOP</button>
+            </div>
+            <audio id="bgMusic" loop></audio>
+        </div>
+
+        <div style="color: #ffffff; font-size: 11px; font-weight: bold; margin-top: 20px;">DAFTAR MEJA CEPAT (1-100)</div>
         <div id="gt" class="grid-meja"></div>
     </div>
 
     <div id="ojol" class="tab-content">
         <div class="card" style="border-top: 5px solid #10b981;">
             <h3 style="color:#10b981;">Panggilan Ojol & Take Away</h3>
-            <p style="font-size: 13px; color: #64748b;">Masukkan nomor antrian Ojol atau Nama pemesan Take Away</p>
-            
             <input type="text" id="oj" placeholder="Nomor Ojol / Nama Take Away">
-            
             <div style="display: flex; gap: 8px;">
                 <button class="btn-call bg-green" style="flex: 1;" onclick="so()">📢 PANGGIL OJOL</button>
                 <button class="btn-call bg-blue" style="flex: 1;" onclick="sta()">📢 PANGGIL TAKE AWAY</button>
-            </div>
-
-            <div style="margin-top: 15px; display: grid; grid-template-columns: 1fr 1fr; gap: 8px;">
-                <button class="btn-ann bg-blue" onclick="bc('Panggilan untuk Driver Shopee Food, pesanan sudah siap. Terimakasih')">🧡 SHOPEE FOOD</button>
-                <button class="btn-ann bg-green" onclick="bc('Panggilan untuk Driver Go Food, pesanan sudah siap. Terimakasih')">💚 GO FOOD</button>
-                <button class="btn-ann bg-purple" style="background: #00b14f" onclick="bc('Panggilan untuk Driver Grab Food, pesanan sudah siap. Terimakasih')">🟢 GRAB FOOD</button>
-                <button class="btn-ann bg-red" onclick="bc('Diharapkan bagi para Driver untuk memarkirkan kendaraannya dengan rapi. Terimakasih')">🚲 PARKIR RAPI</button>
             </div>
         </div>
     </div>
 
     <script>
+        let wakeLock = null;
+        let audio = document.getElementById('bgMusic');
+
+        async function mulaiAplikasi() {
+            mulaiJam();
+            requestWakeLock();
+        }
+
+        async function requestWakeLock() {
+            try {
+                if ('wakeLock' in navigator) {
+                    wakeLock = await navigator.wakeLock.request('screen');
+                }
+            } catch (err) {}
+        }
+
         function mulaiJam() {
             const daftarHari = ["Minggu", "Senin", "Selasa", "Rabu", "Kamis", "Jumat", "Sabtu"];
             const daftarBulan = ["Januari", "Februari", "Maret", "April", "Mei", "Juni", "Juli", "Agustus", "September", "Oktober", "November", "Desember"];
+            
             setInterval(() => {
                 const d = new Date();
+                const h = d.getHours();
+                const m = d.getMinutes();
+                const s = d.getSeconds();
+                
                 document.getElementById("hariTxt").innerText = daftarHari[d.getDay()];
                 document.getElementById("tglTxt").innerText = d.getDate() + " " + daftarBulan[d.getMonth()] + " " + d.getFullYear();
-                const h = d.getHours().toString().padStart(2, '0');
-                const m = d.getMinutes().toString().padStart(2, '0');
-                document.getElementById("jamTxt").innerText = h + "." + m + " WIB";
+                document.getElementById("jamTxt").innerText = h.toString().padStart(2, '0') + "." + m.toString().padStart(2, '0') + " WIB";
+
+                // PENGUMUMAN OTOMATIS TIAP 1 JAM
+                if (m === 0 && s === 0) {
+                    bc("Pemberitahuan otomatis. Kepada para pelanggan, diharapkan memilih kursi sesuai kapasitas meja dan membuang sampah pada tempatnya. Terima kasih.");
+                }
             }, 1000);
+        }
+
+        // FUNGSI MUSIK
+        function playMusic() {
+            const selectedSource = document.getElementById('musicSelect').value;
+            audio.src = selectedSource;
+            audio.play();
+        }
+
+        function stopMusic() {
+            audio.pause();
+            audio.currentTime = 0;
+        }
+
+        function bc(t) {
+            // Mengecilkan suara musik saat ada panggilan agar suara jelas
+            if (!audio.paused) audio.volume = 0.2;
+            
+            window.speechSynthesis.cancel();
+            const u = new SpeechSynthesisUtterance(t);
+            u.lang = 'id-ID';
+            u.rate = document.getElementById('rate').value;
+            
+            u.onend = function() {
+                // Mengembalikan volume musik setelah panggilan selesai
+                if (!audio.paused) audio.volume = 1.0;
+            };
+            
+            window.speechSynthesis.speak(u);
         }
 
         function openTab(tabName) {
@@ -132,31 +193,23 @@
             container.appendChild(b);
         }
 
-        function bc(t) {
-            window.speechSynthesis.cancel();
-            const u = new SpeechSynthesisUtterance(t);
-            u.lang = 'id-ID';
-            u.rate = document.getElementById('rate').value;
-            window.speechSynthesis.speak(u);
-        }
-
         function sp() {
             let n = document.getElementById('nm').value;
             let m = document.getElementById('mj').value;
-            if(n && m) bc("Panggilan Atas Nama Kak " + n + ". Dengan nomor Meja " + m + " .pesanan anda sudah siap. Harap Menuju Meja Self Service sekarang juga, " + ",Sekali lagi, Panggilan Atas Nama Kak " + n + ". Dengan nomor Meja " + m + " .pesanan anda sudah siap. Harap Menuju Meja Self Service sekarang juga, Terimakasih");
+            if(n && m) bc("Panggilan Atas Nama Kak " + n + ". Dengan nomor Meja " + m + " .pesanan anda sudah siap. Terima kasih");
             else alert("Isi nama dan meja dulu yaa");
         }
 
         function so() {
             let o = document.getElementById("oj").value;
-            if (o) bc("Panggilan untuk Driver Ojol dengan nomor antrian " + o + ". Pesanan anda sudah siap, harap menuju meja pengambilan sekarang juga. Terimakasih");
-            else alert("Isi nomor antrian ojol dulu yaa Pak Yudi");
+            if (o) bc("Panggilan untuk Driver Ojol dengan nomor antrian " + o + ". Pesanan anda sudah siap. Terimakasih");
+            else alert("Isi nomor antrian ojol dulu");
         }
 
         function sta() {
             let o = document.getElementById("oj").value;
-            if (o) bc("Panggilan pesanan Take Away atas nama Kak " + o + ". Pesanan anda sudah siap, harap menuju meja pengambilan sekarang juga. Terimakasih");
-            else alert("Isi nama pemesan take away dulu yaa Pak Yudi");
+            if (o) bc("Panggilan pesanan Take Away atas nama Kak " + o + ". Pesanan anda sudah siap. Terimakasih");
+            else alert("Isi nama pemesan take away dulu");
         }
     </script>
 </body>
