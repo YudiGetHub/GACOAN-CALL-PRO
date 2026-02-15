@@ -215,7 +215,7 @@
             let n = document.getElementById('nm').value;
             let m = document.getElementById('mj').value;
             if(n && m) {
-                bc("Panggilan Atas Nama Kak. " + n + ". Dengan nomor Meja. " + m + ". Pesanan anda sudah siap. Harap Menuju Meja Self Service sekarang juga, Terimakasih");
+                bc("Panggilan Atas Nama Kak " + n + " Dengan nomor Meja. " + m + ". Pesanan anda sudah siap. Harap Menuju Meja Self Service sekarang juga, Terimakasih");
                 document.getElementById('nm').value = ""; document.getElementById('mj').value = "";
             }
         }
@@ -223,7 +223,7 @@
         function tambahOjol(brand) {
             let input = document.getElementById('oj').value;
             if(input) {
-                bc("Pesanan. " + brand + " " + input + ". Pesanan sudah siap. Silahkan menuju meja take away sekarang juga, Terimakasih");
+                bc("Pesanan " + brand + " " + input + ". Pesanan sudah siap. Silahkan menuju meja take away sekarang juga, Terimakasih");
                 document.getElementById('oj').value = "";
             }
         }
@@ -231,7 +231,7 @@
         function tambahTA() {
             let input = document.getElementById('oj').value;
             if(input) {
-                bc("Pesanan Take Away atas nama Kak. " + input + ". Pesanan anda sudah siap. Silahkan menuju meja take away sekarang juga, terimakasih");
+                bc("Pesanan Take Away atas nama Kak " + input + ". Pesanan anda sudah siap. Silahkan menuju meja take away sekarang juga, terimakasih");
                 document.getElementById('oj').value = "";
             }
         }
@@ -250,7 +250,7 @@
             else if(stepTuto === 2) { tutoText.innerText = "Tempo suara telah disesuaikan agar lebih lambat dan jelas."; }
             else {
                 document.getElementById('tutorialOverlay').style.display = 'none';
-                bc("Sistem panggilan sudah aktif. Diharapkan para pelanggan untuk dapat mendengarkan panggilan system ini. Terimakasih");
+                bc(".Sistem panggilan sudah aktif. Diharapkan para pelanggan untuk dapat mendengarkan panggilan system ini. Terimakasih");
             }
         }
 
@@ -266,7 +266,7 @@
         for (let i = 1; i <= 100; i++) {
             let b = document.createElement('button');
             b.className = 'meja'; b.innerText = i;
-            b.onclick = () => bc("Panggilan untuk nomor meja. " + i + ". Pesanan anda sudah siap, harap menuju meja self service sekarang juga, Terimakasih");
+            b.onclick = () => bc("Panggilan untuk nomor meja " + i + ". Pesanan anda sudah siap, harap menuju meja self service sekarang juga, Terimakasih");
             container.appendChild(b);
         }
     </script>
