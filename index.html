@@ -9,23 +9,31 @@
     .info-waktu { background: white; padding: 10px; border-radius: 12px; margin-bottom: 10px; box-shadow: 0 2px 4px rgba(0,0,0,0.1); }
     #hariTxt { font-weight: bold; color: #1e3a8a; font-size: 18px; margin: 0; }
     #jamTxt { font-size: 22px; font-weight: bold; color: #f97316; margin: 0; }
+    
     .header { background: #172554; color: white; padding: 15px; border-radius: 15px; margin-bottom: 10px; border: 1px solid #bfdbfe; }
+    .btn-test { background: none; border: none; color: #10b981; font-size: 13px; font-weight: bold; cursor: pointer; text-decoration: underline; margin-top: 5px; }
+
     .nav-tabs { display: flex; gap: 10px; margin-bottom: 15px; }
     .tab-btn { flex: 1; padding: 15px; border-radius: 12px; border: none; font-weight: bold; font-size: 14px; cursor: pointer; background: #cbd5e1; color: #475569; }
     .tab-btn.active { background: #f97316; color: white; }
+
     .card { background: white; padding: 15px; border-radius: 15px; box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1); margin-bottom: 20px; }
     input { width: 85%; padding: 12px; margin: 5px; border: 1px solid #ddd; border-radius: 10px; font-size: 16px; }
+    
     .btn-call { color: white; border: none; padding: 15px; border-radius: 12px; width: 100%; font-weight: bold; margin-top: 10px; font-size: 16px; cursor: pointer; }
     .btn-ann { color: white; border: none; padding: 12px 5px; border-radius: 10px; width: 100%; font-weight: bold; font-size: 11px; cursor: pointer; height: 60px; display: flex; align-items: center; justify-content: center; }
+    
     .bg-orange { background: #f97316; }
     .bg-green { background: #10b981; }
     .bg-blue { background: #3b82f6; }
     .bg-red { background: #ef4444; }
     .bg-purple { background: #8b5cf6; }
+    
     .status-antrean { font-size: 12px; color: #10b981; font-weight: bold; margin-top: 5px; }
     .announcement-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 8px; margin-bottom: 15px; }
     .grid-meja { display: grid; grid-template-columns: repeat(4, 1fr); gap: 8px; margin-top: 20px; }
     .meja { background: white; border: 2px solid #1e3a8a; padding: 15px 0; border-radius: 10px; font-weight: bold; cursor: pointer; color: #1e3a8a; }
+
     .tab-content { display: none; }
     .tab-content.active { display: block; }
     </style>
@@ -35,7 +43,7 @@
     <div class="info-waktu">
         <p id="hariTxt"></p>
         <p id="jamTxt"></p>
-        <small id="statusLayar" style="color: #10b981; font-weight: bold;">Layar: Selalu Menyala ✅</small>
+        <button class="btn-test" onclick="bc('Cek suara sistem, berhasil.')">[ TEST SUARA ]</button>
     </div>
 
     <div class="header">
@@ -55,7 +63,7 @@
             <button class="btn-call bg-orange" onclick="tambahAntreanCustomer()">📢 PANGGIL (MULTI-CALL)</button>
             <div style="margin-top:10px;">
                 <small style="font-weight:bold; color:#1e3a8a;">KECEPATAN SUARA</small><br>
-                <input type="range" id="rate" style="width:90%" min="0.5" max="1.5" step="0.1" value="1.0">
+                <input type="range" id="rate" style="width:90%" min="0.5" max="1.5" step="0.1" value="0.9">
             </div>
         </div>
 
@@ -81,10 +89,19 @@
     <script>
         let antreanSuara = [];
         let sedangBicara = false;
+        let wakeLock = null;
 
         async function mulaiAplikasi() {
             mulaiJam();
-            if ('wakeLock' in navigator) { await navigator.wakeLock.request('screen'); }
+            requestWakeLock();
+        }
+
+        async function requestWakeLock() {
+            try {
+                if ('wakeLock' in navigator) {
+                    wakeLock = await navigator.wakeLock.request('screen');
+                }
+            } catch (err) {}
         }
 
         function mulaiJam() {
@@ -92,9 +109,6 @@
                 const d = new Date();
                 document.getElementById("hariTxt").innerText = ["Minggu","Senin","Selasa","Rabu","Kamis","Jumat","Sabtu"][d.getDay()];
                 document.getElementById("jamTxt").innerText = d.getHours().toString().padStart(2,'0') + "." + d.getMinutes().toString().padStart(2,'0') + " WIB";
-                if (d.getMinutes() === 0 && d.getSeconds() === 0) {
-                    bc("Pemberitahuan otomatis. Kepada para pelanggan yang baru datang, diharapkan memilih kursi sesuai kapasitas meja dan membuang sampah pada tempatnya. Terima kasih.");
-                }
             }, 1000);
         }
 
@@ -108,10 +122,9 @@
             if (sedangBicara || antreanSuara.length === 0) return;
             sedangBicara = true;
             
-            // Ambil teks pertama dari antrean
             let teksSekarang = antreanSuara.shift();
             
-            // LOGIKA MULTI-CALL: Jika antrean masih ada, jangan ucapkan terimakasih di item ini
+            // Logika Multi-Call: Potong "Terimakasih" jika antrean masih ada
             let kalimatFinal = teksSekarang;
             if (antreanSuara.length > 0) {
                 kalimatFinal = teksSekarang.replace(", Terimakasih", "");
@@ -122,6 +135,7 @@
             const u = new SpeechSynthesisUtterance(kalimatFinal);
             u.lang = 'id-ID';
             u.rate = document.getElementById('rate').value;
+            
             u.onend = function() {
                 sedangBicara = false;
                 prosesAntrean();
@@ -137,14 +151,12 @@
             let n = document.getElementById('nm').value;
             let m = document.getElementById('mj').value;
             if(n && m) {
-                // Kalimat sesuai permintaan Bapak
                 bc("Panggilan Atas Nama Kak " + n + ". Dengan nomor Meja " + m + " .pesanan anda sudah siap. Harap Menuju Meja Self Service sekarang juga, Terimakasih");
                 document.getElementById('nm').value = "";
                 document.getElementById('mj').value = "";
             } else { alert("Isi nama & meja!"); }
         }
 
-        // Fungsi Meja Cepat
         const container = document.getElementById('gt');
         for (let i = 1; i <= 100; i++) {
             let b = document.createElement('button');
