@@ -20,16 +20,18 @@
     .card { background: white; padding: 15px; border-radius: 15px; box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1); margin-bottom: 20px; }
     input { width: 85%; padding: 12px; margin: 5px; border: 1px solid #ddd; border-radius: 10px; font-size: 16px; }
     
-    /* Tombol Panggilan Multi */
-    .btn-call { color: white; border: none; padding: 15px; border-radius: 12px; width: 100%; font-weight: bold; margin-top: 10px; font-size: 16px; cursor: pointer; transition: 0.2s; }
-    .btn-call:active { transform: scale(0.95); background: #c2410c; }
+    .btn-call { color: white; border: none; padding: 15px; border-radius: 12px; width: 100%; font-weight: bold; margin-top: 10px; font-size: 16px; cursor: pointer; }
+    .btn-ann { color: white; border: none; padding: 12px 5px; border-radius: 10px; width: 100%; font-weight: bold; font-size: 11px; cursor: pointer; height: 60px; display: flex; align-items: center; justify-content: center; }
     
     .bg-orange { background: #f97316; }
     .bg-green { background: #10b981; }
     .bg-blue { background: #3b82f6; }
     .bg-red { background: #ef4444; }
+    .bg-purple { background: #8b5cf6; }
     
-    .status-antrean { font-size: 12px; color: #1e3a8a; font-weight: bold; margin-top: 5px; }
+    .status-antrean { font-size: 12px; color: #10b981; font-weight: bold; margin-top: 5px; }
+
+    .announcement-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 8px; margin-bottom: 15px; }
 
     .grid-meja { display: grid; grid-template-columns: repeat(4, 1fr); gap: 8px; margin-top: 20px; }
     .meja { background: white; border: 2px solid #1e3a8a; padding: 15px 0; border-radius: 10px; font-weight: bold; cursor: pointer; color: #1e3a8a; }
@@ -48,12 +50,12 @@
 
     <div class="header">
         <h2 style="margin:0">GACOAN CALL PRO</h2>
-        <div id="antreanInfo" class="status-antrean">Antrean Panggilan: 0</div>
+        <div id="antreanInfo" class="status-antrean">Antrean: 0 Panggilan</div>
     </div>
 
     <div class="nav-tabs">
         <button class="tab-btn active" onclick="openTab('customer')">👤 CUSTOMER</button>
-        <button class="tab-btn" onclick="openTab('ojol')">🛵 OJOL & TAKE AWAY</button>
+        <button class="tab-btn" onclick="openTab('ojol')">🛵 OJOL & TA</button>
     </div>
 
     <div id="customer" class="tab-content active">
@@ -67,18 +69,22 @@
             </div>
         </div>
 
-        <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 8px;">
-            <button class="btn-call bg-blue" onclick="bc('Bagi pelanggan yang menemukan atau kehilangan barang, diharapkan melapor ke kasir. Terima kasih')">📦 BARANG HILANG</button>
-            <button class="btn-call bg-red" onclick="bc('Pemberitahuan, cuaca sedang hujan, dimohon berhati-hati karena lantai licin. Terima kasih.')">⚠️ LANTAI LICIN</button>
+        <div class="announcement-grid">
+            <button class="btn-ann bg-blue" onclick="bc('Bagi pelanggan yang menemukan atau kehilangan barang, diharapkan melapor ke kasir. Terima kasih')">📦 BARANG HILANG</button>
+            <button class="btn-ann bg-red" onclick="bc('Pemberitahuan, karena cuaca sedang hujan, dimohon bagi para pelanggan untuk berhati-hati saat berjalan karena lantai cenderung licin. Terima kasih.')">⚠️ LANTAI LICIN</button>
+            <button class="btn-ann bg-green" onclick="bc('Diharapkan bagi pelanggan untuk duduk sesuai dengan kapasitas meja demi kenyamanan bersama. Terima kasih.')">🪑 KAPASITAS MEJA</button>
+            <button class="btn-ann bg-purple" onclick="bc('Mari kita jaga kebersihan bersama dengan membuang sampah pada tempatnya. Terimakasih')">🧹 JAGA KEBERSIHAN</button>
+            <button class="btn-ann bg-orange" style="background:#ea580c" onclick="bc('bagi Para pelanggan diMohon untuk bersabar menunggu antrian, pesanan akan dipanggil ketika sudah Siap. Terima kasih')">⏳ HARAP BERSABAR</button>
+            <button class="btn-ann bg-blue" style="background:#0369a1" onclick="bc('Kepada para pelanggan, dilarang merokok di dalam area restoran demi kenyamanan bersama. Terima kasih')">🚫 NO SMOKING</button>
         </div>
 
-        <div style="color: white; font-size: 11px; font-weight: bold; margin-top: 20px;">KLIK NOMOR MEJA UNTUK PANGGIL CEPAT</div>
+        <div style="color: white; font-size: 11px; font-weight: bold; margin-bottom: 10px;">DAFTAR MEJA (1-100)</div>
         <div id="gt" class="grid-meja"></div>
     </div>
 
     <div id="ojol" class="tab-content">
         <div class="card">
-            <input type="text" id="oj" placeholder="Nomor Ojol / Nama Take Away">
+            <input type="text" id="oj" placeholder="Nomor Ojol / Nama TA">
             <button class="btn-call bg-green" onclick="tambahAntreanOjol()">🛵 PANGGIL OJOL</button>
             <button class="btn-call bg-blue" onclick="tambahAntreanTA()">🥡 PANGGIL TAKE AWAY</button>
         </div>
@@ -100,22 +106,19 @@
                 document.getElementById("jamTxt").innerText = d.getHours().toString().padStart(2,'0') + "." + d.getMinutes().toString().padStart(2,'0') + " WIB";
                 
                 if (d.getMinutes() === 0 && d.getSeconds() === 0) {
-                    bc("Pemberitahuan otomatis. Harap gunakan meja sesuai kapasitas dan jaga kebersihan. Terima kasih.");
+                    bc("Pemberitahuan otomatis. Kepada para pelanggan yang baru datang, diharapkan memilih kursi sesuai kapasitas meja dan membuang sampah pada tempatnya. Terima kasih.");
                 }
             }, 1000);
         }
 
-        // FUNGSI UTAMA: Menambah teks ke antrean
         function bc(teks) {
             antreanSuara.push(teks);
             updateInfoAntrean();
             prosesAntrean();
         }
 
-        // Menjalankan antrean satu per satu
         function prosesAntrean() {
             if (sedangBicara || antreanSuara.length === 0) return;
-
             sedangBicara = true;
             let teksSekarang = antreanSuara.shift();
             updateInfoAntrean();
@@ -123,37 +126,41 @@
             const u = new SpeechSynthesisUtterance(teksSekarang);
             u.lang = 'id-ID';
             u.rate = document.getElementById('rate').value;
-
             u.onend = function() {
                 sedangBicara = false;
-                prosesAntrean(); // Lanjut ke antrean berikutnya
+                prosesAntrean();
             };
-
             window.speechSynthesis.speak(u);
         }
 
         function updateInfoAntrean() {
-            document.getElementById('antreanInfo').innerText = "Antrean Panggilan: " + antreanSuara.length;
+            document.getElementById('antreanInfo').innerText = "Antrean: " + antreanSuara.length + " Panggilan";
         }
 
         function tambahAntreanCustomer() {
             let n = document.getElementById('nm').value;
             let m = document.getElementById('mj').value;
             if(n && m) {
-                bc("Panggilan Atas Nama Kak " + n + ". Dengan nomor Meja " + m + " .pesanan anda sudah siap. Terima kasih");
-                document.getElementById('nm').value = ""; // Reset input biar cepat
+                bc("Panggilan Atas Nama Kak " + n + ". Dengan nomor Meja " + m + " .pesanan anda sudah siap. Harap Menuju Meja Self Service sekarang juga. Terima kasih");
+                document.getElementById('nm').value = "";
                 document.getElementById('mj').value = "";
-            } else { alert("Isi nama & meja!"); }
+            } else { alert("Isi nama & meja dulu Pak Yudi"); }
         }
 
         function tambahAntreanOjol() {
             let o = document.getElementById("oj").value;
-            if(o) bc("Panggilan Driver Ojol dengan nomor antrian " + o + ". Pesanan sudah siap. Terimakasih");
+            if(o) {
+                bc("Panggilan Driver Ojol dengan nomor antrian " + o + ". Pesanan sudah siap. Terimakasih");
+                document.getElementById("oj").value = "";
+            }
         }
 
         function tambahAntreanTA() {
             let o = document.getElementById("oj").value;
-            if(o) bc("Panggilan pesanan Take Away atas nama Kak " + o + ". Pesanan sudah siap. Terimakasih");
+            if(o) {
+                bc("Panggilan pesanan Take Away atas nama Kak " + o + ". Pesanan sudah siap. Terimakasih");
+                document.getElementById("oj").value = "";
+            }
         }
 
         function openTab(tabName) {
@@ -163,7 +170,6 @@
             event.currentTarget.classList.add('active');
         }
 
-        // Build Meja
         const container = document.getElementById('gt');
         for (let i = 1; i <= 100; i++) {
             let b = document.createElement('button');
