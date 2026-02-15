@@ -23,9 +23,13 @@
     .btn-call { color: white; border: none; padding: 15px; border-radius: 12px; width: 100%; font-weight: bold; margin-top: 10px; font-size: 16px; cursor: pointer; }
     .btn-ann { color: white; border: none; padding: 12px 5px; border-radius: 10px; width: 100%; font-weight: bold; font-size: 11px; cursor: pointer; height: 60px; display: flex; align-items: center; justify-content: center; }
     
+    /* Warna Brand Ojol */
+    .bg-grab { background: #00b14f; }
+    .bg-shopee { background: #ee4d2d; }
+    .bg-gojek { background: #00aa13; }
+    .bg-takeaway { background: #3b82f6; }
+
     .bg-orange { background: #f97316; }
-    .bg-green { background: #10b981; }
-    .bg-blue { background: #3b82f6; }
     .bg-red { background: #ef4444; }
     .bg-purple { background: #8b5cf6; }
     
@@ -68,9 +72,9 @@
         </div>
 
         <div class="announcement-grid">
-            <button class="btn-ann bg-blue" onclick="bc('Bagi pelanggan yang menemukan atau kehilangan barang, diharapkan melapor ke kasir. Terima kasih')">📦 BARANG HILANG</button>
+            <button class="btn-ann bg-takeaway" onclick="bc('Bagi pelanggan yang menemukan atau kehilangan barang, diharapkan melapor ke kasir. Terima kasih')">📦 BARANG HILANG</button>
             <button class="btn-ann bg-red" onclick="bc('Pemberitahuan, karena cuaca sedang hujan, dimohon bagi para pelanggan untuk berhati-hati saat berjalan karena lantai cenderung licin. Terima kasih.')">⚠️ LANTAI LICIN</button>
-            <button class="btn-ann bg-green" onclick="bc('Diharapkan bagi pelanggan untuk duduk sesuai dengan kapasitas meja demi kenyamanan bersama. Terima kasih.')">🪑 KAPASITAS MEJA</button>
+            <button class="btn-ann bg-grab" onclick="bc('Diharapkan bagi pelanggan untuk duduk sesuai dengan kapasitas meja demi kenyamanan bersama. Terima kasih.')">🪑 KAPASITAS MEJA</button>
             <button class="btn-ann bg-purple" onclick="bc('Mari kita jaga kebersihan bersama dengan membuang sampah pada tempatnya. Terimakasih')">🧹 JAGA KEBERSIHAN</button>
         </div>
 
@@ -80,9 +84,11 @@
 
     <div id="ojol" class="tab-content">
         <div class="card">
-            <input type="text" id="oj" placeholder="Nomor Ojol / Nama TA">
-            <button class="btn-call bg-green" onclick="tambahAntreanOjol()">🛵 PANGGIL OJOL</button>
-            <button class="btn-call bg-blue" onclick="tambahAntreanTA()">🥡 PANGGIL TAKE AWAY</button>
+            <input type="text" id="oj" placeholder="Nama / Nomor Antrian">
+            <button class="btn-call bg-grab" onclick="tambahOjol('Grab')">🛵 GRABFOOD</button>
+            <button class="btn-call bg-shopee" onclick="tambahOjol('Shopee')">🛵 SHOPEEFOOD</button>
+            <button class="btn-call bg-gojek" onclick="tambahOjol('Gojek')">🛵 GOFOOD</button>
+            <button class="btn-call bg-takeaway" style="margin-top:20px;" onclick="tambahTA()">🥡 TAKE AWAY</button>
         </div>
     </div>
 
@@ -127,7 +133,7 @@
             // Logika Multi-Call: Potong "Terimakasih" jika antrean masih ada
             let kalimatFinal = teksSekarang;
             if (antreanSuara.length > 0) {
-                kalimatFinal = teksSekarang.replace(", Terimakasih", "");
+                kalimatFinal = teksSekarang.replace(", Terimakasih", "").replace(", terimakasih", "");
             }
 
             updateInfoAntrean();
@@ -157,22 +163,30 @@
             } else { alert("Isi nama & meja!"); }
         }
 
+        // Fungsi Baru untuk Ojol
+        function tambahOjol(brand) {
+            let input = document.getElementById('oj').value;
+            if(input) {
+                bc("Pesanan " + brand + " " + input + " pesanan sudah siap, Silahkan menuju meja take away sekarang juga, Terimakasih");
+                document.getElementById('oj').value = "";
+            } else { alert("Isi Nama/Nomor Antrian Driver!"); }
+        }
+
+        // Fungsi Baru untuk Take Away
+        function tambahTA() {
+            let input = document.getElementById('oj').value;
+            if(input) {
+                bc("Pesanan Take Away atas nama Kak " + input + ", pesanan sudah siap. Silahkan menuju meja take away sekarang juga, terimakasih");
+                document.getElementById('oj').value = "";
+            } else { alert("Isi Nama Pemesan!"); }
+        }
+
         const container = document.getElementById('gt');
         for (let i = 1; i <= 100; i++) {
             let b = document.createElement('button');
             b.className = 'meja'; b.innerText = i;
             b.onclick = () => bc("Panggilan untuk nomor meja " + i + " pesanan anda sudah siap, harap menuju meja self service sekarang juga, Terimakasih");
             container.appendChild(b);
-        }
-
-        function tambahAntreanOjol() {
-            let o = document.getElementById("oj").value;
-            if(o) bc("Panggilan untuk nomor antrian ojol " + o + " pesanan anda sudah siap, harap menuju meja pengambilan sekarang juga, Terimakasih");
-        }
-
-        function tambahAntreanTA() {
-            let o = document.getElementById("oj").value;
-            if(o) bc("Panggilan pesanan Take Away atas nama Kak " + o + " pesanan anda sudah siap, harap menuju meja pengambilan sekarang juga, Terimakasih");
         }
 
         function openTab(tabName) {
