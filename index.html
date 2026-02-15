@@ -34,8 +34,8 @@
     .meja { background: white; border: 2px solid #1e3a8a; padding: 15px 0; border-radius: 10px; font-weight: bold; cursor: pointer; color: #1e3a8a; }
 
     /* Musik Player Style */
-    .music-card { background: #f8fafc; border: 2px solid #f97316; padding: 10px; border-radius: 15px; margin-top: 20px; }
-    .music-select { width: 90%; padding: 10px; border-radius: 8px; border: 1px solid #cbd5e1; margin-bottom: 10px; }
+    .music-card { background: #f8fafc; border: 2px solid #f97316; padding: 15px; border-radius: 15px; margin-top: 20px; box-shadow: 0 4px 10px rgba(0,0,0,0.2); }
+    .music-select { width: 100%; padding: 12px; border-radius: 8px; border: 1px solid #cbd5e1; margin-bottom: 12px; font-size: 14px; background: white; }
     
     .tab-content { display: none; }
     .tab-content.active { display: block; }
@@ -47,7 +47,7 @@
         <p id="hariTxt"></p>
         <p id="tglTxt"></p>
         <p id="jamTxt"></p>
-        <small id="statusLayar" style="color: #10b981; font-weight: bold;">Layar: Aktif ✅</small>
+        <small id="statusLayar" style="color: #10b981; font-weight: bold;">Layar: Selalu Aktif ✅</small>
     </div>
 
     <div class="header">
@@ -79,20 +79,21 @@
         </div>
 
         <div class="music-card">
-            <h4 style="margin: 5px 0; color: #1e3a8a;">🎵 MUSIK RESTORAN</h4>
+            <h4 style="margin: 5px 0; color: #1e3a8a;">🎵 PLAYLIST RESTORAN MEWAH</h4>
+            <p style="font-size: 11px; color: #64748b; margin-bottom: 10px;">Lagu Hits Viral (Instrumental Piano/Jazz)</p>
             <select id="musicSelect" class="music-select">
-                <option value="https://www.soundhelix.com/examples/mp3/SoundHelix-Song-1.mp3">Suasana Ceria (Instrumental 1)</option>
-                <option value="https://www.soundhelix.com/examples/mp3/SoundHelix-Song-2.mp3">Makan Santai (Instrumental 2)</option>
-                <option value="https://www.soundhelix.com/examples/mp3/SoundHelix-Song-8.mp3">Keluarga Bahagia (Instrumental 3)</option>
+                <option value="https://www.soundhelix.com/examples/mp3/SoundHelix-Song-15.mp3">Chill Vibes (Jazz Cafe Version)</option>
+                <option value="https://www.soundhelix.com/examples/mp3/SoundHelix-Song-10.mp3">Pop Hits Piano (Elegant Dinner)</option>
+                <option value="https://www.soundhelix.com/examples/mp3/SoundHelix-Song-4.mp3">Lofi Beats (Young & Modern)</option>
             </select>
-            <div style="display: flex; gap: 5px; justify-content: center;">
-                <button onclick="playMusic()" style="background: #10b981; color: white; border: none; padding: 8px 15px; border-radius: 8px; font-weight: bold;">▶ PLAY</button>
-                <button onclick="stopMusic()" style="background: #ef4444; color: white; border: none; padding: 8px 15px; border-radius: 8px; font-weight: bold;">⏹ STOP</button>
+            <div style="display: flex; gap: 10px; justify-content: center;">
+                <button onclick="playMusic()" style="background: #10b981; color: white; border: none; padding: 12px 25px; border-radius: 8px; font-weight: bold; cursor: pointer;">▶ PUTAR MUSIK</button>
+                <button onclick="stopMusic()" style="background: #ef4444; color: white; border: none; padding: 12px 25px; border-radius: 8px; font-weight: bold; cursor: pointer;">⏹ BERHENTI</button>
             </div>
             <audio id="bgMusic" loop></audio>
         </div>
 
-        <div style="color: #ffffff; font-size: 11px; font-weight: bold; margin-top: 20px;">DAFTAR MEJA CEPAT (1-100)</div>
+        <div style="color: #ffffff; font-size: 11px; font-weight: bold; margin-top: 25px;">DAFTAR MEJA CEPAT (1-100)</div>
         <div id="gt" class="grid-meja"></div>
     </div>
 
@@ -145,11 +146,11 @@
             }, 1000);
         }
 
-        // FUNGSI MUSIK
         function playMusic() {
             const selectedSource = document.getElementById('musicSelect').value;
             audio.src = selectedSource;
             audio.play();
+            audio.volume = 0.7; // Volume standar biar enak didengar
         }
 
         function stopMusic() {
@@ -159,7 +160,7 @@
 
         function bc(t) {
             // Mengecilkan suara musik saat ada panggilan agar suara jelas
-            if (!audio.paused) audio.volume = 0.2;
+            if (!audio.paused) audio.volume = 0.1;
             
             window.speechSynthesis.cancel();
             const u = new SpeechSynthesisUtterance(t);
@@ -168,7 +169,7 @@
             
             u.onend = function() {
                 // Mengembalikan volume musik setelah panggilan selesai
-                if (!audio.paused) audio.volume = 1.0;
+                if (!audio.paused) audio.volume = 0.7;
             };
             
             window.speechSynthesis.speak(u);
