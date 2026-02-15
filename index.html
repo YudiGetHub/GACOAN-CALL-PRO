@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Gacoan Call Pro - Premium AI Voice</title>
+    <title>Gacoan Call Pro - Premium Female AI</title>
     <style>
     body { font-family: sans-serif; background: #1e3a8a; margin: 0; padding: 0; overflow-x: hidden; }
     #welcomeScreen { position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: radial-gradient(circle, #1e3a8a, #172554); display: flex; flex-direction: column; align-items: center; justify-content: center; z-index: 9999; transition: transform 1s ease-in-out; }
@@ -42,7 +42,7 @@
 
     <div id="tutorialOverlay">
         <div class="tuto-box">
-            <p id="tutoText">Selamat datang! Silahkan gunakan tombol ini untuk memanggil pelanggan secara beruntun.</p>
+            <p id="tutoText">Selamat datang! Sistem akan menggunakan suara Perempuan (AI Gemini) untuk memanggil pelanggan.</p>
             <button onclick="nextTuto()" style="background:#f97316; color:white; border:none; padding:10px 20px; border-radius:10px; font-weight:bold;">Lanjut</button>
         </div>
     </div>
@@ -51,7 +51,7 @@
         <div class="info-waktu">
             <p id="hariTxt"></p>
             <p id="jamTxt"></p>
-            <button style="background:none; border:none; color:#10b981; text-decoration:underline; font-weight:bold;" onclick="bc('Cek suara Gemini, berhasil aktif.')">[ TEST SUARA AI ]</button>
+            <button style="background:none; border:none; color:#10b981; text-decoration:underline; font-weight:bold;" onclick="bc('Cek suara Gemini Perempuan, berhasil aktif.')">[ TEST SUARA PEREMPUAN ]</button>
         </div>
 
         <div class="header">
@@ -71,15 +71,8 @@
                 <button class="btn-call bg-orange" onclick="tambahAntreanCustomer()">📢 PANGGIL (MULTI-CALL)</button>
                 <div style="margin-top:10px;">
                     <small style="font-weight:bold; color:#1e3a8a;">KECEPATAN SUARA</small><br>
-                    <input type="range" id="rate" style="width:90%" min="0.5" max="1.2" step="0.05" value="0.9">
+                    <input type="range" id="rate" style="width:90%" min="0.5" max="1.2" step="0.05" value="0.95">
                 </div>
-            </div>
-
-            <div class="announcement-grid">
-                <button class="btn-ann bg-takeaway" onclick="bc('Bagi pelanggan yang menemukan atau kehilangan barang, diharapkan melapor ke kasir. Terima kasih')">📦 BARANG HILANG</button>
-                <button class="btn-ann bg-red" onclick="bc('Pemberitahuan, karena cuaca sedang hujan, dimohon bagi para pelanggan untuk berhati-hati saat berjalan karena lantai cenderung licin. Terima kasih.')">⚠️ LANTAI LICIN</button>
-                <button class="btn-ann bg-grab" onclick="bc('Diharapkan bagi pelanggan untuk duduk sesuai dengan kapasitas meja demi kenyamanan bersama. Terima kasih.')">🪑 KAPASITAS MEJA</button>
-                <button class="btn-ann bg-purple" onclick="bc('Mari kita jaga kebersihan bersama dengan membuang sampah pada tempatnya. Terimakasih')">🧹 JAGA KEBERSIHAN</button>
             </div>
             <div id="gt" class="grid-meja"></div>
         </div>
@@ -101,12 +94,14 @@
         let stepTuto = 0;
         let voices = [];
 
-        // Load voices segera saat tersedia
-        window.speechSynthesis.onvoiceschanged = () => {
+        // Memuat suara dan mencari suara perempuan
+        function loadVoices() {
             voices = window.speechSynthesis.getVoices();
-        };
+        }
+        window.speechSynthesis.onvoiceschanged = loadVoices;
 
         async function mulaiAplikasi() {
+            loadVoices();
             mulaiJam();
             if ('wakeLock' in navigator) { try { await navigator.wakeLock.request('screen'); } catch (err) {} }
         }
@@ -119,8 +114,7 @@
         function nextTuto() {
             stepTuto++;
             const tutoText = document.getElementById('tutoText');
-            if(stepTuto === 1) { tutoText.innerText = "Fitur Multi-Call aktif otomatis. Panggilan akan mengantre dengan cerdas."; }
-            else if(stepTuto === 2) { tutoText.innerText = "Suara telah dioptimalkan agar terdengar seperti asisten AI Gemini."; }
+            if(stepTuto === 1) { tutoText.innerText = "Suara diprioritaskan menggunakan profil Perempuan (Voice 4) agar ramah didengar."; }
             else {
                 document.getElementById('tutorialOverlay').style.display = 'none';
                 bc("Sistem panggilan sudah aktif. Diharapkan para pelanggan untuk dapat mendengarkan panggilan system ini. Terimakasih");
@@ -154,17 +148,19 @@
 
             const u = new SpeechSynthesisUtterance(kalimatFinal);
             
-            // LOGIKA SUARA GEMINI-LIKE
-            // Mencari suara Indonesia yang paling premium (biasanya milik Google)
-            let voiceGemini = voices.find(v => v.lang.includes('id') && v.name.includes('Google') && v.name.includes('Natural'));
-            if (!voiceGemini) voiceGemini = voices.find(v => v.lang.includes('id') && v.name.includes('Google'));
-            if (!voiceGemini) voiceGemini = voices.find(v => v.lang.includes('id'));
+            // LOGIKA MENCARI SUARA PEREMPUAN
+            // 1. Cari suara yang ada kata "female" atau "perempuan"
+            let voicePerempuan = voices.find(v => v.lang.includes('id') && (v.name.toLowerCase().includes('female') || v.name.includes('Perempuan')));
+            
+            // 2. Jika tidak ada, cari suara Google Indonesia (biasanya Google Voice 4 itu perempuan)
+            if (!voicePerempuan) {
+                voicePerempuan = voices.find(v => v.lang.includes('id') && v.name.includes('Google'));
+            }
 
-            u.voice = voiceGemini;
+            u.voice = voicePerempuan;
             u.lang = 'id-ID';
             u.rate = document.getElementById('rate').value;
-            u.pitch = 1.05; // Sedikit lebih tinggi agar terdengar ramah
-            u.volume = 1;
+            u.pitch = 1.1; // Sedikit dinaikkan agar karakter perempuannya lebih jelas
 
             u.onend = function() { sedangBicara = false; prosesAntrean(); };
             window.speechSynthesis.speak(u);
