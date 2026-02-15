@@ -6,36 +6,26 @@
     <title>Gacoan Call Pro - Pak Yudi</title>
     <style>
     body { font-family: sans-serif; background: #1e3a8a; margin: 0; padding: 15px; text-align: center; }
-
     .info-waktu { background: white; padding: 10px; border-radius: 12px; margin-bottom: 10px; box-shadow: 0 2px 4px rgba(0,0,0,0.1); }
     #hariTxt { font-weight: bold; color: #1e3a8a; font-size: 18px; margin: 0; }
     #jamTxt { font-size: 22px; font-weight: bold; color: #f97316; margin: 0; }
-
     .header { background: #172554; color: white; padding: 15px; border-radius: 15px; margin-bottom: 10px; border: 1px solid #bfdbfe; }
-
     .nav-tabs { display: flex; gap: 10px; margin-bottom: 15px; }
     .tab-btn { flex: 1; padding: 15px; border-radius: 12px; border: none; font-weight: bold; font-size: 14px; cursor: pointer; background: #cbd5e1; color: #475569; }
     .tab-btn.active { background: #f97316; color: white; }
-
     .card { background: white; padding: 15px; border-radius: 15px; box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1); margin-bottom: 20px; }
     input { width: 85%; padding: 12px; margin: 5px; border: 1px solid #ddd; border-radius: 10px; font-size: 16px; }
-    
     .btn-call { color: white; border: none; padding: 15px; border-radius: 12px; width: 100%; font-weight: bold; margin-top: 10px; font-size: 16px; cursor: pointer; }
     .btn-ann { color: white; border: none; padding: 12px 5px; border-radius: 10px; width: 100%; font-weight: bold; font-size: 11px; cursor: pointer; height: 60px; display: flex; align-items: center; justify-content: center; }
-    
     .bg-orange { background: #f97316; }
     .bg-green { background: #10b981; }
     .bg-blue { background: #3b82f6; }
     .bg-red { background: #ef4444; }
     .bg-purple { background: #8b5cf6; }
-    
     .status-antrean { font-size: 12px; color: #10b981; font-weight: bold; margin-top: 5px; }
-
     .announcement-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 8px; margin-bottom: 15px; }
-
     .grid-meja { display: grid; grid-template-columns: repeat(4, 1fr); gap: 8px; margin-top: 20px; }
     .meja { background: white; border: 2px solid #1e3a8a; padding: 15px 0; border-radius: 10px; font-weight: bold; cursor: pointer; color: #1e3a8a; }
-
     .tab-content { display: none; }
     .tab-content.active { display: block; }
     </style>
@@ -74,8 +64,6 @@
             <button class="btn-ann bg-red" onclick="bc('Pemberitahuan, karena cuaca sedang hujan, dimohon bagi para pelanggan untuk berhati-hati saat berjalan karena lantai cenderung licin. Terima kasih.')">⚠️ LANTAI LICIN</button>
             <button class="btn-ann bg-green" onclick="bc('Diharapkan bagi pelanggan untuk duduk sesuai dengan kapasitas meja demi kenyamanan bersama. Terima kasih.')">🪑 KAPASITAS MEJA</button>
             <button class="btn-ann bg-purple" onclick="bc('Mari kita jaga kebersihan bersama dengan membuang sampah pada tempatnya. Terimakasih')">🧹 JAGA KEBERSIHAN</button>
-            <button class="btn-ann bg-orange" style="background:#ea580c" onclick="bc('bagi Para pelanggan diMohon untuk bersabar menunggu antrian, pesanan akan dipanggil ketika sudah Siap. Terima kasih')">⏳ HARAP BERSABAR</button>
-            <button class="btn-ann bg-blue" style="background:#0369a1" onclick="bc('Kepada para pelanggan, dilarang merokok di dalam area restoran demi kenyamanan bersama. Terima kasih')">🚫 NO SMOKING</button>
         </div>
 
         <div style="color: white; font-size: 11px; font-weight: bold; margin-bottom: 10px;">DAFTAR MEJA (1-100)</div>
@@ -104,7 +92,6 @@
                 const d = new Date();
                 document.getElementById("hariTxt").innerText = ["Minggu","Senin","Selasa","Rabu","Kamis","Jumat","Sabtu"][d.getDay()];
                 document.getElementById("jamTxt").innerText = d.getHours().toString().padStart(2,'0') + "." + d.getMinutes().toString().padStart(2,'0') + " WIB";
-                
                 if (d.getMinutes() === 0 && d.getSeconds() === 0) {
                     bc("Pemberitahuan otomatis. Kepada para pelanggan yang baru datang, diharapkan memilih kursi sesuai kapasitas meja dan membuang sampah pada tempatnya. Terima kasih.");
                 }
@@ -120,10 +107,19 @@
         function prosesAntrean() {
             if (sedangBicara || antreanSuara.length === 0) return;
             sedangBicara = true;
+            
+            // Ambil teks pertama dari antrean
             let teksSekarang = antreanSuara.shift();
+            
+            // LOGIKA MULTI-CALL: Jika antrean masih ada, jangan ucapkan terimakasih di item ini
+            let kalimatFinal = teksSekarang;
+            if (antreanSuara.length > 0) {
+                kalimatFinal = teksSekarang.replace(", Terimakasih", "");
+            }
+
             updateInfoAntrean();
 
-            const u = new SpeechSynthesisUtterance(teksSekarang);
+            const u = new SpeechSynthesisUtterance(kalimatFinal);
             u.lang = 'id-ID';
             u.rate = document.getElementById('rate').value;
             u.onend = function() {
@@ -141,26 +137,30 @@
             let n = document.getElementById('nm').value;
             let m = document.getElementById('mj').value;
             if(n && m) {
-                bc("Panggilan Atas Nama Kak " + n + ". Dengan nomor Meja " + m + " .pesanan anda sudah siap. Harap Menuju Meja Self Service sekarang juga. Terima kasih");
+                // Kalimat sesuai permintaan Bapak
+                bc("Panggilan Atas Nama Kak " + n + ". Dengan nomor Meja " + m + " .pesanan anda sudah siap. Harap Menuju Meja Self Service sekarang juga, Terimakasih");
                 document.getElementById('nm').value = "";
                 document.getElementById('mj').value = "";
-            } else { alert("Isi nama & meja dulu Pak Yudi"); }
+            } else { alert("Isi nama & meja!"); }
+        }
+
+        // Fungsi Meja Cepat
+        const container = document.getElementById('gt');
+        for (let i = 1; i <= 100; i++) {
+            let b = document.createElement('button');
+            b.className = 'meja'; b.innerText = i;
+            b.onclick = () => bc("Panggilan untuk nomor meja " + i + " pesanan anda sudah siap, harap menuju meja self service sekarang juga, Terimakasih");
+            container.appendChild(b);
         }
 
         function tambahAntreanOjol() {
             let o = document.getElementById("oj").value;
-            if(o) {
-                bc("Panggilan Driver Ojol dengan nomor antrian " + o + ". Pesanan sudah siap. Terimakasih");
-                document.getElementById("oj").value = "";
-            }
+            if(o) bc("Panggilan untuk nomor antrian ojol " + o + " pesanan anda sudah siap, harap menuju meja pengambilan sekarang juga, Terimakasih");
         }
 
         function tambahAntreanTA() {
             let o = document.getElementById("oj").value;
-            if(o) {
-                bc("Panggilan pesanan Take Away atas nama Kak " + o + ". Pesanan sudah siap. Terimakasih");
-                document.getElementById("oj").value = "";
-            }
+            if(o) bc("Panggilan pesanan Take Away atas nama Kak " + o + " pesanan anda sudah siap, harap menuju meja pengambilan sekarang juga, Terimakasih");
         }
 
         function openTab(tabName) {
@@ -168,14 +168,6 @@
             document.querySelectorAll('.tab-btn').forEach(b => b.classList.remove('active'));
             document.getElementById(tabName).classList.add('active');
             event.currentTarget.classList.add('active');
-        }
-
-        const container = document.getElementById('gt');
-        for (let i = 1; i <= 100; i++) {
-            let b = document.createElement('button');
-            b.className = 'meja'; b.innerText = i;
-            b.onclick = () => bc("Panggilan untuk Nomor meja " + i + ", pesanan anda sudah siap.");
-            container.appendChild(b);
         }
     </script>
 </body>
