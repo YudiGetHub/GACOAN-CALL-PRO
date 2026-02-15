@@ -6,20 +6,14 @@
     <title>Gacoan Call Pro - Pak Yudi</title>
     <style>
     body { font-family: sans-serif; background: #1e3a8a; margin: 0; padding: 15px; text-align: center; padding-bottom: 100px; }
-
     .info-waktu { background: white; padding: 10px; border-radius: 12px; margin-bottom: 10px; box-shadow: 0 2px 4px rgba(0,0,0,0.1); }
     #hariTxt { font-weight: bold; color: #1e3a8a; font-size: 18px; margin: 0; }
     #tglTxt { color: #64748b; font-size: 14px; margin: 2px 0; }
     #jamTxt { font-size: 22px; font-weight: bold; color: #f97316; margin: 0; }
-
     .header { background: #172554; color: white; padding: 15px; border-radius: 15px; margin-bottom: 10px; border: 1px solid #bfdbfe; }
-    .btn-test { background: none; border: none; color: #bfdbfe; font-size: 12px; cursor: pointer; text-decoration: underline; margin-bottom: 10px; }
-
     .nav-tabs { display: flex; gap: 10px; margin-bottom: 15px; }
     .tab-btn { flex: 1; padding: 15px; border-radius: 12px; border: none; font-weight: bold; font-size: 14px; cursor: pointer; background: #cbd5e1; color: #475569; }
-    .tab-btn.active { background: #f97316; color: white; box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1); }
-    .tab-btn.ojol-tab.active { background: #10b981; }
-
+    .tab-btn.active { background: #f97316; color: white; }
     .card { background: white; padding: 15px; border-radius: 15px; box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1); margin-bottom: 20px; }
     input { width: 85%; padding: 12px; margin: 5px; border: 1px solid #ddd; border-radius: 10px; font-size: 16px; }
     .btn-call { color: white; border: none; padding: 15px; border-radius: 12px; width: 100%; font-weight: bold; margin-top: 10px; font-size: 16px; cursor: pointer; }
@@ -27,16 +21,13 @@
     .bg-green { background: #10b981; }
     .bg-blue { background: #3b82f6; }
     .bg-red { background: #ef4444; }
-    .bg-purple { background: #8b5cf6; }
-
-    .slider { width: 90%; margin: 10px 0; }
+    
+    /* Music Card Mewah */
+    .music-card { background: #ffffff; border: 2px solid #f97316; padding: 15px; border-radius: 15px; margin-top: 20px; box-shadow: 0 4px 10px rgba(0,0,0,0.2); }
+    .music-select { width: 100%; padding: 12px; border-radius: 8px; border: 1px solid #cbd5e1; margin-bottom: 12px; font-size: 14px; }
+    
     .grid-meja { display: grid; grid-template-columns: repeat(4, 1fr); gap: 8px; margin-top: 20px; }
     .meja { background: white; border: 2px solid #1e3a8a; padding: 15px 0; border-radius: 10px; font-weight: bold; cursor: pointer; color: #1e3a8a; }
-
-    /* Musik Player Style */
-    .music-card { background: #f8fafc; border: 2px solid #f97316; padding: 15px; border-radius: 15px; margin-top: 20px; box-shadow: 0 4px 10px rgba(0,0,0,0.2); }
-    .music-select { width: 100%; padding: 12px; border-radius: 8px; border: 1px solid #cbd5e1; margin-bottom: 12px; font-size: 14px; background: white; }
-    
     .tab-content { display: none; }
     .tab-content.active { display: block; }
     </style>
@@ -52,12 +43,12 @@
 
     <div class="header">
         <h2 style="margin:0">GACOAN CALL PRO</h2>
-        <button class="btn-test" onclick="bc('ini adalah Test suara sistem Berhasil')">[ TEST SUARA ]</button>
+        <button class="btn-test" style="background:none; border:none; color:#bfdbfe; text-decoration:underline; cursor:pointer;" onclick="bc('Suara sistem siap')">[ TEST SUARA ]</button>
     </div>
 
     <div class="nav-tabs">
         <button class="tab-btn active" onclick="openTab('customer')">👤 CUSTOMER</button>
-        <button class="tab-btn ojol-tab" onclick="openTab('ojol')">🛵 OJOL & TAKE AWAY</button>
+        <button class="tab-btn" onclick="openTab('ojol')">🛵 OJOL & TAKE AWAY</button>
     </div>
 
     <div id="customer" class="tab-content active">
@@ -67,121 +58,84 @@
             <button class="btn-call bg-orange" onclick="sp()">📢 PANGGIL PELANGGAN</button>
             <div style="margin-top:10px;">
                 <small style="font-weight:bold; color:#1e3a8a;">KECEPATAN SUARA</small><br>
-                <input type="range" id="rate" class="slider" min="0.5" max="1.5" step="0.1" value="0.9">
+                <input type="range" id="rate" style="width:90%" min="0.5" max="1.5" step="0.1" value="0.9">
             </div>
         </div>
 
-        <div class="announcement-grid">
-            <button class="btn-ann bg-blue" onclick="bc('Bagi pelanggan yang menemukan atau kehilangan barang, diharapkan melapor ke kasir. Terima kasih')">📦 BARANG HILANG</button>
-            <button class="btn-ann bg-red" onclick="bc('Pemberitahuan, karena cuaca sedang hujan, dimohon untuk berhati-hati karena lantai licin. Terima kasih.')">⚠️ LANTAI LICIN</button>
-            <button class="btn-ann bg-purple" onclick="bc('Mari kita jaga kebersihan bersama dengan membuang sampah pada tempatnya. Terimakasih')">🧹 JAGA KEBERSIHAN</button>
-            <button class="btn-ann bg-red" onclick="bc('bagi Para pelanggan diMohon untuk bersabar menunggu antrian, pesanan akan dipanggil ketika sudah Siap. Terima kasih')">⏳ HARAP BERSABAR</button>
+        <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 8px; margin-bottom: 20px;">
+            <button class="btn-call bg-blue" style="font-size:12px; padding:10px;" onclick="bc('Bagi pelanggan yang menemukan atau kehilangan barang, harap melapor ke kasir.')">📦 BARANG HILANG</button>
+            <button class="btn-call bg-red" style="font-size:12px; padding:10px;" onclick="bc('Perhatian, cuaca sedang hujan. Harap berhati-hati karena lantai licin.')">⚠️ LANTAI LICIN</button>
         </div>
 
         <div class="music-card">
-            <h4 style="margin: 5px 0; color: #1e3a8a;">🎵 PLAYLIST RESTORAN MEWAH</h4>
-            <p style="font-size: 11px; color: #64748b; margin-bottom: 10px;">Lagu Hits Viral (Instrumental Piano/Jazz)</p>
+            <h4 style="margin: 5px 0; color: #1e3a8a;">🎵 INSTRUMEN HITS BARAT</h4>
+            <p style="font-size: 11px; color: #64748b; margin-bottom: 10px;">Vibe Restoran Mewah & Familiar</p>
             <select id="musicSelect" class="music-select">
-                <option value="https://www.soundhelix.com/examples/mp3/SoundHelix-Song-15.mp3">Chill Vibes (Jazz Cafe Version)</option>
-                <option value="https://www.soundhelix.com/examples/mp3/SoundHelix-Song-10.mp3">Pop Hits Piano (Elegant Dinner)</option>
-                <option value="https://www.soundhelix.com/examples/mp3/SoundHelix-Song-4.mp3">Lofi Beats (Young & Modern)</option>
+                <option value="https://www.soundhelix.com/examples/mp3/SoundHelix-Song-15.mp3">Perfect/Beautiful (Piano Instrumental)</option>
+                <option value="https://www.soundhelix.com/examples/mp3/SoundHelix-Song-10.mp3">Chill Pop Hits (Acoustic Guitar)</option>
+                <option value="https://www.soundhelix.com/examples/mp3/SoundHelix-Song-4.mp3">Elegant Jazz (Modern Vibe)</option>
             </select>
             <div style="display: flex; gap: 10px; justify-content: center;">
-                <button onclick="playMusic()" style="background: #10b981; color: white; border: none; padding: 12px 25px; border-radius: 8px; font-weight: bold; cursor: pointer;">▶ PUTAR MUSIK</button>
-                <button onclick="stopMusic()" style="background: #ef4444; color: white; border: none; padding: 12px 25px; border-radius: 8px; font-weight: bold; cursor: pointer;">⏹ BERHENTI</button>
+                <button onclick="playMusic()" style="background: #10b981; color: white; border: none; padding: 12px 25px; border-radius: 8px; font-weight: bold; cursor: pointer;">▶ PUTAR</button>
+                <button onclick="stopMusic()" style="background: #ef4444; color: white; border: none; padding: 12px 25px; border-radius: 8px; font-weight: bold; cursor: pointer;">⏹ STOP</button>
             </div>
             <audio id="bgMusic" loop></audio>
         </div>
 
-        <div style="color: #ffffff; font-size: 11px; font-weight: bold; margin-top: 25px;">DAFTAR MEJA CEPAT (1-100)</div>
         <div id="gt" class="grid-meja"></div>
     </div>
 
     <div id="ojol" class="tab-content">
-        <div class="card" style="border-top: 5px solid #10b981;">
-            <h3 style="color:#10b981;">Panggilan Ojol & Take Away</h3>
-            <input type="text" id="oj" placeholder="Nomor Ojol / Nama Take Away">
-            <div style="display: flex; gap: 8px;">
-                <button class="btn-call bg-green" style="flex: 1;" onclick="so()">📢 PANGGIL OJOL</button>
-                <button class="btn-call bg-blue" style="flex: 1;" onclick="sta()">📢 PANGGIL TAKE AWAY</button>
-            </div>
+        <div class="card">
+            <h3>OJOL & TAKE AWAY</h3>
+            <input type="text" id="oj" placeholder="Nama / Nomor Order">
+            <button class="btn-call bg-green" onclick="so()">📢 PANGGIL OJOL</button>
+            <button class="btn-call bg-blue" onclick="sta()">📢 PANGGIL TAKE AWAY</button>
         </div>
     </div>
 
     <script>
-        let wakeLock = null;
         let audio = document.getElementById('bgMusic');
-
+        
         async function mulaiAplikasi() {
             mulaiJam();
-            requestWakeLock();
-        }
-
-        async function requestWakeLock() {
-            try {
-                if ('wakeLock' in navigator) {
-                    wakeLock = await navigator.wakeLock.request('screen');
-                }
-            } catch (err) {}
+            if ('wakeLock' in navigator) { await navigator.wakeLock.request('screen'); }
         }
 
         function mulaiJam() {
-            const daftarHari = ["Minggu", "Senin", "Selasa", "Rabu", "Kamis", "Jumat", "Sabtu"];
-            const daftarBulan = ["Januari", "Februari", "Maret", "April", "Mei", "Juni", "Juli", "Agustus", "September", "Oktober", "November", "Desember"];
-            
             setInterval(() => {
                 const d = new Date();
-                const h = d.getHours();
-                const m = d.getMinutes();
-                const s = d.getSeconds();
+                document.getElementById("hariTxt").innerText = ["Minggu","Senin","Selasa","Rabu","Kamis","Jumat","Sabtu"][d.getDay()];
+                document.getElementById("tglTxt").innerText = d.getDate() + " " + ["Jan","Feb","Mar","Apr","Mei","Jun","Jul","Agu","Sep","Okt","Nov","Des"][d.getMonth()] + " " + d.getFullYear();
+                document.getElementById("jamTxt").innerText = d.getHours().toString().padStart(2,'0') + "." + d.getMinutes().toString().padStart(2,'0') + " WIB";
                 
-                document.getElementById("hariTxt").innerText = daftarHari[d.getDay()];
-                document.getElementById("tglTxt").innerText = d.getDate() + " " + daftarBulan[d.getMonth()] + " " + d.getFullYear();
-                document.getElementById("jamTxt").innerText = h.toString().padStart(2, '0') + "." + m.toString().padStart(2, '0') + " WIB";
-
-                // PENGUMUMAN OTOMATIS TIAP 1 JAM
-                if (m === 0 && s === 0) {
-                    bc("Pemberitahuan otomatis. Kepada para pelanggan, diharapkan memilih kursi sesuai kapasitas meja dan membuang sampah pada tempatnya. Terima kasih.");
+                if (d.getMinutes() === 0 && d.getSeconds() === 0) {
+                    bc("Pemberitahuan otomatis. Mohon gunakan meja sesuai kapasitas dan jaga kebersihan. Terima kasih.");
                 }
             }, 1000);
         }
 
         function playMusic() {
-            const selectedSource = document.getElementById('musicSelect').value;
-            audio.src = selectedSource;
+            audio.src = document.getElementById('musicSelect').value;
             audio.play();
-            audio.volume = 0.7; // Volume standar biar enak didengar
+            audio.volume = 0.6;
         }
 
-        function stopMusic() {
-            audio.pause();
-            audio.currentTime = 0;
-        }
+        function stopMusic() { audio.pause(); audio.currentTime = 0; }
 
         function bc(t) {
-            // Mengecilkan suara musik saat ada panggilan agar suara jelas
             if (!audio.paused) audio.volume = 0.1;
-            
             window.speechSynthesis.cancel();
             const u = new SpeechSynthesisUtterance(t);
             u.lang = 'id-ID';
             u.rate = document.getElementById('rate').value;
-            
-            u.onend = function() {
-                // Mengembalikan volume musik setelah panggilan selesai
-                if (!audio.paused) audio.volume = 0.7;
-            };
-            
+            u.onend = () => { if (!audio.paused) audio.volume = 0.6; };
             window.speechSynthesis.speak(u);
         }
 
         function openTab(tabName) {
-            let contents = document.getElementsByClassName('tab-content');
-            let tabs = document.getElementsByClassName('tab-btn');
-            for (let i = 0; i < contents.length; i++) {
-                contents[i].classList.remove('active');
-                tabs[i].classList.remove('active');
-            }
+            document.querySelectorAll('.tab-content').forEach(c => c.classList.remove('active'));
+            document.querySelectorAll('.tab-btn').forEach(b => b.classList.remove('active'));
             document.getElementById(tabName).classList.add('active');
             event.currentTarget.classList.add('active');
         }
@@ -190,27 +144,25 @@
         for (let i = 1; i <= 100; i++) {
             let b = document.createElement('button');
             b.className = 'meja'; b.innerText = i;
-            b.onclick = () => bc("Panggilan untuk Nomor meja " + i + ", pesanan anda sudah siap. Harap Menuju Meja Self Service sekarang juga, Terimakasih");
+            b.onclick = () => bc("Panggilan meja " + i + ", pesanan sudah siap.");
             container.appendChild(b);
         }
 
         function sp() {
             let n = document.getElementById('nm').value;
             let m = document.getElementById('mj').value;
-            if(n && m) bc("Panggilan Atas Nama Kak " + n + ". Dengan nomor Meja " + m + " .pesanan anda sudah siap. Terima kasih");
-            else alert("Isi nama dan meja dulu yaa");
+            if(n && m) bc("Panggilan Kak " + n + ", meja " + m + ". Pesanan sudah siap.");
+            else alert("Isi nama & meja!");
         }
 
-        function so() {
+        function so() { 
             let o = document.getElementById("oj").value;
-            if (o) bc("Panggilan untuk Driver Ojol dengan nomor antrian " + o + ". Pesanan anda sudah siap. Terimakasih");
-            else alert("Isi nomor antrian ojol dulu");
+            if(o) bc("Driver Ojol nomor " + o + ", pesanan siap.");
         }
 
         function sta() {
             let o = document.getElementById("oj").value;
-            if (o) bc("Panggilan pesanan Take Away atas nama Kak " + o + ". Pesanan anda sudah siap. Terimakasih");
-            else alert("Isi nama pemesan take away dulu");
+            if(o) bc("Pesanan Take Away atas nama Kak " + o + ", pesanan sudah siap.");
         }
     </script>
 </body>
