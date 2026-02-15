@@ -123,10 +123,9 @@
             </div>
 
             <div class="announcement-grid">
-                <button class="btn-ann bg-takeaway" onclick="bc('PENGUMUMAN. Bagi pelanggan yang menemukan atau kehilangan barang, diharapkan melapor ke kasir. Terima kasih')">📦 BARANG HILANG</button>
-                <button class="btn-ann bg-red" onclick="bc('PEMBERITAHUAN, karena cuaca sedang hujan, dimohon bagi para pelanggan untuk berhati-hati saat berjalan karena lantai cenderung licin. Terima kasih.')">⚠️ LANTAI LICIN</button>
-                <button class="btn-ann bg-grab" onclick="bc('DIMOHON. bagi pelanggan untuk duduk sesuai dengan kapasitas meja demi kenyamanan bersama. Terima kasih.')">🪑 KAPASITAS MEJA</button>
-                <button class="btn-ann bg-purple" onclick="bc('Mari kita jaga kebersihan bersama dengan membuang sampah pada tempatnya. Terimakasih')">🧹 JAGA KEBERSIHAN</button>
+                <button class="btn-ann bg-red" onclick="bc('PEMBERITAHUAN, karena cuaca sedang hujan, dimohon bagi para pelanggan untuk berhati-hati saat berjalan karena lantai cenderung licin. Terima kasih.')" style="width: 100%; height: 80px; font-size: 16px;">⚠️ KLIK SAAT HUJAN (LANTAI LICIN)</button>
+                
+                <p style="font-size: 11px; color: #64748b; margin-top: 10px;">*Pengumuman otomatis aktif pada jam istirahat & jam ramai (18:00 - 01:00).</p>
             </div>
 
             <div id="gt" class="grid-meja"></div>
@@ -152,6 +151,14 @@
         let sedangBicara = false;
         let stepTuto = 0;
         let voices = [];
+        
+        // --- LOGIKA PENGUMUMAN OTOMATIS BERDASARKAN JAM ---
+        let indexPengumuman = 0;
+        const daftarPengumumanOtomatis = [
+            "PENGUMUMAN. Bagi pelanggan yang menemukan atau kehilangan barang, diharapkan melapor ke kasir. Terima kasih",
+            "DIMOHON. bagi pelanggan untuk duduk sesuai dengan kapasitas meja demi kenyamanan bersama. Terima kasih.",
+            "Mari kita jaga kebersihan bersama dengan membuang sampah pada tempatnya. Terimakasih"
+        ];
 
         // LOAD SUARA DARI SISTEM
         window.speechSynthesis.onvoiceschanged = () => {
@@ -194,7 +201,6 @@
 
             const u = new SpeechSynthesisUtterance(kalimatFinal);
             
-            // Mencari suara Indonesia terbaik
             let voiceGemini = voices.find(v => v.lang.includes('id') && v.name.includes('Google') && v.name.includes('Natural'));
             if (!voiceGemini) voiceGemini = voices.find(v => v.lang.includes('id') && v.name.includes('Google'));
             if (!voiceGemini) voiceGemini = voices.find(v => v.lang.includes('id'));
@@ -207,6 +213,30 @@
 
             u.onend = function() { sedangBicara = false; prosesAntrean(); };
             window.speechSynthesis.speak(u);
+        }
+
+        /* --- LOGIKA CEK JAM RAMAI (EDIT DI SINI) --- */
+        function jalankanPengumumanOtomatis() {
+            setInterval(() => {
+                const sekarang = new Date();
+                const jam = sekarang.getHours();
+
+                // === EDIT DI SINI: Atur Jam Aktif Pengumuman ===
+                // Contoh: jam >= 12 && jam <= 13 (Berarti aktif jam 12 siang sampai 1 siang)
+                // Contoh: jam >= 18 || jam < 1 (Berarti aktif jam 6 sore sampai 1 dini hari)
+                
+                const isJamIstirahat = (jam >= 12 && jam <= 13); 
+                const isJamMalam = (jam >= 18 || jam < 1); 
+
+                if (isJamIstirahat || isJamMalam) {
+                    bc(daftarPengumumanOtomatis[indexPengumuman]);
+                    indexPengumuman = (indexPengumuman + 1) % daftarPengumumanOtomatis.length;
+                    console.log("Pengumuman Otomatis Berjalan di Jam Ramai");
+                } else {
+                    console.log("Sistem Standby: Bukan jam ramai untuk pengumuman otomatis.");
+                }
+
+            }, 45 * 60 * 1000); // Durasi per 45 menit
         }
 
         /* --- FUNGSI TOMBOL INPUT --- */
@@ -246,11 +276,12 @@
         function nextTuto() {
             stepTuto++;
             const tutoText = document.getElementById('tutoText');
-            if(stepTuto === 1) { tutoText.innerText = "Fitur Multi-Call aktif otomatis. silahkan klik beberapa nomor meja dengan cepat, sistem akan memanggilnya satu per satu"; }
-            else if(stepTuto === 2) { tutoText.innerText = "dimohon untuk menunggu sampai suara terdengar aktif."; }
+            if(stepTuto === 1) { tutoText.innerText = "Fitur Multi-Call aktif otomatis. Silahkan klik beberapa nomor meja dengan cepat."; }
+            else if(stepTuto === 2) { tutoText.innerText = "Pengumuman otomatis hanya akan berbunyi di jam sibuk (Istirahat & Malam)."; }
             else {
                 document.getElementById('tutorialOverlay').style.display = 'none';
                 bc("Sistem panggilan sudah aktif. Diharapkan para pelanggan untuk dapat mendengarkan panggilan system ini. Terimakasih");
+                jalankanPengumumanOtomatis(); 
             }
         }
 
