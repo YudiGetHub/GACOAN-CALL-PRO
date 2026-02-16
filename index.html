@@ -1,4 +1,3 @@
-
 <!DOCTYPE html>
 <html lang="id">
 <head>
@@ -7,346 +6,41 @@
     <title>Gacoan Call Pro - Premium By Yudi</title>
     
     <style>
-        /* =========================================
-           1. TEMA UTAMA & LAYAR SAMBUTAN
-           ========================================= */
+        /* CSS tetap sama dengan sebelumnya */
         body { font-family: sans-serif; background: #f4f7f9; margin: 0; padding: 0; overflow-x: hidden; color: #333; }
-        
-        #welcomeScreen { 
-            position: fixed; top: 0; left: 0; width: 100%; height: 100%; 
-            background: radial-gradient(circle, #ffffff, #e2e8f0); 
-            display: flex; flex-direction: column; align-items: center; justify-content: center; 
-            z-index: 9999; transition: transform 1s ease-in-out; 
-        }
-        
+        #welcomeScreen { position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: radial-gradient(circle, #ffffff, #e2e8f0); display: flex; flex-direction: column; align-items: center; justify-content: center; z-index: 9999; transition: transform 1s ease-in-out; }
         .logo-gacoan { width: 180px; height: 180px; margin-bottom: 20px; border-radius: 50%; border: 5px solid #1e3a8a; box-shadow: 0 4px 15px rgba(0,0,0,0.1); background: white; object-fit: contain; }
-        
-        .btn-mulai { 
-            padding: 15px 40px; background: #1e3a8a; color: white; border: none; 
-            border-radius: 30px; font-weight: bold; font-size: 18px; cursor: pointer; 
-            box-shadow: 0 5px 15px rgba(30,58,138,0.3); 
-        }
-
-        /* =========================================
-           2. AREA NAVIGASI & HEADER
-           ========================================= */
+        .btn-mulai { padding: 15px 40px; background: #1e3a8a; color: white; border: none; border-radius: 30px; font-weight: bold; font-size: 18px; cursor: pointer; box-shadow: 0 5px 15px rgba(30,58,138,0.3); }
         .main-app { padding: 15px; text-align: center; }
-        
         .info-waktu { background: white; padding: 10px; border-radius: 12px; margin-bottom: 10px; border: 1px solid #e2e8f0; }
         #hariTxt { font-weight: bold; color: #1e3a8a; font-size: 18px; margin: 0; }
         #jamTxt { font-size: 22px; font-weight: bold; color: #f97316; margin: 0; }
-        
-        .header { background: #ffffff; color: #1e3a8a; padding: 15px; border-radius: 15px; margin-bottom: 10px; border: 2px solid #1e3a8a; }
-        
-        .nav-tabs { display: flex; gap: 10px; margin-bottom: 15px; }
-        .tab-btn { flex: 1; padding: 15px; border-radius: 12px; border: 1px solid #cbd5e1; font-weight: bold; font-size: 14px; cursor: pointer; background: #f8fafc; color: #64748b; }
-        .tab-btn.active { background: #1e3a8a; color: white; border-color: #1e3a8a; }
-
-        /* =========================================
-           3. KARTU INPUT & TOMBOL PANGGILAN
-           ========================================= */
-        .card { background: white; padding: 15px; border-radius: 15px; box-shadow: 0 4px 6px rgba(0,0,0,0.05); border: 1px solid #e2e8f0; margin-bottom: 20px; }
-        input { width: 85%; padding: 12px; margin: 5px; border: 1px solid #cbd5e1; border-radius: 10px; font-size: 16px; background: #fdfdfd; }
-        
-        .btn-call { color: white; border: none; padding: 15px; border-radius: 12px; width: 100%; font-weight: bold; margin-top: 10px; font-size: 16px; cursor: pointer; }
-        .btn-ann { color: white; border: none; padding: 12px 5px; border-radius: 10px; width: 100%; font-weight: bold; font-size: 11px; cursor: pointer; height: 60px; display: flex; align-items: center; justify-content: center; }
-        
-        /* WARNA TOMBOL */
-        .bg-grab { background: #00b14f; } 
-        .bg-shopee { background: #ee4d2d; } 
-        .bg-gojek { background: #00aa13; } 
-        .bg-takeaway { background: #3b82f6; }
-        .bg-orange { background: #f97316; } 
-        .bg-red { background: #ef4444; } 
-        .bg-purple { background: #8b5cf6; }
-
-        /* =========================================
-           4. GRID MEJA & LAINNYA
-           ========================================= */
-        .grid-meja { display: grid; grid-template-columns: repeat(4, 1fr); gap: 8px; margin-top: 20px; }
-        .meja { background: white; border: 1px solid #cbd5e1; padding: 15px 0; border-radius: 10px; font-weight: bold; color: #1e3a8a; transition: 0.2s; }
-        .meja:active { background: #e2e8f0; }
-
-        .tab-content { display: none; } 
-        .tab-content.active { display: block; }
-        .status-antrean { font-size: 12px; color: #10b981; font-weight: bold; margin-top: 5px; }
-
-        /* OVERLAY TUTORIAL */
-        #tutorialOverlay { position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: rgba(0,0,0,0.7); display: none; z-index: 10000; color: white; padding: 20px; text-align: center; justify-content: center; align-items: center; flex-direction: column; }
-        .tuto-box { background: white; color: #333; padding: 20px; border-radius: 15px; width: 80%; max-width: 300px; position: relative; }
-    </style>
-</head>
-<body onload="mulaiAplikasi()">
-
-    <div id="welcomeScreen">
-        <img src="https://i.ibb.co.com/ycrmLMHf/Logo-Mie-Gacoan-1.png" class="logo-gacoan">
-        <h1 style="color:#1e3a8a; margin-bottom:30px;">Gacoan Call Pro</h1>
-        <button class="btn-mulai" onclick="startTutorial()">BUKA LAYAR PANGGILAN</button>
-        <p style="color:#64748b; font-size:12px; margin-top:20px;">Versi Premium - By : Nur Wahyudi</p>
-    </div>
-
-    <div id="tutorialOverlay">
-        <div class="tuto-box">
-            <p id="tutoText">Selamat datang! Silahkan gunakan aplikasi ini untuk memanggil pelanggan dengan cepat.</p>
-            <button onclick="nextTuto()" style="background:#1e3a8a; color:white; border:none; padding:10px 20px; border-radius:10px; font-weight:bold;">Lanjut</button>
-        </div>
-    </div>
-
-    <div class="main-app">
-        
-        <div class="info-waktu">
-            <p id="hariTxt"></p>
-            <p id="jamTxt"></p>
-            <button style="background:none; border:none; color:#1e3a8a; text-decoration:underline; font-weight:bold; cursor:pointer;" onclick="bc('Ini adalah suara system. Cek suara system berhasil.')">
-                [ CEK SUARA APLIKASI ]
-            </button>
-        </div>
-
-        <div class="header">
-            <h2 style="margin:0">GACOAN CALL PRO</h2>
-            <div id="antreanInfo" class="status-antrean">Antrean: 0 Panggilan</div>
-        </div>
-
-        <div class="nav-tabs">
-            <button class="tab-btn active" onclick="openTab('customer')">👤 CUSTOMER</button>
-            <button class="tab-btn" onclick="openTab('ojol')">🛵 OJOL & TA</button>
-        </div>
-
-        <div id="customer" class="tab-content active">
-            <div class="card">
-                <input type="text" id="nm" placeholder="Nama Pelanggan">
-                <input type="text" id="mj" placeholder="No Meja">
-                <button class="btn-call bg-orange" onclick="tambahAntreanCustomer()">📢 PANGGIL (MULTI-CALL)</button>
-                <div style="margin-top:10px;">
-                    <small style="font-weight:bold; color:#1e3a8a;">PENGATURAN TEMPO SUARA</small><br>
-                    <input type="range" id="rate" style="width:90%" min="0.5" max="1.2" step="0.05" value="0.85">
-                </div>
-            </div>
-
-            <div class="announcement-grid">
-                <button class="btn-ann bg-red" onclick="bc('PEMBERITAHUAN, karena cuaca sedang hujan, dimohon bagi para pelanggan untuk berhati-hati saat berjalan karena lantai cenderung licin. Terima kasih.')" style="width: 100%; height: 80px; font-size: 16px;">⚠️ KLIK SAAT HUJAN (LANTAI LICIN)</button>
-                
-                <p style="font-size: 11px; color: #64748b; margin-top: 10px;">*Pengumuman otomatis aktif pada jam istirahat & jam ramai (18:00 - 01:00).</p>
-            </div>
-
-            <div id="gt" class="grid-meja"></div>
-        </div>
-
-        <div id="ojol" class="tab-content">
-            <div class="card">
-                <input type="text" id="oj" placeholder="Nama / Nomor Antrian">
-                <button class="btn-call bg-grab" onclick="tambahOjol('Grab')">🛵 GRABFOOD</button>
-                <button class="btn-call bg-shopee" onclick="tambahOjol('Shopee')">🛵 SHOPEEFOOD</button>
-                <button class="btn-call bg-gojek" onclick="tambahOjol('Gojek')">🛵 GOFOOD</button>
-                <button class="btn-call bg-takeaway" style="margin-top:20px;" onclick="tambahTA()">🥡 TAKE AWAY</button>
-            </div>
-        </div>
-    </div>
-
-    <script>
-        /* =========================================
-           5. LOGIKA JAVASCRIPT
-           ========================================= */
-        
-        let antreanSuara = [];
-        let sedangBicara = false;
-        let stepTuto = 0;
-        let voices = [];
-        
-        // --- LOGIKA PENGUMUMAN OTOMATIS BERDASARKAN JAM ---
-        let indexPengumuman = 0;
-        const daftarPengumumanOtomatis = [
-            "PENGUMUMAN. Bagi pelanggan yang menemukan atau kehilangan barang, diharapkan melapor ke kasir. Terima kasih",
-            "DIMOHON. bagi pelanggan untuk duduk sesuai dengan kapasitas meja demi kenyamanan bersama. Terima kasih.",
-            "Mari kita jaga kebersihan bersama dengan membuang sampah pada tempatnya. Terimakasih"
-        ];
-
-        // LOAD SUARA DARI SISTEM
-        window.speechSynthesis.onvoiceschanged = () => {
-            voices = window.speechSynthesis.getVoices();
-        };
-
-        // INISIALISASI APLIKASI
-        async function mulaiAplikasi() {
-            mulaiJam();
-            if ('wakeLock' in navigator) { try { await navigator.wakeLock.request('screen'); } catch (err) {} }
-        }
-
-        // LOGIKA JAM & HARI
-        function mulaiJam() {
-            setInterval(() => {
-                const d = new Date();
-                document.getElementById("hariTxt").innerText = ["Minggu","Senin","Selasa","Rabu","Kamis","Jumat","Sabtu"][d.getDay()];
-                document.getElementById("jamTxt").innerText = d.getHours().toString().padStart(2,'0') + "." + d.getMinutes().toString().padStart(2,'0') + " WIB";
-            }, 1000);
-        }
-
-        /* --- LOGIKA PANGGILAN SUARA --- */
-        
-        function bc(teks) {
-            antreanSuara.push(teks);
-            prosesAntrean();
-        }
-
-        function prosesAntrean() {
-            if (sedangBicara || antreanSuara.length === 0) return;
-            sedangBicara = true;
-            
-            let teksSekarang = antreanSuara.shift();
-            let kalimatFinal = teksSekarang;
-            if (antreanSuara.length > 0) {
-                kalimatFinal = teksSekarang.replace(/Terimakasih|terimakasih/gi, "");
-            }
-
-            document.getElementById('antreanInfo').innerText = "Antrean: " + antreanSuara.length + " Panggilan";
-
-            const u = new SpeechSynthesisUtterance(kalimatFinal);
-            
-            let voiceGemini = voices.find(v => v.lang.includes('id') && v.name.includes('Google') && v.name.includes('Natural'));
-            if (!voiceGemini) voiceGemini = voices.find(v => v.lang.includes('id') && v.name.includes('Google'));
-            if (!voiceGemini) voiceGemini = voices.find(v => v.lang.includes('id'));
-
-            u.voice = voiceGemini;
-            u.lang = 'id-ID';
-            u.rate = document.getElementById('rate').value;
-            u.pitch = 1.05;
-            u.volume = 1;
-
-            u.onend = function() { sedangBicara = false; prosesAntrean(); };
-            window.speechSynthesis.speak(u);
-        }
-
-        /* --- LOGIKA CEK JAM RAMAI (EDIT DI SINI) --- */
-        function jalankanPengumumanOtomatis() {
-            setInterval(() => {
-                const sekarang = new Date();
-                const jam = sekarang.getHours();
-
-                // === EDIT DI SINI: Atur Jam Aktif Pengumuman ===
-                // Contoh: jam >= 12 && jam <= 13 (Berarti aktif jam 12 siang sampai 1 siang)
-                // Contoh: jam >= 18 || jam < 1 (Berarti aktif jam 6 sore sampai 1 dini hari)
-                
-                const isJamIstirahat = (jam >= 12 && jam <= 13); 
-                const isJamMalam = (jam >= 18 || jam < 1); 
-
-                if (isJamIstirahat || isJamMalam) {
-                    bc(daftarPengumumanOtomatis[indexPengumuman]);
-                    indexPengumuman = (indexPengumuman + 1) % daftarPengumumanOtomatis.length;
-                    console.log("Pengumuman Otomatis Berjalan di Jam Ramai");
-                } else {
-                    console.log("Sistem Standby: Bukan jam ramai untuk pengumuman otomatis.");
-                }
-
-            }, 45 * 60 * 1000); // Durasi per 45 menit
-        }
-
-        /* --- FUNGSI TOMBOL INPUT --- */
-
-        function tambahAntreanCustomer() {
-            let n = document.getElementById('nm').value;
-            let m = document.getElementById('mj').value;
-            if(n && m) {
-                bc("  Panggilan Atas Nama Kak " + n + " Dengan nomor Meja. " + m + ". Pesanan anda sudah siap. Harap Menuju Meja Self Service sekarang juga, Terimakasih");
-                document.getElementById('nm').value = ""; document.getElementById('mj').value = "";
-            }
-        }
-
-        function tambahOjol(brand) {
-            let input = document.getElementById('oj').value;
-            if(input) {
-                bc("  Pesanan " + brand + " " + input + " Pesanan sudah siap. Silahkan menuju meja take away sekarang juga, Terimakasih");
-                document.getElementById('oj').value = "";
-            }
-        }
-
-        function tambahTA() {
-            let input = document.getElementById('oj').value;
-            if(input) {
-                bc("  Pesanan Take Away atas nama Kak" + input + ". Pesanan anda sudah siap. Silahkan menuju meja take away sekarang juga, terimakasih");
-                document.getElementById('oj').value = "";
-            }
-        }
-
-        /* --- FUNGSI UI (TUTORIAL & TAB) --- */
-
-        function startTutorial() {
-            document.getElementById('welcomeScreen').style.transform = 'translateY(-100%)';
-            setTimeout(() => { document.getElementById('tutorialOverlay').style.display = 'flex'; }, 1000);
-        }
-
-        function nextTuto() {
-            stepTuto++;
-            const tutoText = document.getElementById('tutoText');
-            if(stepTuto === 1) { tutoText.innerText = "Fitur Multi-Call aktif otomatis. Silahkan klik beberapa nomor meja dengan cepat."; }
-            else if(stepTuto === 2) { tutoText.innerText = "Pengumuman otomatis hanya akan berbunyi di jam sibuk (Istirahat & Malam)."; }
-            else {
-                document.getElementById('tutorialOverlay').style.display = 'none';
-                bc("   Sistem panggilan sudah aktif. Diharapkan para pelanggan untuk dapat mendengarkan panggilan system ini. Terimakasih");
-                jalankanPengumumanOtomatis(); 
-            }
-        }
-
-        function openTab(tabName) {
-            document.querySelectorAll('.tab-content').forEach(c => c.classList.remove('active'));
-            document.querySelectorAll('.tab-btn').forEach(b => b.classList.remove('active'));
-            document.getElementById(tabName).classList.add('active');
-            event.currentTarget.classList.add('active');
-        }
-
-        // GENERATE TOMBOL MEJA 1-100
-        const container = document.getElementById('gt');
-        for (let i = 1; i <= 100; i++) {
-            let b = document.createElement('button');
-            b.className = 'meja'; b.innerText = i;
-            b.onclick = () => bc("Panggilan untuk nomor meja " + i + ". Pesanan anda sudah siap, harap menuju meja self service sekarang juga, Terimakasih");
-            container.appendChild(b);
-        }
-    </script>
-</body>
-</html>        
-        /* Tombol Musik Style */
         .music-control-box { margin-top: 10px; display: flex; align-items: center; justify-content: center; gap: 10px; }
-        .btn-music-ctrl { border: none; padding: 8px 15px; border-radius: 20px; font-size: 12px; font-weight: bold; cursor: pointer; display: flex; align-items: center; gap: 5px; }
+        .btn-music-ctrl { border: none; padding: 8px 15px; border-radius: 20px; font-size: 12px; font-weight: bold; cursor: pointer; }
         .bg-play { background: #10b981; color: white; }
         .bg-pause { background: #ef4444; color: white; }
-        #statusMusic { font-size: 11px; color: #64748b; font-style: italic; }
-
+        #statusMusic { font-size: 11px; color: #64748b; font-style: italic; margin-top: 5px; }
         .header { background: #ffffff; color: #1e3a8a; padding: 15px; border-radius: 15px; margin-bottom: 10px; border: 2px solid #1e3a8a; }
-        
         .nav-tabs { display: flex; gap: 10px; margin-bottom: 15px; }
         .tab-btn { flex: 1; padding: 15px; border-radius: 12px; border: 1px solid #cbd5e1; font-weight: bold; font-size: 14px; cursor: pointer; background: #f8fafc; color: #64748b; }
         .tab-btn.active { background: #1e3a8a; color: white; border-color: #1e3a8a; }
-
-        /* =========================================
-           3. KARTU INPUT & TOMBOL PANGGILAN
-           ========================================= */
         .card { background: white; padding: 15px; border-radius: 15px; box-shadow: 0 4px 6px rgba(0,0,0,0.05); border: 1px solid #e2e8f0; margin-bottom: 20px; }
         input { width: 85%; padding: 12px; margin: 5px; border: 1px solid #cbd5e1; border-radius: 10px; font-size: 16px; background: #fdfdfd; }
-        
         .btn-call { color: white; border: none; padding: 15px; border-radius: 12px; width: 100%; font-weight: bold; margin-top: 10px; font-size: 16px; cursor: pointer; }
         .btn-ann { color: white; border: none; padding: 12px 5px; border-radius: 10px; width: 100%; font-weight: bold; font-size: 11px; cursor: pointer; height: 60px; display: flex; align-items: center; justify-content: center; }
-        
-        /* WARNA TOMBOL */
+        .bg-orange { background: #f97316; } 
+        .bg-red { background: #ef4444; } 
         .bg-grab { background: #00b14f; } 
         .bg-shopee { background: #ee4d2d; } 
         .bg-gojek { background: #00aa13; } 
         .bg-takeaway { background: #3b82f6; }
-        .bg-orange { background: #f97316; } 
-        .bg-red { background: #ef4444; } 
-
-        /* =========================================
-           4. GRID MEJA & LAINNYA
-           ========================================= */
         .grid-meja { display: grid; grid-template-columns: repeat(4, 1fr); gap: 8px; margin-top: 20px; }
-        .meja { background: white; border: 1px solid #cbd5e1; padding: 15px 0; border-radius: 10px; font-weight: bold; color: #1e3a8a; transition: 0.2s; }
-        .meja:active { background: #e2e8f0; }
-
+        .meja { background: white; border: 1px solid #cbd5e1; padding: 15px 0; border-radius: 10px; font-weight: bold; color: #1e3a8a; }
         .tab-content { display: none; } 
         .tab-content.active { display: block; }
         .status-antrean { font-size: 12px; color: #10b981; font-weight: bold; margin-top: 5px; }
-
         #tutorialOverlay { position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: rgba(0,0,0,0.7); display: none; z-index: 10000; color: white; padding: 20px; text-align: center; justify-content: center; align-items: center; flex-direction: column; }
-        .tuto-box { background: white; color: #333; padding: 20px; border-radius: 15px; width: 80%; max-width: 300px; position: relative; }
+        .tuto-box { background: white; color: #333; padding: 20px; border-radius: 15px; width: 80%; max-width: 300px; }
     </style>
 </head>
 <body onload="mulaiAplikasi()">
@@ -373,16 +67,14 @@
     </div>
 
     <div class="main-app">
-        
         <div class="info-waktu">
             <p id="hariTxt"></p>
             <p id="jamTxt"></p>
-            
             <div class="music-control-box">
-                <button id="btnPlay" class="btn-music-ctrl bg-play" onclick="manualPlayMusic()">▶ PLAY</button>
-                <button id="btnPause" class="btn-music-ctrl bg-pause" onclick="manualPauseMusic()">⏸ PAUSE</button>
+                <button class="btn-music-ctrl bg-play" onclick="manualPlayMusic()">▶ PLAY</button>
+                <button class="btn-music-ctrl bg-pause" onclick="manualPauseMusic()">⏸ PAUSE</button>
             </div>
-            <div id="statusMusic">Musik: Off</div>
+            <div id="statusMusic">Musik: Off (Tekan Play untuk memulai)</div>
         </div>
 
         <div class="header">
@@ -405,12 +97,9 @@
                     <input type="range" id="rate" style="width:90%" min="0.5" max="1.2" step="0.05" value="0.85">
                 </div>
             </div>
-
             <div class="announcement-grid">
                 <button class="btn-ann bg-red" onclick="bc('PEMBERITAHUAN, karena cuaca sedang hujan, dimohon bagi para pelanggan untuk berhati-hati saat berjalan karena lantai cenderung licin. Terima kasih.')" style="width: 100%; height: 80px; font-size: 16px;">⚠️ KLIK SAAT HUJAN (LANTAI LICIN)</button>
-                <p style="font-size: 11px; color: #64748b; margin-top: 10px;">*Pengumuman otomatis berjalan setiap 30 menit.</p>
             </div>
-
             <div id="gt" class="grid-meja"></div>
         </div>
 
@@ -430,15 +119,16 @@
         let sedangBicara = false;
         let stepTuto = 0;
         let voices = [];
-        let currentMusicId = null; 
-        let isMusicPausedManually = false;
+        let currentMusicId = null;
+        // KUNCI UTAMA: Awalnya diset TRUE agar tidak putar otomatis
+        let isMusicPausedManually = true; 
         
-        let indexPengumuman = 0;
         const daftarPengumumanOtomatis = [
             "PENGUMUMAN. Bagi pelanggan yang menemukan atau kehilangan barang, diharapkan melapor ke kasir. Terima kasih",
             "DIMOHON. bagi pelanggan untuk duduk sesuai dengan kapasitas meja demi kenyamanan bersama. Terima kasih.",
             "Mari kita jaga kebersihan bersama dengan membuang sampah pada tempatnya. Terimakasih"
         ];
+        let indexPengumuman = 0;
 
         window.speechSynthesis.onvoiceschanged = () => { voices = window.speechSynthesis.getVoices(); };
 
@@ -452,49 +142,40 @@
                 const d = new Date();
                 document.getElementById("hariTxt").innerText = ["Minggu","Senin","Selasa","Rabu","Kamis","Jumat","Sabtu"][d.getDay()];
                 document.getElementById("jamTxt").innerText = d.getHours().toString().padStart(2,'0') + "." + d.getMinutes().toString().padStart(2,'0') + " WIB";
-                
-                // Update jenis musik tiap menit (tapi jangan maksa play kalau lagi dipause manual)
+                // Tetap jalankan pengecekan jenis musik, tapi tidak akan PLAY kalau isMusicPausedManually = true
                 updateMusicTypeByTime();
             }, 1000);
         }
 
-        /* --- LOGIKA MUSIK INSTRUMEN --- */
         function updateMusicTypeByTime() {
-            if (isMusicPausedManually) return; // Jika dipause manual, jangan ganti/play otomatis
+            if (isMusicPausedManually) return; // Stop di sini jika user belum tekan PLAY
 
             const jam = new Date().getHours();
             const isJamSibuk = (jam >= 11 && jam <= 14) || (jam >= 18 || jam < 1);
-            
             const targetId = isJamSibuk ? 'bgmSemangat' : 'bgmSlow';
-            const statusTxt = document.getElementById('statusMusic');
 
             if (currentMusicId !== targetId) {
-                // Berhenti musik lama
                 if (currentMusicId) document.getElementById(currentMusicId).pause();
-                
-                // Mainkan musik baru
                 const newMusic = document.getElementById(targetId);
                 newMusic.volume = 0.15;
-                newMusic.play().catch(e => console.log("User must interact first"));
-                
+                newMusic.play().catch(() => {});
                 currentMusicId = targetId;
-                statusTxt.innerText = "Musik: " + (isJamSibuk ? "Semangat" : "Slow") + " (Auto)";
+                document.getElementById('statusMusic').innerText = "Musik: " + (isJamSibuk ? "Semangat" : "Slow");
             }
         }
 
         function manualPlayMusic() {
             isMusicPausedManually = false;
-            currentMusicId = null; // Reset agar fungsi updateMusic mendeteksi ulang
+            currentMusicId = null; // Reset agar fungsi update deteksi ulang dan PLAY
             updateMusicTypeByTime();
-            document.getElementById('statusMusic').innerText = "Musik dinyalakan kembali";
         }
 
         function manualPauseMusic() {
             isMusicPausedManually = true;
             if (currentMusicId) {
                 document.getElementById(currentMusicId).pause();
-                document.getElementById('statusMusic').innerText = "Musik Dimatikan (Paused)";
             }
+            document.getElementById('statusMusic').innerText = "Musik Dimatikan";
         }
 
         function bc(teks) {
@@ -505,29 +186,17 @@
         function prosesAntrean() {
             if (sedangBicara || antreanSuara.length === 0) return;
             sedangBicara = true;
-            
-            // Ducking (kecilkan volume kalau musik nyala)
-            if (currentMusicId && !isMusicPausedManually) {
-                document.getElementById(currentMusicId).volume = 0.03;
-            }
+            if (currentMusicId && !isMusicPausedManually) document.getElementById(currentMusicId).volume = 0.03;
 
-            let teksSekarang = antreanSuara.shift();
+            let teks = antreanSuara.shift();
             document.getElementById('antreanInfo').innerText = "Antrean: " + antreanSuara.length + " Panggilan";
-
-            const u = new SpeechSynthesisUtterance(teksSekarang);
-            let v = voices.find(v => v.lang.includes('id') && v.name.includes('Google') && v.name.includes('Natural')) || voices.find(v => v.lang.includes('id'));
-
-            u.voice = v;
+            const u = new SpeechSynthesisUtterance(teks);
+            u.voice = voices.find(v => v.lang.includes('id') && v.name.includes('Google')) || voices.find(v => v.lang.includes('id'));
             u.lang = 'id-ID';
             u.rate = document.getElementById('rate').value;
-            u.pitch = 1.05;
-
             u.onend = function() { 
                 sedangBicara = false; 
-                // Restore volume
-                if (currentMusicId && !isMusicPausedManually) {
-                    document.getElementById(currentMusicId).volume = 0.15;
-                }
+                if (currentMusicId && !isMusicPausedManually) document.getElementById(currentMusicId).volume = 0.15;
                 prosesAntrean(); 
             };
             window.speechSynthesis.speak(u);
@@ -544,7 +213,7 @@
             let n = document.getElementById('nm').value;
             let m = document.getElementById('mj').value;
             if(n && m) {
-                bc("  Panggilan Atas Nama Kak " + n + " Dengan nomor Meja. " + m + ". Pesanan anda sudah siap. Harap Menuju Meja Self Service sekarang juga, Terimakasih");
+                bc("Panggilan Atas Nama Kak " + n + " Dengan nomor Meja. " + m + ". Pesanan anda sudah siap. Harap Menuju Meja Self Service sekarang juga, Terimakasih");
                 document.getElementById('nm').value = ""; document.getElementById('mj').value = "";
             }
         }
@@ -552,7 +221,7 @@
         function tambahOjol(brand) {
             let input = document.getElementById('oj').value;
             if(input) {
-                bc("  Pesanan " + brand + " " + input + " Pesanan sudah siap. Silahkan menuju meja take away sekarang juga, Terimakasih");
+                bc("Pesanan " + brand + " " + input + " Pesanan sudah siap. Silahkan menuju meja take away sekarang juga, Terimakasih");
                 document.getElementById('oj').value = "";
             }
         }
@@ -560,7 +229,7 @@
         function tambahTA() {
             let input = document.getElementById('oj').value;
             if(input) {
-                bc("  Pesanan Take Away atas nama Kak " + input + ". Pesanan anda sudah siap. Silahkan menuju meja take away sekarang juga, terimakasih");
+                bc("Pesanan Take Away atas nama Kak " + input + ". Pesanan anda sudah siap. Silahkan menuju meja take away sekarang juga, terimakasih");
                 document.getElementById('oj').value = "";
             }
         }
@@ -572,14 +241,11 @@
 
         function nextTuto() {
             stepTuto++;
-            const tutoText = document.getElementById('tutoText');
-            if(stepTuto === 1) { tutoText.innerText = "Gunakan tombol Play/Pause untuk mengatur musik secara manual."; }
-            else if(stepTuto === 2) { tutoText.innerText = "Pengumuman otomatis 30 menit akan terus berjalan."; }
+            if(stepTuto === 1) document.getElementById('tutoText').innerText = "Tekan tombol PLAY di atas untuk memutar musik pengiring.";
             else {
                 document.getElementById('tutorialOverlay').style.display = 'none';
-                manualPlayMusic(); 
-                bc("   Sistem Gacoan Call Pro Aktif. Musik dan pengumuman rutin telah berjalan. Terimakasih");
                 jalankanPengumumanOtomatis(); 
+                bc("Sistem Gacoan Call Pro Aktif.");
             }
         }
 
