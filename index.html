@@ -6,7 +6,6 @@
     <title>Gacoan Call Pro - Premium By Yudi</title>
     
     <style>
-        /* CSS tetap sama dengan sebelumnya */
         body { font-family: sans-serif; background: #f4f7f9; margin: 0; padding: 0; overflow-x: hidden; color: #333; }
         #welcomeScreen { position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: radial-gradient(circle, #ffffff, #e2e8f0); display: flex; flex-direction: column; align-items: center; justify-content: center; z-index: 9999; transition: transform 1s ease-in-out; }
         .logo-gacoan { width: 180px; height: 180px; margin-bottom: 20px; border-radius: 50%; border: 5px solid #1e3a8a; box-shadow: 0 4px 15px rgba(0,0,0,0.1); background: white; object-fit: contain; }
@@ -15,11 +14,18 @@
         .info-waktu { background: white; padding: 10px; border-radius: 12px; margin-bottom: 10px; border: 1px solid #e2e8f0; }
         #hariTxt { font-weight: bold; color: #1e3a8a; font-size: 18px; margin: 0; }
         #jamTxt { font-size: 22px; font-weight: bold; color: #f97316; margin: 0; }
-        .music-control-box { margin-top: 10px; display: flex; align-items: center; justify-content: center; gap: 10px; }
-        .btn-music-ctrl { border: none; padding: 8px 15px; border-radius: 20px; font-size: 12px; font-weight: bold; cursor: pointer; }
-        .bg-play { background: #10b981; color: white; }
-        .bg-pause { background: #ef4444; color: white; }
-        #statusMusic { font-size: 11px; color: #64748b; font-style: italic; margin-top: 5px; }
+        
+        /* Style Tambahan untuk Panel Musik */
+        .music-control-box { margin-top: 10px; display: flex; flex-wrap: wrap; align-items: center; justify-content: center; gap: 8px; }
+        .btn-music-ctrl { border: none; padding: 8px 12px; border-radius: 10px; font-size: 11px; font-weight: bold; cursor: pointer; color: white; }
+        .bg-play { background: #10b981; }
+        .bg-pause { background: #ef4444; }
+        .bg-slow { background: #3b82f6; }
+        .bg-energic { background: #f97316; }
+        .bg-night { background: #6366f1; }
+        .bg-ultah { background: #db2777; }
+        
+        #statusMusic { font-size: 11px; color: #64748b; font-style: italic; margin-top: 5px; display: block; }
         .header { background: #ffffff; color: #1e3a8a; padding: 15px; border-radius: 15px; margin-bottom: 10px; border: 2px solid #1e3a8a; }
         .nav-tabs { display: flex; gap: 10px; margin-bottom: 15px; }
         .tab-btn { flex: 1; padding: 15px; border-radius: 12px; border: 1px solid #cbd5e1; font-weight: bold; font-size: 14px; cursor: pointer; background: #f8fafc; color: #64748b; }
@@ -45,12 +51,10 @@
 </head>
 <body onload="mulaiAplikasi()">
 
-    <audio id="bgmSlow" loop preload="auto">
-        <source src="https://www.bensound.com/bensound-music/bensound-betterdays.mp3" type="audio/mpeg">
-    </audio>
-    <audio id="bgmSemangat" loop preload="auto">
-        <source src="https://www.bensound.com/bensound-music/bensound-energy.mp3" type="audio/mpeg">
-    </audio>
+    <audio id="bgmSlow" loop preload="auto"><source src="https://www.bensound.com/bensound-music/bensound-betterdays.mp3" type="audio/mpeg"></audio>
+    <audio id="bgmSemangat" loop preload="auto"><source src="https://www.bensound.com/bensound-music/bensound-energy.mp3" type="audio/mpeg"></audio>
+    <audio id="bgmNight" loop preload="auto"><source src="https://www.bensound.com/bensound-music/bensound-memories.mp3" type="audio/mpeg"></audio>
+    <audio id="bgmUltah" preload="auto"><source src="https://www.chosic.com/wp-content/uploads/2021/04/Happy-Birthday-To-You-Jazz-Style.mp3" type="audio/mpeg"></audio>
 
     <div id="welcomeScreen">
         <img src="https://i.ibb.co.com/ycrmLMHf/Logo-Mie-Gacoan-1.png" class="logo-gacoan">
@@ -71,10 +75,13 @@
             <p id="hariTxt"></p>
             <p id="jamTxt"></p>
             <div class="music-control-box">
-                <button class="btn-music-ctrl bg-play" onclick="manualPlayMusic()">▶ PLAY</button>
+                <button class="btn-music-ctrl bg-energic" onclick="manualPlayMusic('bgmSemangat', 'Energik')">⚡ ENERGIK</button>
+                <button class="btn-music-ctrl bg-slow" onclick="manualPlayMusic('bgmSlow', 'Santai')">🍃 SANTAI</button>
+                <button class="btn-music-ctrl bg-night" onclick="manualPlayMusic('bgmNight', 'Malam')">🌙 MALAM</button>
+                <button class="btn-music-ctrl bg-ultah" onclick="modeUltah()">🎂 ULTAH</button>
                 <button class="btn-music-ctrl bg-pause" onclick="manualPauseMusic()">⏸ PAUSE</button>
             </div>
-            <div id="statusMusic">Musik: Off (Tekan Play untuk memulai)</div>
+            <span id="statusMusic">Musik: Off (Pilih mode untuk memulai)</span>
         </div>
 
         <div class="header">
@@ -115,19 +122,29 @@
     </div>
 
     <script>
+        /* =========================================
+           KONFIGURASI PENGUMUMAN OTOMATIS
+           ========================================= */
+        const JEDA_MENIT = 1; // Ubah angka ini untuk mengatur menit jeda
+        
+        const daftarPengumumanOtomatis = [
+            "PENGUMUMAN. Bagi pelanggan yang menemukan atau kehilangan barang, diharapkan melapor ke kasir. Terima kasih",
+            "Bagi pelanggan yang membutuhkan tisu, atau sendok. bisa langsung meminta pada meja self service kami. Terima kasih",
+            "Untuk pelanggan yang menginginkan Makananya dibungkus silahkan menunju Cashier untuk membeli paperboxnya terlebih dahulu nanti akan kami bantu bungkuskan pesanannya. Terimakasih",
+            "DIMOHON. bagi pelanggan yang baru datang atau ingin memesan pastikan untuk duduk sesuai dengan kapasitas meja demi kenyamanan bersama. Terima kasih.",
+            "Mari kita jaga kebersihan bersama dengan membuang sampah pada tempatnya. Terimakasih",
+            "Saya ucapkan Terimakasih kepada pelanggan semua yang sudah menyempatkan waktunya untuk memesan atau makan mie di Resto kami. Silahkan datang Kembali dan menjadi pelanggan Experience Terbaik kami."
+        ];
+
+        /* =========================================
+           LOGIKA UTAMA APLIKASI
+           ========================================= */
         let antreanSuara = [];
         let sedangBicara = false;
         let stepTuto = 0;
         let voices = [];
         let currentMusicId = null;
-        // KUNCI UTAMA: Awalnya diset TRUE agar tidak putar otomatis
         let isMusicPausedManually = true; 
-        
-        const daftarPengumumanOtomatis = [
-            "PENGUMUMAN. Bagi pelanggan yang menemukan atau kehilangan barang, diharapkan melapor ke kasir. Terima kasih",
-            "DIMOHON. bagi pelanggan untuk duduk sesuai dengan kapasitas meja demi kenyamanan bersama. Terima kasih.",
-            "Mari kita jaga kebersihan bersama dengan membuang sampah pada tempatnya. Terimakasih"
-        ];
         let indexPengumuman = 0;
 
         window.speechSynthesis.onvoiceschanged = () => { voices = window.speechSynthesis.getVoices(); };
@@ -142,40 +159,41 @@
                 const d = new Date();
                 document.getElementById("hariTxt").innerText = ["Minggu","Senin","Selasa","Rabu","Kamis","Jumat","Sabtu"][d.getDay()];
                 document.getElementById("jamTxt").innerText = d.getHours().toString().padStart(2,'0') + "." + d.getMinutes().toString().padStart(2,'0') + " WIB";
-                // Tetap jalankan pengecekan jenis musik, tapi tidak akan PLAY kalau isMusicPausedManually = true
-                updateMusicTypeByTime();
             }, 1000);
         }
 
-        function updateMusicTypeByTime() {
-            if (isMusicPausedManually) return; // Stop di sini jika user belum tekan PLAY
-
-            const jam = new Date().getHours();
-            const isJamSibuk = (jam >= 11 && jam <= 14) || (jam >= 18 || jam < 1);
-            const targetId = isJamSibuk ? 'bgmSemangat' : 'bgmSlow';
-
-            if (currentMusicId !== targetId) {
-                if (currentMusicId) document.getElementById(currentMusicId).pause();
-                const newMusic = document.getElementById(targetId);
-                newMusic.volume = 0.15;
-                newMusic.play().catch(() => {});
-                currentMusicId = targetId;
-                document.getElementById('statusMusic').innerText = "Musik: " + (isJamSibuk ? "Semangat" : "Slow");
-            }
-        }
-
-        function manualPlayMusic() {
+        function manualPlayMusic(id, label) {
             isMusicPausedManually = false;
-            currentMusicId = null; // Reset agar fungsi update deteksi ulang dan PLAY
-            updateMusicTypeByTime();
+            stopAllMusicInternal();
+            currentMusicId = id;
+            const m = document.getElementById(id);
+            m.volume = 0.15;
+            m.play().catch(() => {});
+            document.getElementById('statusMusic').innerText = "Musik: Mode " + label;
         }
 
         function manualPauseMusic() {
             isMusicPausedManually = true;
-            if (currentMusicId) {
-                document.getElementById(currentMusicId).pause();
-            }
+            stopAllMusicInternal();
             document.getElementById('statusMusic').innerText = "Musik Dimatikan";
+        }
+
+        function stopAllMusicInternal() {
+            ['bgmSlow', 'bgmSemangat', 'bgmNight', 'bgmUltah'].forEach(id => {
+                const m = document.getElementById(id);
+                m.pause();
+                m.currentTime = 0;
+            });
+        }
+
+        function modeUltah() {
+            isMusicPausedManually = false;
+            stopAllMusicInternal();
+            currentMusicId = 'bgmUltah';
+            document.getElementById('bgmUltah').volume = 0.2;
+            document.getElementById('bgmUltah').play();
+            document.getElementById('statusMusic').innerText = "Musik: Mode Ulang Tahun 🎂";
+            bc("Pemberitahuan. Kami segenap kru Mie Gacoan mengucapkan Selamat Ulang Tahun untuk pelanggan kami yang sedang berbahagia. Semoga panjang umur dan sehat selalu. Mari kita beri tepuk tangan yang meriah!");
         }
 
         function bc(teks) {
@@ -186,7 +204,7 @@
         function prosesAntrean() {
             if (sedangBicara || antreanSuara.length === 0) return;
             sedangBicara = true;
-            if (currentMusicId && !isMusicPausedManually) document.getElementById(currentMusicId).volume = 0.03;
+            if (currentMusicId) document.getElementById(currentMusicId).volume = 0.03;
 
             let teks = antreanSuara.shift();
             document.getElementById('antreanInfo').innerText = "Antrean: " + antreanSuara.length + " Panggilan";
@@ -196,7 +214,7 @@
             u.rate = document.getElementById('rate').value;
             u.onend = function() { 
                 sedangBicara = false; 
-                if (currentMusicId && !isMusicPausedManually) document.getElementById(currentMusicId).volume = 0.15;
+                if (currentMusicId) document.getElementById(currentMusicId).volume = 0.15;
                 prosesAntrean(); 
             };
             window.speechSynthesis.speak(u);
@@ -206,7 +224,7 @@
             setInterval(() => {
                 bc("  " + daftarPengumumanOtomatis[indexPengumuman]);
                 indexPengumuman = (indexPengumuman + 1) % daftarPengumumanOtomatis.length;
-            }, 30 * 60 * 1000); 
+            }, JEDA_MENIT * 60 * 1000); 
         }
 
         function tambahAntreanCustomer() {
@@ -241,7 +259,7 @@
 
         function nextTuto() {
             stepTuto++;
-            if(stepTuto === 1) document.getElementById('tutoText').innerText = "Tekan tombol PLAY di atas untuk memutar musik pengiring.";
+            if(stepTuto === 1) document.getElementById('tutoText').innerText = "Gunakan tombol musik di atas untuk mengatur suasana resto.";
             else {
                 document.getElementById('tutorialOverlay').style.display = 'none';
                 jalankanPengumumanOtomatis(); 
