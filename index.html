@@ -130,7 +130,7 @@
         /* ========================================================
            BAGIAN 2: EDIT KONFIGURASI DI SINI
            ======================================================== */
-        const JEDA_MENIT = 30; // Jeda pengumuman otomatis
+        const JEDA_MENIT = 1; // Jeda pengumuman otomatis
         const JEDA_ANTREAN_DETIK = 3; // Jeda antar suara panggilan (Sesuai Request)
 
         const daftarPengumumanOtomatis = [
@@ -277,11 +277,11 @@
 
         function nextTuto() {
             stepTuto++;
-            if(stepTuto === 1) document.getElementById('tutoText').innerText = "Gunakan tombol musik di atas untuk mengatur suasana resto.";
+            if(stepTuto === 1) document.getElementById('tutoText').innerText = "Mohon Tunggu aplikasi Mengeluarkan suara ketika sudah menutup pesan ini";
             else {
                 document.getElementById('tutorialOverlay').style.display = 'none';
                 jalankanPengumumanOtomatis(); 
-                bc(" Suara Sistem Panggilan sudah Aktif.");
+                bc(" Suara Panggilan Sistem sudah Aktif. Diharapkan pelanggan bisa mendengarkan dengan bijak. Terimakasih");
             }
         }
 
