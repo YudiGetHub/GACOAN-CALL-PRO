@@ -34,8 +34,14 @@
         .info-waktu { background: white; padding: 10px; border-radius: 12px; margin-bottom: 10px; border: 1px solid #e2e8f0; }
         #hariTxt { font-weight: bold; color: #1e3a8a; font-size: 18px; margin: 0; }
         #jamTxt { font-size: 22px; font-weight: bold; color: #f97316; margin: 0; }
-        #statusMusic { font-size: 12px; color: #64748b; margin-top: 5px; font-style: italic; }
         
+        /* Tombol Musik Style */
+        .music-control-box { margin-top: 10px; display: flex; align-items: center; justify-content: center; gap: 10px; }
+        .btn-music-ctrl { border: none; padding: 8px 15px; border-radius: 20px; font-size: 12px; font-weight: bold; cursor: pointer; display: flex; align-items: center; gap: 5px; }
+        .bg-play { background: #10b981; color: white; }
+        .bg-pause { background: #ef4444; color: white; }
+        #statusMusic { font-size: 11px; color: #64748b; font-style: italic; }
+
         .header { background: #ffffff; color: #1e3a8a; padding: 15px; border-radius: 15px; margin-bottom: 10px; border: 2px solid #1e3a8a; }
         
         .nav-tabs { display: flex; gap: 10px; margin-bottom: 15px; }
@@ -58,7 +64,6 @@
         .bg-takeaway { background: #3b82f6; }
         .bg-orange { background: #f97316; } 
         .bg-red { background: #ef4444; } 
-        .bg-purple { background: #8b5cf6; }
 
         /* =========================================
            4. GRID MEJA & LAINNYA
@@ -71,7 +76,6 @@
         .tab-content.active { display: block; }
         .status-antrean { font-size: 12px; color: #10b981; font-weight: bold; margin-top: 5px; }
 
-        /* OVERLAY TUTORIAL */
         #tutorialOverlay { position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: rgba(0,0,0,0.7); display: none; z-index: 10000; color: white; padding: 20px; text-align: center; justify-content: center; align-items: center; flex-direction: column; }
         .tuto-box { background: white; color: #333; padding: 20px; border-radius: 15px; width: 80%; max-width: 300px; position: relative; }
     </style>
@@ -94,7 +98,7 @@
 
     <div id="tutorialOverlay">
         <div class="tuto-box">
-            <p id="tutoText">Selamat datang! Silahkan gunakan aplikasi ini untuk memanggil pelanggan dengan cepat.</p>
+            <p id="tutoText">Selamat datang!</p>
             <button onclick="nextTuto()" style="background:#1e3a8a; color:white; border:none; padding:10px 20px; border-radius:10px; font-weight:bold;">Lanjut</button>
         </div>
     </div>
@@ -104,10 +108,12 @@
         <div class="info-waktu">
             <p id="hariTxt"></p>
             <p id="jamTxt"></p>
+            
+            <div class="music-control-box">
+                <button id="btnPlay" class="btn-music-ctrl bg-play" onclick="manualPlayMusic()">▶ PLAY</button>
+                <button id="btnPause" class="btn-music-ctrl bg-pause" onclick="manualPauseMusic()">⏸ PAUSE</button>
+            </div>
             <div id="statusMusic">Musik: Off</div>
-            <button style="background:none; border:none; color:#1e3a8a; text-decoration:underline; font-weight:bold; cursor:pointer;" onclick="bc('Ini adalah suara system. Cek suara system berhasil.')">
-                [ CEK SUARA APLIKASI ]
-            </button>
         </div>
 
         <div class="header">
@@ -133,8 +139,7 @@
 
             <div class="announcement-grid">
                 <button class="btn-ann bg-red" onclick="bc('PEMBERITAHUAN, karena cuaca sedang hujan, dimohon bagi para pelanggan untuk berhati-hati saat berjalan karena lantai cenderung licin. Terima kasih.')" style="width: 100%; height: 80px; font-size: 16px;">⚠️ KLIK SAAT HUJAN (LANTAI LICIN)</button>
-                
-                <p style="font-size: 11px; color: #64748b; margin-top: 10px;">*Pengumuman otomatis 30 Menit berjalan sepanjang waktu.</p>
+                <p style="font-size: 11px; color: #64748b; margin-top: 10px;">*Pengumuman otomatis berjalan setiap 30 menit.</p>
             </div>
 
             <div id="gt" class="grid-meja"></div>
@@ -152,17 +157,13 @@
     </div>
 
     <script>
-        /* =========================================
-           5. LOGIKA JAVASCRIPT
-           ========================================= */
-        
         let antreanSuara = [];
         let sedangBicara = false;
         let stepTuto = 0;
         let voices = [];
-        let currentMusic = null;
+        let currentMusicId = null; 
+        let isMusicPausedManually = false;
         
-        // --- LOGIKA PENGUMUMAN OTOMATIS ---
         let indexPengumuman = 0;
         const daftarPengumumanOtomatis = [
             "PENGUMUMAN. Bagi pelanggan yang menemukan atau kehilangan barang, diharapkan melapor ke kasir. Terima kasih",
@@ -182,37 +183,48 @@
                 const d = new Date();
                 document.getElementById("hariTxt").innerText = ["Minggu","Senin","Selasa","Rabu","Kamis","Jumat","Sabtu"][d.getDay()];
                 document.getElementById("jamTxt").innerText = d.getHours().toString().padStart(2,'0') + "." + d.getMinutes().toString().padStart(2,'0') + " WIB";
-                updateMusicByTime();
+                
+                // Update jenis musik tiap menit (tapi jangan maksa play kalau lagi dipause manual)
+                updateMusicTypeByTime();
             }, 1000);
         }
 
         /* --- LOGIKA MUSIK INSTRUMEN --- */
-        function updateMusicByTime() {
+        function updateMusicTypeByTime() {
+            if (isMusicPausedManually) return; // Jika dipause manual, jangan ganti/play otomatis
+
             const jam = new Date().getHours();
-            
-            // Jam Musik Semangat (Bisa Bapak sesuaikan jika perlu)
             const isJamSibuk = (jam >= 11 && jam <= 14) || (jam >= 18 || jam < 1);
             
-            const musicSlow = document.getElementById('bgmSlow');
-            const musicSemangat = document.getElementById('bgmSemangat');
+            const targetId = isJamSibuk ? 'bgmSemangat' : 'bgmSlow';
             const statusTxt = document.getElementById('statusMusic');
 
-            if (isJamSibuk) {
-                if (currentMusic !== 'semangat') {
-                    musicSlow.pause();
-                    musicSemangat.volume = 0.15; // Volume 15%
-                    musicSemangat.play();
-                    currentMusic = 'semangat';
-                    statusTxt.innerText = "Musik: Semangat (Aktif)";
-                }
-            } else {
-                if (currentMusic !== 'slow') {
-                    musicSemangat.pause();
-                    musicSlow.volume = 0.15;
-                    musicSlow.play();
-                    currentMusic = 'slow';
-                    statusTxt.innerText = "Musik: Slow (Aktif)";
-                }
+            if (currentMusicId !== targetId) {
+                // Berhenti musik lama
+                if (currentMusicId) document.getElementById(currentMusicId).pause();
+                
+                // Mainkan musik baru
+                const newMusic = document.getElementById(targetId);
+                newMusic.volume = 0.15;
+                newMusic.play().catch(e => console.log("User must interact first"));
+                
+                currentMusicId = targetId;
+                statusTxt.innerText = "Musik: " + (isJamSibuk ? "Semangat" : "Slow") + " (Auto)";
+            }
+        }
+
+        function manualPlayMusic() {
+            isMusicPausedManually = false;
+            currentMusicId = null; // Reset agar fungsi updateMusic mendeteksi ulang
+            updateMusicTypeByTime();
+            document.getElementById('statusMusic').innerText = "Musik dinyalakan kembali";
+        }
+
+        function manualPauseMusic() {
+            isMusicPausedManually = true;
+            if (currentMusicId) {
+                document.getElementById(currentMusicId).pause();
+                document.getElementById('statusMusic').innerText = "Musik Dimatikan (Paused)";
             }
         }
 
@@ -225,40 +237,35 @@
             if (sedangBicara || antreanSuara.length === 0) return;
             sedangBicara = true;
             
-            // Ducking (Mengecilkan musik)
-            if (currentMusic === 'slow') document.getElementById('bgmSlow').volume = 0.03;
-            if (currentMusic === 'semangat') document.getElementById('bgmSemangat').volume = 0.03;
-
-            let teksSekarang = antreanSuara.shift();
-            let kalimatFinal = teksSekarang;
-            if (antreanSuara.length > 0) {
-                kalimatFinal = teksSekarang.replace(/Terimakasih|terimakasih/gi, "");
+            // Ducking (kecilkan volume kalau musik nyala)
+            if (currentMusicId && !isMusicPausedManually) {
+                document.getElementById(currentMusicId).volume = 0.03;
             }
 
+            let teksSekarang = antreanSuara.shift();
             document.getElementById('antreanInfo').innerText = "Antrean: " + antreanSuara.length + " Panggilan";
 
-            const u = new SpeechSynthesisUtterance(kalimatFinal);
-            let voiceGemini = voices.find(v => v.lang.includes('id') && v.name.includes('Google') && v.name.includes('Natural')) || voices.find(v => v.lang.includes('id'));
+            const u = new SpeechSynthesisUtterance(teksSekarang);
+            let v = voices.find(v => v.lang.includes('id') && v.name.includes('Google') && v.name.includes('Natural')) || voices.find(v => v.lang.includes('id'));
 
-            u.voice = voiceGemini;
+            u.voice = v;
             u.lang = 'id-ID';
             u.rate = document.getElementById('rate').value;
             u.pitch = 1.05;
 
             u.onend = function() { 
                 sedangBicara = false; 
-                // Restore Musik
-                if (currentMusic === 'slow') document.getElementById('bgmSlow').volume = 0.15;
-                if (currentMusic === 'semangat') document.getElementById('bgmSemangat').volume = 0.15;
+                // Restore volume
+                if (currentMusicId && !isMusicPausedManually) {
+                    document.getElementById(currentMusicId).volume = 0.15;
+                }
                 prosesAntrean(); 
             };
             window.speechSynthesis.speak(u);
         }
 
-        /* --- LOGIKA PENGUMUMAN SETIAP 30 MENIT (SELALU AKTIF) --- */
         function jalankanPengumumanOtomatis() {
             setInterval(() => {
-                // Pengumuman ini akan berbunyi SETIAP 30 menit tanpa filter jam
                 bc("  " + daftarPengumumanOtomatis[indexPengumuman]);
                 indexPengumuman = (indexPengumuman + 1) % daftarPengumumanOtomatis.length;
             }, 30 * 60 * 1000); 
@@ -297,11 +304,11 @@
         function nextTuto() {
             stepTuto++;
             const tutoText = document.getElementById('tutoText');
-            if(stepTuto === 1) { tutoText.innerText = "Musik slow dan semangat berganti otomatis sesuai jam."; }
-            else if(stepTuto === 2) { tutoText.innerText = "Pengumuman otomatis 30 menit sekali sudah diaktifkan selamanya."; }
+            if(stepTuto === 1) { tutoText.innerText = "Gunakan tombol Play/Pause untuk mengatur musik secara manual."; }
+            else if(stepTuto === 2) { tutoText.innerText = "Pengumuman otomatis 30 menit akan terus berjalan."; }
             else {
                 document.getElementById('tutorialOverlay').style.display = 'none';
-                updateMusicByTime(); 
+                manualPlayMusic(); 
                 bc("   Sistem Gacoan Call Pro Aktif. Musik dan pengumuman rutin telah berjalan. Terimakasih");
                 jalankanPengumumanOtomatis(); 
             }
