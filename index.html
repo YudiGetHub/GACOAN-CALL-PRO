@@ -84,7 +84,7 @@
                 <button class="btn-music-ctrl bg-ultah" onclick="modeUltah()">🎂 ULTAH</button>
                 <button class="btn-music-ctrl bg-pause" onclick="manualPauseMusic()">⏸ PAUSE</button>
                 
-                <button class="btn-music-ctrl bg-cek" onclick="bc('ini adalah Suara sistem. Cek Suara sistem Berhasil.')">⚙️ CEK SUARA SISTEM</button>
+                <button class="btn-music-ctrl bg-cek" onclick="bc('ini adalah Suara sistem. Cek Suara sistem Berhasil.', true)">⚙️ CEK SUARA SISTEM</button>
             </div>
             <span id="statusMusic">Musik: Off (Pilih mode untuk memulai)</span>
         </div>
@@ -110,7 +110,7 @@
                 </div>
             </div>
             <div class="announcement-grid">
-                <button class="btn-ann bg-red" onclick="bc('PEMBERITAHUAN, karena cuaca sedang hujan, dimohon bagi para pelanggan untuk berhati-hati saat berjalan karena lantai cenderung licin. Terima kasih.')" style="width: 100%; height: 80px; font-size: 16px;">⚠️ KLIK SAAT HUJAN (LANTAI LICIN)</button>
+                <button class="btn-ann bg-red" onclick="bc('PEMBERITAHUAN, karena cuaca sedang hujan, dimohon bagi para pelanggan untuk berhati-hati saat berjalan karena lantai cenderung licin. Terima kasih.', false)" style="width: 100%; height: 80px; font-size: 16px;">⚠️ KLIK SAAT HUJAN (LANTAI LICIN)</button>
             </div>
             <div id="gt" class="grid-meja"></div>
         </div>
@@ -130,8 +130,8 @@
         /* ========================================================
            BAGIAN 2: EDIT KONFIGURASI DI SINI
            ======================================================== */
-        const JEDA_MENIT = 25; // Jeda pengumuman otomatis
-        const JEDA_ANTREAN_DETIK = 3; // Jeda antar suara panggilan (Sesuai Request)
+        const JEDA_MENIT = 25; 
+        const JEDA_ANTREAN_DETIK = 3; 
 
         const daftarPengumumanOtomatis = [
             " PENGUMUMAN Bagi pelanggan yang menemukan atau kehilangan barang, diharapkan untuk segera melapor ke kasir. Terima kasih",
@@ -191,7 +191,6 @@
             currentMusicId = null;
         }
 
-        /* FITUR ULANG TAHUN: MUSIK SELESAI BARU BICARA */
         function modeUltah() {
             stopAllMusicInternal();
             const mUltah = document.getElementById('bgmUltah');
@@ -202,12 +201,13 @@
 
             mUltah.onended = function() {
                 document.getElementById('statusMusic').innerText = "Musik Selesai. Mengucapkan Selamat...";
-                bc("Pemberitahuan. Kami segenap kru Mie Gacoan mengucapkan Selamat Ulang Tahun untuk pelanggan kami yang sedang berbahagia. Semoga panjang umur dan sehat selalu. Mari kita beri tepuk tangan yang meriah!");
+                bc("Pemberitahuan. Kami segenap kru Mie Gacoan mengucapkan Selamat Ulang Tahun untuk pelanggan kami yang sedang berbahagia. Semoga panjang umur dan sehat selalu. Mari kita beri tepuk tangan yang meriah!", true);
             };
         }
 
-        function bc(teks) {
-            antreanSuara.push(teks);
+        // FUNGSI BC DENGAN FLAG TANPA JEDA
+        function bc(teks, tanpaJeda = false) {
+            antreanSuara.push({ teks: teks, tanpaJeda: tanpaJeda });
             prosesAntrean();
         }
 
@@ -217,10 +217,10 @@
             
             if (currentMusicId) document.getElementById(currentMusicId).volume = 0.03;
 
-            let teks = antreanSuara.shift();
+            let item = antreanSuara.shift();
             document.getElementById('antreanInfo').innerText = "Antrean: " + antreanSuara.length + " Panggilan";
             
-            const u = new SpeechSynthesisUtterance(teks);
+            const u = new SpeechSynthesisUtterance(item.teks);
             u.voice = voices.find(v => v.lang.includes('id') && v.name.includes('Google')) || voices.find(v => v.lang.includes('id'));
             u.lang = 'id-ID';
             u.rate = document.getElementById('rate').value;
@@ -228,30 +228,33 @@
             u.onend = function() { 
                 if (currentMusicId) document.getElementById(currentMusicId).volume = 0.15;
                 
-                // JEDA 3 DETIK (DARI KONFIGURASI)
+                // LOGIKA PENGECUALIAN JEDA
+                let waktuTunggu = item.tanpaJeda ? 0 : (JEDA_ANTREAN_DETIK * 1000);
+                
                 setTimeout(() => {
                     sedangBicara = false; 
                     prosesAntrean(); 
-                }, JEDA_ANTREAN_DETIK * 1000);
+                }, waktuTunggu);
             };
             window.speechSynthesis.speak(u);
         }
 
         function jalankanPengumumanOtomatis() {
             setInterval(() => {
-                bc("  " + daftarPengumumanOtomatis[indexPengumuman]);
+                // Pengumuman otomatis tetap pakai jeda (tanpaJeda = false)
+                bc("  " + daftarPengumumanOtomatis[indexPengumuman], false);
                 indexPengumuman = (indexPengumuman + 1) % daftarPengumumanOtomatis.length;
             }, JEDA_MENIT * 60 * 1000); 
         }
 
         /* ========================================================
-           KATA-KATA PANGGILAN (ASLI - TIDAK DIGANTI)
+           KATA-KATA PANGGILAN (TANPA JEDA UNTUK MEJA & OJOL)
            ======================================================== */
         function tambahAntreanCustomer() {
             let n = document.getElementById('nm').value;
             let m = document.getElementById('mj').value;
             if(n && m) {
-                bc("Panggilan Atas Nama Kak " + n + " Dengan nomor Meja. " + m + ". Pesanan anda sudah siap. Harap Menuju Meja Self Service sekarang juga, Terimakasih");
+                bc("Panggilan Atas Nama Kak " + n + " Dengan nomor Meja. " + m + ". Pesanan anda sudah siap. Harap Menuju Meja Self Service sekarang juga, Terimakasih", true);
                 document.getElementById('nm').value = ""; document.getElementById('mj').value = "";
             }
         }
@@ -259,7 +262,7 @@
         function tambahOjol(brand) {
             let input = document.getElementById('oj').value;
             if(input) {
-                bc("Pesanan " + brand + " " + input + " Pesanan sudah siap. Silahkan menuju meja take away sekarang juga, Terimakasih");
+                bc("Pesanan " + brand + " " + input + " Pesanan sudah siap. Silahkan menuju meja take away sekarang juga, Terimakasih", true);
                 document.getElementById('oj').value = "";
             }
         }
@@ -267,7 +270,7 @@
         function tambahTA() {
             let input = document.getElementById('oj').value;
             if(input) {
-                bc("Pesanan Take Away atas nama Kak " + input + ". Pesanan anda sudah siap. Silahkan menuju meja take away sekarang juga, terimakasih");
+                bc("Pesanan Take Away atas nama Kak " + input + ". Pesanan anda sudah siap. Silahkan menuju meja take away sekarang juga, terimakasih", true);
                 document.getElementById('oj').value = "";
             }
         }
@@ -284,7 +287,7 @@
             else {
                 document.getElementById('tutorialOverlay').style.display = 'none';
                 jalankanPengumumanOtomatis(); 
-                bc(" Suara Panggilan Sistem sudah Aktif. Diharapkan pelanggan bisa mendengarkan dengan bijak. Terimakasih");
+                bc(" Suara Panggilan Sistem sudah Aktif. Diharapkan pelanggan bisa mendengarkan dengan bijak. Terimakasih", true);
             }
         }
 
@@ -299,7 +302,7 @@
         for (let i = 1; i <= 100; i++) {
             let b = document.createElement('button');
             b.className = 'meja'; b.innerText = i;
-            b.onclick = () => bc("Panggilan untuk nomor meja " + i + ". Pesanan anda sudah siap, harap menuju meja self service sekarang juga, Terimakasih");
+            b.onclick = () => bc("Panggilan untuk nomor meja " + i + ". Pesanan anda sudah siap, harap menuju meja self service sekarang juga, Terimakasih", true);
             container.appendChild(b);
         }
     </script>
