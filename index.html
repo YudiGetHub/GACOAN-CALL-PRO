@@ -34,6 +34,7 @@
         .info-waktu { background: white; padding: 10px; border-radius: 12px; margin-bottom: 10px; border: 1px solid #e2e8f0; }
         #hariTxt { font-weight: bold; color: #1e3a8a; font-size: 18px; margin: 0; }
         #jamTxt { font-size: 22px; font-weight: bold; color: #f97316; margin: 0; }
+        #statusMusic { font-size: 12px; color: #64748b; margin-top: 5px; font-style: italic; }
         
         .header { background: #ffffff; color: #1e3a8a; padding: 15px; border-radius: 15px; margin-bottom: 10px; border: 2px solid #1e3a8a; }
         
@@ -77,6 +78,13 @@
 </head>
 <body onload="mulaiAplikasi()">
 
+    <audio id="bgmSlow" loop preload="auto">
+        <source src="https://www.bensound.com/bensound-music/bensound-betterdays.mp3" type="audio/mpeg">
+    </audio>
+    <audio id="bgmSemangat" loop preload="auto">
+        <source src="https://www.bensound.com/bensound-music/bensound-energy.mp3" type="audio/mpeg">
+    </audio>
+
     <div id="welcomeScreen">
         <img src="https://i.ibb.co.com/ycrmLMHf/Logo-Mie-Gacoan-1.png" class="logo-gacoan">
         <h1 style="color:#1e3a8a; margin-bottom:30px;">Gacoan Call Pro</h1>
@@ -96,6 +104,7 @@
         <div class="info-waktu">
             <p id="hariTxt"></p>
             <p id="jamTxt"></p>
+            <div id="statusMusic">Musik: Off</div>
             <button style="background:none; border:none; color:#1e3a8a; text-decoration:underline; font-weight:bold; cursor:pointer;" onclick="bc('Ini adalah suara system. Cek suara system berhasil.')">
                 [ CEK SUARA APLIKASI ]
             </button>
@@ -125,7 +134,7 @@
             <div class="announcement-grid">
                 <button class="btn-ann bg-red" onclick="bc('PEMBERITAHUAN, karena cuaca sedang hujan, dimohon bagi para pelanggan untuk berhati-hati saat berjalan karena lantai cenderung licin. Terima kasih.')" style="width: 100%; height: 80px; font-size: 16px;">⚠️ KLIK SAAT HUJAN (LANTAI LICIN)</button>
                 
-                <p style="font-size: 11px; color: #64748b; margin-top: 10px;">*Pengumuman otomatis aktif pada jam istirahat & jam ramai (18:00 - 01:00).</p>
+                <p style="font-size: 11px; color: #64748b; margin-top: 10px;">*Pengumuman otomatis 30 Menit berjalan sepanjang waktu.</p>
             </div>
 
             <div id="gt" class="grid-meja"></div>
@@ -151,8 +160,9 @@
         let sedangBicara = false;
         let stepTuto = 0;
         let voices = [];
+        let currentMusic = null;
         
-        // --- LOGIKA PENGUMUMAN OTOMATIS BERDASARKAN JAM ---
+        // --- LOGIKA PENGUMUMAN OTOMATIS ---
         let indexPengumuman = 0;
         const daftarPengumumanOtomatis = [
             "PENGUMUMAN. Bagi pelanggan yang menemukan atau kehilangan barang, diharapkan melapor ke kasir. Terima kasih",
@@ -160,28 +170,52 @@
             "Mari kita jaga kebersihan bersama dengan membuang sampah pada tempatnya. Terimakasih"
         ];
 
-        // LOAD SUARA DARI SISTEM
-        window.speechSynthesis.onvoiceschanged = () => {
-            voices = window.speechSynthesis.getVoices();
-        };
+        window.speechSynthesis.onvoiceschanged = () => { voices = window.speechSynthesis.getVoices(); };
 
-        // INISIALISASI APLIKASI
         async function mulaiAplikasi() {
             mulaiJam();
             if ('wakeLock' in navigator) { try { await navigator.wakeLock.request('screen'); } catch (err) {} }
         }
 
-        // LOGIKA JAM & HARI
         function mulaiJam() {
             setInterval(() => {
                 const d = new Date();
                 document.getElementById("hariTxt").innerText = ["Minggu","Senin","Selasa","Rabu","Kamis","Jumat","Sabtu"][d.getDay()];
                 document.getElementById("jamTxt").innerText = d.getHours().toString().padStart(2,'0') + "." + d.getMinutes().toString().padStart(2,'0') + " WIB";
+                updateMusicByTime();
             }, 1000);
         }
 
-        /* --- LOGIKA PANGGILAN SUARA --- */
-        
+        /* --- LOGIKA MUSIK INSTRUMEN --- */
+        function updateMusicByTime() {
+            const jam = new Date().getHours();
+            
+            // Jam Musik Semangat (Bisa Bapak sesuaikan jika perlu)
+            const isJamSibuk = (jam >= 11 && jam <= 14) || (jam >= 18 || jam < 1);
+            
+            const musicSlow = document.getElementById('bgmSlow');
+            const musicSemangat = document.getElementById('bgmSemangat');
+            const statusTxt = document.getElementById('statusMusic');
+
+            if (isJamSibuk) {
+                if (currentMusic !== 'semangat') {
+                    musicSlow.pause();
+                    musicSemangat.volume = 0.15; // Volume 15%
+                    musicSemangat.play();
+                    currentMusic = 'semangat';
+                    statusTxt.innerText = "Musik: Semangat (Aktif)";
+                }
+            } else {
+                if (currentMusic !== 'slow') {
+                    musicSemangat.pause();
+                    musicSlow.volume = 0.15;
+                    musicSlow.play();
+                    currentMusic = 'slow';
+                    statusTxt.innerText = "Musik: Slow (Aktif)";
+                }
+            }
+        }
+
         function bc(teks) {
             antreanSuara.push(teks);
             prosesAntrean();
@@ -191,6 +225,10 @@
             if (sedangBicara || antreanSuara.length === 0) return;
             sedangBicara = true;
             
+            // Ducking (Mengecilkan musik)
+            if (currentMusic === 'slow') document.getElementById('bgmSlow').volume = 0.03;
+            if (currentMusic === 'semangat') document.getElementById('bgmSemangat').volume = 0.03;
+
             let teksSekarang = antreanSuara.shift();
             let kalimatFinal = teksSekarang;
             if (antreanSuara.length > 0) {
@@ -200,46 +238,31 @@
             document.getElementById('antreanInfo').innerText = "Antrean: " + antreanSuara.length + " Panggilan";
 
             const u = new SpeechSynthesisUtterance(kalimatFinal);
-            
-            let voiceGemini = voices.find(v => v.lang.includes('id') && v.name.includes('Google') && v.name.includes('Natural'));
-            if (!voiceGemini) voiceGemini = voices.find(v => v.lang.includes('id') && v.name.includes('Google'));
-            if (!voiceGemini) voiceGemini = voices.find(v => v.lang.includes('id'));
+            let voiceGemini = voices.find(v => v.lang.includes('id') && v.name.includes('Google') && v.name.includes('Natural')) || voices.find(v => v.lang.includes('id'));
 
             u.voice = voiceGemini;
             u.lang = 'id-ID';
             u.rate = document.getElementById('rate').value;
             u.pitch = 1.05;
-            u.volume = 1;
 
-            u.onend = function() { sedangBicara = false; prosesAntrean(); };
+            u.onend = function() { 
+                sedangBicara = false; 
+                // Restore Musik
+                if (currentMusic === 'slow') document.getElementById('bgmSlow').volume = 0.15;
+                if (currentMusic === 'semangat') document.getElementById('bgmSemangat').volume = 0.15;
+                prosesAntrean(); 
+            };
             window.speechSynthesis.speak(u);
         }
 
-        /* --- LOGIKA CEK JAM RAMAI (EDIT DI SINI) --- */
+        /* --- LOGIKA PENGUMUMAN SETIAP 30 MENIT (SELALU AKTIF) --- */
         function jalankanPengumumanOtomatis() {
             setInterval(() => {
-                const sekarang = new Date();
-                const jam = sekarang.getHours();
-
-                // === EDIT DI SINI: Atur Jam Aktif Pengumuman ===
-                // Contoh: jam >= 12 && jam <= 13 (Berarti aktif jam 12 siang sampai 1 siang)
-                // Contoh: jam >= 18 || jam < 1 (Berarti aktif jam 6 sore sampai 1 dini hari)
-                
-                const isJamIstirahat = (jam >= 12 && jam <= 13); 
-                const isJamMalam = (jam >= 18 || jam < 1); 
-
-                if (isJamIstirahat || isJamMalam) {
-                    bc(daftarPengumumanOtomatis[indexPengumuman]);
-                    indexPengumuman = (indexPengumuman + 1) % daftarPengumumanOtomatis.length;
-                    console.log("Pengumuman Otomatis Berjalan di Jam Ramai");
-                } else {
-                    console.log("Sistem Standby: Bukan jam ramai untuk pengumuman otomatis.");
-                }
-
-            }, 45 * 60 * 1000); // Durasi per 45 menit
+                // Pengumuman ini akan berbunyi SETIAP 30 menit tanpa filter jam
+                bc("  " + daftarPengumumanOtomatis[indexPengumuman]);
+                indexPengumuman = (indexPengumuman + 1) % daftarPengumumanOtomatis.length;
+            }, 30 * 60 * 1000); 
         }
-
-        /* --- FUNGSI TOMBOL INPUT --- */
 
         function tambahAntreanCustomer() {
             let n = document.getElementById('nm').value;
@@ -261,12 +284,10 @@
         function tambahTA() {
             let input = document.getElementById('oj').value;
             if(input) {
-                bc("  Pesanan Take Away atas nama Kak" + input + ". Pesanan anda sudah siap. Silahkan menuju meja take away sekarang juga, terimakasih");
+                bc("  Pesanan Take Away atas nama Kak " + input + ". Pesanan anda sudah siap. Silahkan menuju meja take away sekarang juga, terimakasih");
                 document.getElementById('oj').value = "";
             }
         }
-
-        /* --- FUNGSI UI (TUTORIAL & TAB) --- */
 
         function startTutorial() {
             document.getElementById('welcomeScreen').style.transform = 'translateY(-100%)';
@@ -276,11 +297,12 @@
         function nextTuto() {
             stepTuto++;
             const tutoText = document.getElementById('tutoText');
-            if(stepTuto === 1) { tutoText.innerText = "Fitur Multi-Call aktif otomatis. Silahkan klik beberapa nomor meja dengan cepat."; }
-            else if(stepTuto === 2) { tutoText.innerText = "Pengumuman otomatis hanya akan berbunyi di jam sibuk (Istirahat & Malam)."; }
+            if(stepTuto === 1) { tutoText.innerText = "Musik slow dan semangat berganti otomatis sesuai jam."; }
+            else if(stepTuto === 2) { tutoText.innerText = "Pengumuman otomatis 30 menit sekali sudah diaktifkan selamanya."; }
             else {
                 document.getElementById('tutorialOverlay').style.display = 'none';
-                bc("   Sistem panggilan sudah aktif. Diharapkan para pelanggan untuk dapat mendengarkan panggilan system ini. Terimakasih");
+                updateMusicByTime(); 
+                bc("   Sistem Gacoan Call Pro Aktif. Musik dan pengumuman rutin telah berjalan. Terimakasih");
                 jalankanPengumumanOtomatis(); 
             }
         }
@@ -292,7 +314,6 @@
             event.currentTarget.classList.add('active');
         }
 
-        // GENERATE TOMBOL MEJA 1-100
         const container = document.getElementById('gt');
         for (let i = 1; i <= 100; i++) {
             let b = document.createElement('button');
