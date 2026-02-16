@@ -245,7 +245,7 @@
             let n = document.getElementById('nm').value;
             let m = document.getElementById('mj').value;
             if(n && m) {
-                bc("Panggilan Atas Nama Kak " + n + " Dengan nomor Meja. " + m + ". Pesanan anda sudah siap. Harap Menuju Meja Self Service sekarang juga, Terimakasih");
+                bc("  Panggilan Atas Nama Kak " + n + " Dengan nomor Meja. " + m + ". Pesanan anda sudah siap. Harap Menuju Meja Self Service sekarang juga, Terimakasih");
                 document.getElementById('nm').value = ""; document.getElementById('mj').value = "";
             }
         }
@@ -261,7 +261,7 @@
         function tambahTA() {
             let input = document.getElementById('oj').value;
             if(input) {
-                bc("Pesanan Take Away atas nama Kak" + input + ". Pesanan anda sudah siap. Silahkan menuju meja take away sekarang juga, terimakasih");
+                bc("  Pesanan Take Away atas nama Kak" + input + ". Pesanan anda sudah siap. Silahkan menuju meja take away sekarang juga, terimakasih");
                 document.getElementById('oj').value = "";
             }
         }
@@ -280,7 +280,7 @@
             else if(stepTuto === 2) { tutoText.innerText = "Pengumuman otomatis hanya akan berbunyi di jam sibuk (Istirahat & Malam)."; }
             else {
                 document.getElementById('tutorialOverlay').style.display = 'none';
-                bc("Sistem panggilan sudah aktif. Diharapkan para pelanggan untuk dapat mendengarkan panggilan system ini. Terimakasih");
+                bc("   Sistem panggilan sudah aktif. Diharapkan para pelanggan untuk dapat mendengarkan panggilan system ini. Terimakasih");
                 jalankanPengumumanOtomatis(); 
             }
         }
