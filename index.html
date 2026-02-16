@@ -6,6 +6,7 @@
     <title>Gacoan Call Pro - Premium By Yudi</title>
     
     <style>
+        /* CSS UTAMA - JANGAN DIUBAH KECUALI WARNA TAMPILAN */
         body { font-family: sans-serif; background: #f4f7f9; margin: 0; padding: 0; overflow-x: hidden; color: #333; }
         #welcomeScreen { position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: radial-gradient(circle, #ffffff, #e2e8f0); display: flex; flex-direction: column; align-items: center; justify-content: center; z-index: 9999; transition: transform 1s ease-in-out; }
         .logo-gacoan { width: 180px; height: 180px; margin-bottom: 20px; border-radius: 50%; border: 5px solid #1e3a8a; box-shadow: 0 4px 15px rgba(0,0,0,0.1); background: white; object-fit: contain; }
@@ -15,7 +16,7 @@
         #hariTxt { font-weight: bold; color: #1e3a8a; font-size: 18px; margin: 0; }
         #jamTxt { font-size: 22px; font-weight: bold; color: #f97316; margin: 0; }
         
-        /* Style Tambahan untuk Panel Musik */
+        /* STYLE PANEL MUSIK */
         .music-control-box { margin-top: 10px; display: flex; flex-wrap: wrap; align-items: center; justify-content: center; gap: 8px; }
         .btn-music-ctrl { border: none; padding: 8px 12px; border-radius: 10px; font-size: 11px; font-weight: bold; cursor: pointer; color: white; }
         .bg-play { background: #10b981; }
@@ -74,6 +75,7 @@
         <div class="info-waktu">
             <p id="hariTxt"></p>
             <p id="jamTxt"></p>
+            
             <div class="music-control-box">
                 <button class="btn-music-ctrl bg-energic" onclick="manualPlayMusic('bgmSemangat', 'Energik')">⚡ ENERGIK</button>
                 <button class="btn-music-ctrl bg-slow" onclick="manualPlayMusic('bgmSlow', 'Santai')">🍃 SANTAI</button>
@@ -122,29 +124,26 @@
     </div>
 
     <script>
-        /* =========================================
-           KONFIGURASI PENGUMUMAN OTOMATIS
-           ========================================= */
-        const JEDA_MENIT = 1; // Ubah angka ini untuk mengatur menit jeda
-        
+        /* ========================================================
+           BAGIAN 2: EDIT PENGUMUMAN OTOMATIS & JEDA DI SINI
+           ======================================================== */
+        const JEDA_MENIT = 30; // Jeda antar pengumuman (menit)
+        const JEDA_ANTREAN_DETIK = 3; // Jeda antar suara panggilan (detik)
+
         const daftarPengumumanOtomatis = [
             "PENGUMUMAN. Bagi pelanggan yang menemukan atau kehilangan barang, diharapkan melapor ke kasir. Terima kasih",
-            "Bagi pelanggan yang membutuhkan tisu, atau sendok. bisa langsung meminta pada meja self service kami. Terima kasih",
-            "Untuk pelanggan yang menginginkan Makananya dibungkus silahkan menunju Cashier untuk membeli paperboxnya terlebih dahulu nanti akan kami bantu bungkuskan pesanannya. Terimakasih",
-            "DIMOHON. bagi pelanggan yang baru datang atau ingin memesan pastikan untuk duduk sesuai dengan kapasitas meja demi kenyamanan bersama. Terima kasih.",
-            "Mari kita jaga kebersihan bersama dengan membuang sampah pada tempatnya. Terimakasih",
-            "Saya ucapkan Terimakasih kepada pelanggan semua yang sudah menyempatkan waktunya untuk memesan atau makan mie di Resto kami. Silahkan datang Kembali dan menjadi pelanggan Experience Terbaik kami."
+            "DIMOHON. bagi pelanggan untuk duduk sesuai dengan kapasitas meja demi kenyamanan bersama. Terima kasih.",
+            "Mari kita jaga kebersihan bersama dengan membuang sampah pada tempatnya. Terimakasih"
         ];
 
-        /* =========================================
-           LOGIKA UTAMA APLIKASI
-           ========================================= */
+        /* ========================================================
+           LOGIKA SISTEM - JANGAN DIUBAH KECUALI PAHAM KODE
+           ======================================================== */
         let antreanSuara = [];
         let sedangBicara = false;
         let stepTuto = 0;
         let voices = [];
         let currentMusicId = null;
-        let isMusicPausedManually = true; 
         let indexPengumuman = 0;
 
         window.speechSynthesis.onvoiceschanged = () => { voices = window.speechSynthesis.getVoices(); };
@@ -163,17 +162,15 @@
         }
 
         function manualPlayMusic(id, label) {
-            isMusicPausedManually = false;
             stopAllMusicInternal();
             currentMusicId = id;
             const m = document.getElementById(id);
             m.volume = 0.15;
-            m.play().catch(() => {});
+            m.play().catch(e => console.log("Audio diblokir browser, butuh interaksi user."));
             document.getElementById('statusMusic').innerText = "Musik: Mode " + label;
         }
 
         function manualPauseMusic() {
-            isMusicPausedManually = true;
             stopAllMusicInternal();
             document.getElementById('statusMusic').innerText = "Musik Dimatikan";
         }
@@ -183,17 +180,24 @@
                 const m = document.getElementById(id);
                 m.pause();
                 m.currentTime = 0;
+                m.onended = null;
             });
+            currentMusicId = null;
         }
 
+        /* FITUR ULANG TAHUN: MUSIK DULU BARU BICARA */
         function modeUltah() {
-            isMusicPausedManually = false;
             stopAllMusicInternal();
+            const mUltah = document.getElementById('bgmUltah');
             currentMusicId = 'bgmUltah';
-            document.getElementById('bgmUltah').volume = 0.2;
-            document.getElementById('bgmUltah').play();
-            document.getElementById('statusMusic').innerText = "Musik: Mode Ulang Tahun 🎂";
-            bc("Pemberitahuan. Kami segenap kru Mie Gacoan mengucapkan Selamat Ulang Tahun untuk pelanggan kami yang sedang berbahagia. Semoga panjang umur dan sehat selalu. Mari kita beri tepuk tangan yang meriah!");
+            mUltah.volume = 0.25;
+            document.getElementById('statusMusic').innerText = "Musik: Merayakan Ulang Tahun... 🎂";
+            mUltah.play();
+
+            mUltah.onended = function() {
+                document.getElementById('statusMusic').innerText = "Musik Selesai. Mengucapkan Selamat...";
+                bc("Pemberitahuan. Kami segenap kru Mie Gacoan mengucapkan Selamat Ulang Tahun untuk pelanggan kami yang sedang berbahagia. Semoga panjang umur dan sehat selalu. Mari kita beri tepuk tangan yang meriah!");
+            };
         }
 
         function bc(teks) {
@@ -201,21 +205,29 @@
             prosesAntrean();
         }
 
+        /* LOGIKA ANTREAN & DUCKING VOLUME */
         function prosesAntrean() {
             if (sedangBicara || antreanSuara.length === 0) return;
             sedangBicara = true;
+            
             if (currentMusicId) document.getElementById(currentMusicId).volume = 0.03;
 
             let teks = antreanSuara.shift();
             document.getElementById('antreanInfo').innerText = "Antrean: " + antreanSuara.length + " Panggilan";
+            
             const u = new SpeechSynthesisUtterance(teks);
             u.voice = voices.find(v => v.lang.includes('id') && v.name.includes('Google')) || voices.find(v => v.lang.includes('id'));
             u.lang = 'id-ID';
             u.rate = document.getElementById('rate').value;
+            
             u.onend = function() { 
-                sedangBicara = false; 
                 if (currentMusicId) document.getElementById(currentMusicId).volume = 0.15;
-                prosesAntrean(); 
+                
+                // JEDA ANTAR PANGGILAN (Default: 3 Detik)
+                setTimeout(() => {
+                    sedangBicara = false; 
+                    prosesAntrean(); 
+                }, JEDA_ANTREAN_DETIK * 1000);
             };
             window.speechSynthesis.speak(u);
         }
@@ -227,6 +239,9 @@
             }, JEDA_MENIT * 60 * 1000); 
         }
 
+        /* ========================================================
+           KATA-KATA PANGGILAN (SESUAI REQUEST: JANGAN DIUBAH)
+           ======================================================== */
         function tambahAntreanCustomer() {
             let n = document.getElementById('nm').value;
             let m = document.getElementById('mj').value;
@@ -252,8 +267,11 @@
             }
         }
 
+        /* LOGIKA LAYAR AWAL & TUTORIAL */
         function startTutorial() {
             document.getElementById('welcomeScreen').style.transform = 'translateY(-100%)';
+            // Pancing izin suara browser
+            window.speechSynthesis.speak(new SpeechSynthesisUtterance(""));
             setTimeout(() => { document.getElementById('tutorialOverlay').style.display = 'flex'; }, 1000);
         }
 
@@ -274,6 +292,7 @@
             event.currentTarget.classList.add('active');
         }
 
+        /* PEMBUATAN GRID MEJA */
         const container = document.getElementById('gt');
         for (let i = 1; i <= 100; i++) {
             let b = document.createElement('button');
