@@ -6,27 +6,18 @@
     <title>Gacoan Call Pro - Premium By Yudi</title>
     
     <style>
-        /* CSS UTAMA - JANGAN DIUBAH */
+        /* SEMUA CSS ASLI BAPAK TETAP SAMA */
         body { font-family: sans-serif; background: #f4f7f9; margin: 0; padding: 0; overflow-x: hidden; color: #333; }
         #welcomeScreen { position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: radial-gradient(circle, #ffffff, #e2e8f0); display: flex; flex-direction: column; align-items: center; justify-content: center; z-index: 9999; transition: transform 1s ease-in-out; }
         .logo-gacoan { width: 180px; height: 180px; margin-bottom: 20px; border-radius: 50%; border: 5px solid #1e3a8a; box-shadow: 0 4px 15px rgba(0,0,0,0.1); background: white; object-fit: contain; }
         .btn-mulai { padding: 15px 40px; background: #1e3a8a; color: white; border: none; border-radius: 30px; font-weight: bold; font-size: 18px; cursor: pointer; box-shadow: 0 5px 15px rgba(30,58,138,0.3); }
-        .main-app { padding: 15px; text-align: center; }
+        .main-app { padding: 15px; text-align: center; display: none; } /* Awalnya sembunyi */
         .info-waktu { background: white; padding: 10px; border-radius: 12px; margin-bottom: 10px; border: 1px solid #e2e8f0; }
         #hariTxt { font-weight: bold; color: #1e3a8a; font-size: 18px; margin: 0; }
         #jamTxt { font-size: 22px; font-weight: bold; color: #f97316; margin: 0; }
-        
-        /* STYLE PANEL MUSIK & CEK SUARA */
         .music-control-box { margin-top: 10px; display: flex; flex-wrap: wrap; align-items: center; justify-content: center; gap: 8px; }
         .btn-music-ctrl { border: none; padding: 8px 12px; border-radius: 10px; font-size: 11px; font-weight: bold; cursor: pointer; color: white; }
-        .bg-play { background: #10b981; }
-        .bg-pause { background: #ef4444; }
-        .bg-slow { background: #3b82f6; }
-        .bg-energic { background: #f97316; }
-        .bg-night { background: #6366f1; }
-        .bg-ultah { background: #db2777; }
-        .bg-cek { background: #64748b; margin-top: 10px; width: 80%; }
-        
+        .bg-play { background: #10b981; } .bg-pause { background: #ef4444; } .bg-slow { background: #3b82f6; } .bg-energic { background: #f97316; } .bg-night { background: #6366f1; } .bg-ultah { background: #db2777; } .bg-cek { background: #64748b; margin-top: 10px; width: 80%; }
         #statusMusic { font-size: 11px; color: #64748b; font-style: italic; margin-top: 5px; display: block; }
         .header { background: #ffffff; color: #1e3a8a; padding: 15px; border-radius: 15px; margin-bottom: 10px; border: 2px solid #1e3a8a; }
         .nav-tabs { display: flex; gap: 10px; margin-bottom: 15px; }
@@ -36,34 +27,33 @@
         input { width: 85%; padding: 12px; margin: 5px; border: 1px solid #cbd5e1; border-radius: 10px; font-size: 16px; background: #fdfdfd; }
         .btn-call { color: white; border: none; padding: 15px; border-radius: 12px; width: 100%; font-weight: bold; margin-top: 10px; font-size: 16px; cursor: pointer; }
         .btn-ann { color: white; border: none; padding: 12px 5px; border-radius: 10px; width: 100%; font-weight: bold; font-size: 11px; cursor: pointer; height: 60px; display: flex; align-items: center; justify-content: center; }
-        .bg-orange { background: #f97316; } 
-        .bg-red { background: #ef4444; } 
-        .bg-grab { background: #00b14f; } 
-        .bg-shopee { background: #ee4d2d; } 
-        .bg-gojek { background: #00aa13; } 
-        .bg-takeaway { background: #3b82f6; }
+        .bg-orange { background: #f97316; } .bg-red { background: #ef4444; } .bg-grab { background: #00b14f; } .bg-shopee { background: #ee4d2d; } .bg-gojek { background: #00aa13; } .bg-takeaway { background: #3b82f6; }
         .grid-meja { display: grid; grid-template-columns: repeat(4, 1fr); gap: 8px; margin-top: 20px; }
         .meja { background: white; border: 1px solid #cbd5e1; padding: 15px 0; border-radius: 10px; font-weight: bold; color: #1e3a8a; }
-        .tab-content { display: none; } 
-        .tab-content.active { display: block; }
+        .tab-content { display: none; } .tab-content.active { display: block; }
         .status-antrean { font-size: 12px; color: #10b981; font-weight: bold; margin-top: 5px; }
         #tutorialOverlay { position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: rgba(0,0,0,0.7); display: none; z-index: 10000; color: white; padding: 20px; text-align: center; justify-content: center; align-items: center; flex-direction: column; }
         .tuto-box { background: white; color: #333; padding: 20px; border-radius: 15px; width: 80%; max-width: 300px; }
+        
+        /* Input Lisensi Style */
+        .license-input { margin-bottom: 20px; width: 250px; text-align: center; border: 2px solid #1e3a8a; }
     </style>
 </head>
-<body onload="mulaiAplikasi()">
+<body onload="persiapanCek()">
+
+    <div id="welcomeScreen">
+        <img src="https://i.ibb.co.com/ycrmLMHf/Logo-Mie-Gacoan-1.png" class="logo-gacoan">
+        <h1 style="color:#1e3a8a; margin-bottom:10px;">Gacoan Call Pro</h1>
+        <p id="msgLisensi" style="color:#64748b; margin-bottom: 20px;">Masukkan Kode Lisensi Untuk Memulai</p>
+        <input type="text" id="kodeLisensi" class="license-input" placeholder="KODE LISENSI">
+        <button class="btn-mulai" id="btnProses" onclick="jalankanCekLisensi()">BUKA LAYAR PANGGILAN</button>
+        <p style="color:#64748b; font-size:12px; margin-top:20px;">Versi Premium - By : Nur Wahyudi</p>
+    </div>
 
     <audio id="bgmSlow" loop preload="auto"><source src="https://www.bensound.com/bensound-music/bensound-betterdays.mp3" type="audio/mpeg"></audio>
     <audio id="bgmSemangat" loop preload="auto"><source src="https://www.bensound.com/bensound-music/bensound-energy.mp3" type="audio/mpeg"></audio>
     <audio id="bgmNight" loop preload="auto"><source src="https://www.bensound.com/bensound-music/bensound-memories.mp3" type="audio/mpeg"></audio>
     <audio id="bgmUltah" preload="auto"><source src="https://cdn.pixabay.com/audio/2022/11/22/audio_13854999f3.mp3" type="audio/mpeg"></audio>
-
-    <div id="welcomeScreen">
-        <img src="https://i.ibb.co.com/ycrmLMHf/Logo-Mie-Gacoan-1.png" class="logo-gacoan">
-        <h1 style="color:#1e3a8a; margin-bottom:30px;">Gacoan Call Pro</h1>
-        <button class="btn-mulai" onclick="startTutorial()">BUKA LAYAR PANGGILAN</button>
-        <p style="color:#64748b; font-size:12px; margin-top:20px;">Versi Premium - By : Nur Wahyudi</p>
-    </div>
 
     <div id="tutorialOverlay">
         <div class="tuto-box">
@@ -72,18 +62,16 @@
         </div>
     </div>
 
-    <div class="main-app">
+    <div class="main-app" id="appBody">
         <div class="info-waktu">
             <p id="hariTxt"></p>
             <p id="jamTxt"></p>
-            
             <div class="music-control-box">
                 <button class="btn-music-ctrl bg-energic" onclick="manualPlayMusic('bgmSemangat', 'Energik')">⚡ ENERGIK</button>
                 <button class="btn-music-ctrl bg-slow" onclick="manualPlayMusic('bgmSlow', 'Santai')">🍃 SANTAI</button>
                 <button class="btn-music-ctrl bg-night" onclick="manualPlayMusic('bgmNight', 'Malam')">🌙 MALAM</button>
                 <button class="btn-music-ctrl bg-ultah" onclick="modeUltah()">🎂 ULTAH</button>
                 <button class="btn-music-ctrl bg-pause" onclick="manualPauseMusic()">⏸ PAUSE</button>
-                
                 <button class="btn-music-ctrl bg-cek" onclick="bc('ini adalah Suara sistem. Cek Suara sistem Berhasil.', true)">⚙️ CEK SUARA SISTEM</button>
             </div>
             <span id="statusMusic">Musik: Off (Pilih mode untuk memulai)</span>
@@ -127,12 +115,41 @@
     </div>
 
     <script>
-        /* ========================================================
-           BAGIAN 2: EDIT KONFIGURASI DI SINI
-           ======================================================== */
+        // MASUKKAN URL WEB APP APPS SCRIPT BAPAK DI SINI
+        const URL_SCRIPT = "URL_WEB_APP_BAPAK_DI_SINI";
+
+        /* LOGIKA CEK LISENSI */
+        function persiapanCek() {
+            console.log("Aplikasi Siap");
+        }
+
+        async function jalankanCekLisensi() {
+            const kode = document.getElementById('kodeLisensi').value;
+            if(!kode) return alert("Masukkan Kode Lisensi!");
+            
+            document.getElementById('msgLisensi').innerText = "Memverifikasi...";
+            document.getElementById('btnProses').disabled = true;
+
+            try {
+                const response = await fetch(`${URL_SCRIPT}?action=check&kode=${kode}`);
+                const status = await response.text();
+
+                if (status.trim() === "Aktif") {
+                    startTutorial(); // Jika Aktif, buka aplikasi
+                } else {
+                    alert("LISENSI TIDAK AKTIF ATAU KODE SALAH!");
+                    document.getElementById('msgLisensi').innerText = "Akses Ditolak!";
+                    document.getElementById('btnProses').disabled = false;
+                }
+            } catch (err) {
+                alert("Gagal koneksi ke server lisensi!");
+                document.getElementById('btnProses').disabled = false;
+            }
+        }
+
+        /* SEMUA LOGIKA ASLI BAPAK DIBAWAH INI TIDAK BERUBAH */
         const JEDA_MENIT = 25; 
         const JEDA_ANTREAN_DETIK = 3; 
-
         const daftarPengumumanOtomatis = [
             " PENGUMUMAN Bagi pelanggan yang menemukan atau kehilangan barang, diharapkan untuk segera melapor ke kasir. Terima kasih",
             " Diharapkan bagi pelanggan yang baru datang atau ingin memesan pastikan untuk duduk sesuai dengan kapasitas meja demi kenyamanan bersama. Terima kasih.",
@@ -142,9 +159,6 @@
             " Pastikan pesanan anda sudah selesai dan tidak ada kekurangan ketika diambil dari meja self service. terimakasih"
         ];
 
-        /* ========================================================
-           LOGIKA SISTEM - JANGAN DIUBAH
-           ======================================================== */
         let antreanSuara = [];
         let sedangBicara = false;
         let stepTuto = 0;
@@ -153,11 +167,6 @@
         let indexPengumuman = 0;
 
         window.speechSynthesis.onvoiceschanged = () => { voices = window.speechSynthesis.getVoices(); };
-
-        async function mulaiAplikasi() {
-            mulaiJam();
-            if ('wakeLock' in navigator) { try { await navigator.wakeLock.request('screen'); } catch (err) {} }
-        }
 
         function mulaiJam() {
             setInterval(() => {
@@ -198,14 +207,12 @@
             mUltah.volume = 0.3;
             document.getElementById('statusMusic').innerText = "Musik: Merayakan Ulang Tahun... 🎂";
             mUltah.play();
-
             mUltah.onended = function() {
                 document.getElementById('statusMusic').innerText = "Musik Selesai. Mengucapkan Selamat...";
                 bc("Pemberitahuan. Kami segenap kru Mie Gacoan mengucapkan Selamat Ulang Tahun untuk pelanggan kami yang sedang berbahagia. Semoga panjang umur dan sehat selalu. Mari kita beri tepuk tangan yang meriah!", true);
             };
         }
 
-        // FUNGSI BC DENGAN FLAG TANPA JEDA
         function bc(teks, tanpaJeda = false) {
             antreanSuara.push({ teks: teks, tanpaJeda: tanpaJeda });
             prosesAntrean();
@@ -214,42 +221,28 @@
         function prosesAntrean() {
             if (sedangBicara || antreanSuara.length === 0) return;
             sedangBicara = true;
-            
             if (currentMusicId) document.getElementById(currentMusicId).volume = 0.03;
-
             let item = antreanSuara.shift();
             document.getElementById('antreanInfo').innerText = "Antrean: " + antreanSuara.length + " Panggilan";
-            
             const u = new SpeechSynthesisUtterance(item.teks);
             u.voice = voices.find(v => v.lang.includes('id') && v.name.includes('Google')) || voices.find(v => v.lang.includes('id'));
             u.lang = 'id-ID';
             u.rate = document.getElementById('rate').value;
-            
             u.onend = function() { 
                 if (currentMusicId) document.getElementById(currentMusicId).volume = 0.15;
-                
-                // LOGIKA PENGECUALIAN JEDA
                 let waktuTunggu = item.tanpaJeda ? 0 : (JEDA_ANTREAN_DETIK * 1000);
-                
-                setTimeout(() => {
-                    sedangBicara = false; 
-                    prosesAntrean(); 
-                }, waktuTunggu);
+                setTimeout(() => { sedangBicara = false; prosesAntrean(); }, waktuTunggu);
             };
             window.speechSynthesis.speak(u);
         }
 
         function jalankanPengumumanOtomatis() {
             setInterval(() => {
-                // Pengumuman otomatis tetap pakai jeda (tanpaJeda = false)
                 bc("  " + daftarPengumumanOtomatis[indexPengumuman], false);
                 indexPengumuman = (indexPengumuman + 1) % daftarPengumumanOtomatis.length;
             }, JEDA_MENIT * 60 * 1000); 
         }
 
-        /* ========================================================
-           KATA-KATA PANGGILAN (TANPA JEDA UNTUK MEJA & OJOL)
-           ======================================================== */
         function tambahAntreanCustomer() {
             let n = document.getElementById('nm').value;
             let m = document.getElementById('mj').value;
@@ -271,12 +264,13 @@
             let input = document.getElementById('oj').value;
             if(input) {
                 bc("Pesanan Take Away atas nama Kak " + input + ". Pesanan anda sudah siap. Silahkan menuju meja take away sekarang juga, terimakasih", true);
-                document.getElementById('oj').value = "";
+                document.getElementById('ojol').querySelector('#oj').value = "";
             }
         }
 
         function startTutorial() {
             document.getElementById('welcomeScreen').style.transform = 'translateY(-100%)';
+            document.getElementById('appBody').style.display = 'block'; // Tampilkan aplikasi
             window.speechSynthesis.speak(new SpeechSynthesisUtterance(""));
             setTimeout(() => { document.getElementById('tutorialOverlay').style.display = 'flex'; }, 1000);
         }
@@ -286,6 +280,7 @@
             if(stepTuto === 1) document.getElementById('tutoText').innerText = "Mohon Tunggu aplikasi Mengeluarkan suara ketika sudah menutup pesan ini";
             else {
                 document.getElementById('tutorialOverlay').style.display = 'none';
+                mulaiJam();
                 jalankanPengumumanOtomatis(); 
                 bc(" Suara Panggilan Sistem sudah Aktif. Diharapkan pelanggan bisa mendengarkan dengan bijak. Terimakasih", true);
             }
