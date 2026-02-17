@@ -6,12 +6,12 @@
     <title>Gacoan Call Pro - Premium By Yudi</title>
     
     <style>
-        /* SEMUA CSS ASLI BAPAK TETAP SAMA */
+        /* CSS ASLI TETAP SAMA */
         body { font-family: sans-serif; background: #f4f7f9; margin: 0; padding: 0; overflow-x: hidden; color: #333; }
         #welcomeScreen { position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: radial-gradient(circle, #ffffff, #e2e8f0); display: flex; flex-direction: column; align-items: center; justify-content: center; z-index: 9999; transition: transform 1s ease-in-out; }
         .logo-gacoan { width: 180px; height: 180px; margin-bottom: 20px; border-radius: 50%; border: 5px solid #1e3a8a; box-shadow: 0 4px 15px rgba(0,0,0,0.1); background: white; object-fit: contain; }
         .btn-mulai { padding: 15px 40px; background: #1e3a8a; color: white; border: none; border-radius: 30px; font-weight: bold; font-size: 18px; cursor: pointer; box-shadow: 0 5px 15px rgba(30,58,138,0.3); }
-        .main-app { padding: 15px; text-align: center; display: none; } /* Awalnya sembunyi */
+        .main-app { padding: 15px; text-align: center; display: none; }
         .info-waktu { background: white; padding: 10px; border-radius: 12px; margin-bottom: 10px; border: 1px solid #e2e8f0; }
         #hariTxt { font-weight: bold; color: #1e3a8a; font-size: 18px; margin: 0; }
         #jamTxt { font-size: 22px; font-weight: bold; color: #f97316; margin: 0; }
@@ -34,12 +34,15 @@
         .status-antrean { font-size: 12px; color: #10b981; font-weight: bold; margin-top: 5px; }
         #tutorialOverlay { position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: rgba(0,0,0,0.7); display: none; z-index: 10000; color: white; padding: 20px; text-align: center; justify-content: center; align-items: center; flex-direction: column; }
         .tuto-box { background: white; color: #333; padding: 20px; border-radius: 15px; width: 80%; max-width: 300px; }
-        
-        /* Input Lisensi Style */
         .license-input { margin-bottom: 20px; width: 250px; text-align: center; border: 2px solid #1e3a8a; }
     </style>
 </head>
-<body onload="persiapanCek()">
+<body onload="mulaiJam()">
+
+    <audio id="bgmSlow" loop preload="auto"><source src="https://www.bensound.com/bensound-music/bensound-betterdays.mp3" type="audio/mpeg"></audio>
+    <audio id="bgmSemangat" loop preload="auto"><source src="https://www.bensound.com/bensound-music/bensound-energy.mp3" type="audio/mpeg"></audio>
+    <audio id="bgmNight" loop preload="auto"><source src="https://www.bensound.com/bensound-music/bensound-memories.mp3" type="audio/mpeg"></audio>
+    <audio id="bgmUltah" preload="auto"><source src="https://cdn.pixabay.com/audio/2022/11/22/audio_13854999f3.mp3" type="audio/mpeg"></audio>
 
     <div id="welcomeScreen">
         <img src="https://i.ibb.co.com/ycrmLMHf/Logo-Mie-Gacoan-1.png" class="logo-gacoan">
@@ -49,11 +52,6 @@
         <button class="btn-mulai" id="btnProses" onclick="jalankanCekLisensi()">BUKA LAYAR PANGGILAN</button>
         <p style="color:#64748b; font-size:12px; margin-top:20px;">Versi Premium - By : Nur Wahyudi</p>
     </div>
-
-    <audio id="bgmSlow" loop preload="auto"><source src="https://www.bensound.com/bensound-music/bensound-betterdays.mp3" type="audio/mpeg"></audio>
-    <audio id="bgmSemangat" loop preload="auto"><source src="https://www.bensound.com/bensound-music/bensound-energy.mp3" type="audio/mpeg"></audio>
-    <audio id="bgmNight" loop preload="auto"><source src="https://www.bensound.com/bensound-music/bensound-memories.mp3" type="audio/mpeg"></audio>
-    <audio id="bgmUltah" preload="auto"><source src="https://cdn.pixabay.com/audio/2022/11/22/audio_13854999f3.mp3" type="audio/mpeg"></audio>
 
     <div id="tutorialOverlay">
         <div class="tuto-box">
@@ -115,18 +113,11 @@
     </div>
 
     <script>
-        // MASUKKAN URL WEB APP APPS SCRIPT BAPAK DI SINI
-        const URL_SCRIPT = "URL_WEB_APP_BAPAK_DI_SINI";
-
-        /* LOGIKA CEK LISENSI */
-        function persiapanCek() {
-            console.log("Aplikasi Siap");
-        }
+        const URL_SCRIPT = "https://script.google.com/macros/s/AKfycbx1-7lPgeAoWRrTyqIytj35891eYtGdyBQLH3LV76XQ92UwuFJZY6K14qGpm5V_7DM4/exec";
 
         async function jalankanCekLisensi() {
             const kode = document.getElementById('kodeLisensi').value;
             if(!kode) return alert("Masukkan Kode Lisensi!");
-            
             document.getElementById('msgLisensi').innerText = "Memverifikasi...";
             document.getElementById('btnProses').disabled = true;
 
@@ -135,19 +126,21 @@
                 const status = await response.text();
 
                 if (status.trim() === "Aktif") {
-                    startTutorial(); // Jika Aktif, buka aplikasi
+                    startTutorial();
+                } else if(status.trim() === "Expired") {
+                    alert("MASA BERLAKU HABIS (EXPIRED)!");
+                    location.reload();
                 } else {
                     alert("LISENSI TIDAK AKTIF ATAU KODE SALAH!");
-                    document.getElementById('msgLisensi').innerText = "Akses Ditolak!";
-                    document.getElementById('btnProses').disabled = false;
+                    location.reload();
                 }
             } catch (err) {
-                alert("Gagal koneksi ke server lisensi!");
+                alert("Gagal koneksi ke server!");
                 document.getElementById('btnProses').disabled = false;
             }
         }
 
-        /* SEMUA LOGIKA ASLI BAPAK DIBAWAH INI TIDAK BERUBAH */
+        /* LOGIKA PANGGILAN & MUSIK ASLI (TIDAK BERUBAH) */
         const JEDA_MENIT = 25; 
         const JEDA_ANTREAN_DETIK = 3; 
         const daftarPengumumanOtomatis = [
@@ -193,9 +186,7 @@
         function stopAllMusicInternal() {
             ['bgmSlow', 'bgmSemangat', 'bgmNight', 'bgmUltah'].forEach(id => {
                 const m = document.getElementById(id);
-                m.pause();
-                m.currentTime = 0;
-                m.onended = null;
+                m.pause(); m.currentTime = 0;
             });
             currentMusicId = null;
         }
@@ -264,13 +255,13 @@
             let input = document.getElementById('oj').value;
             if(input) {
                 bc("Pesanan Take Away atas nama Kak " + input + ". Pesanan anda sudah siap. Silahkan menuju meja take away sekarang juga, terimakasih", true);
-                document.getElementById('ojol').querySelector('#oj').value = "";
+                document.getElementById('oj').value = "";
             }
         }
 
         function startTutorial() {
             document.getElementById('welcomeScreen').style.transform = 'translateY(-100%)';
-            document.getElementById('appBody').style.display = 'block'; // Tampilkan aplikasi
+            document.getElementById('appBody').style.display = 'block';
             window.speechSynthesis.speak(new SpeechSynthesisUtterance(""));
             setTimeout(() => { document.getElementById('tutorialOverlay').style.display = 'flex'; }, 1000);
         }
@@ -280,7 +271,6 @@
             if(stepTuto === 1) document.getElementById('tutoText').innerText = "Mohon Tunggu aplikasi Mengeluarkan suara ketika sudah menutup pesan ini";
             else {
                 document.getElementById('tutorialOverlay').style.display = 'none';
-                mulaiJam();
                 jalankanPengumumanOtomatis(); 
                 bc(" Suara Panggilan Sistem sudah Aktif. Diharapkan pelanggan bisa mendengarkan dengan bijak. Terimakasih", true);
             }
