@@ -6,7 +6,7 @@
     <title>Gacoan Call Pro - Premium By Yudi</title>
     
     <style>
-        /* CSS TETAP SAMA (TIDAK BERUBAH) */
+        /* CSS UTAMA - JANGAN DIUBAH */
         body { font-family: sans-serif; background: #f4f7f9; margin: 0; padding: 0; overflow-x: hidden; color: #333; }
         #welcomeScreen { position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: radial-gradient(circle, #ffffff, #e2e8f0); display: flex; flex-direction: column; align-items: center; justify-content: center; z-index: 9999; transition: transform 1s ease-in-out; }
         .logo-gacoan { width: 180px; height: 180px; margin-bottom: 20px; border-radius: 50%; border: 5px solid #1e3a8a; box-shadow: 0 4px 15px rgba(0,0,0,0.1); background: white; object-fit: contain; }
@@ -17,15 +17,13 @@
         .license-box { background: white; color: #333; padding: 30px; border-radius: 20px; width: 85%; max-width: 400px; box-shadow: 0 10px 25px rgba(0,0,0,0.2); }
         .license-box input { width: 90%; padding: 15px; margin: 20px 0; border: 2px solid #ddd; border-radius: 10px; font-size: 18px; text-align: center; font-weight: bold; }
         
-        /* STYLE UTAMA */
-        .main-app { padding: 15px; text-align: center; display: none; } /* Tersembunyi sebelum login */
+        .main-app { padding: 15px; text-align: center; display: none; }
         .info-waktu { background: white; padding: 10px; border-radius: 12px; margin-bottom: 10px; border: 1px solid #e2e8f0; }
         #hariTxt { font-weight: bold; color: #1e3a8a; font-size: 18px; margin: 0; }
         #jamTxt { font-size: 22px; font-weight: bold; color: #f97316; margin: 0; }
         .music-control-box { margin-top: 10px; display: flex; flex-wrap: wrap; align-items: center; justify-content: center; gap: 8px; }
         .btn-music-ctrl { border: none; padding: 8px 12px; border-radius: 10px; font-size: 11px; font-weight: bold; cursor: pointer; color: white; }
         .bg-pause { background: #ef4444; } .bg-slow { background: #3b82f6; } .bg-energic { background: #f97316; } .bg-night { background: #6366f1; } .bg-ultah { background: #db2777; } .bg-cek { background: #64748b; margin-top: 10px; width: 80%; }
-        #statusMusic { font-size: 11px; color: #64748b; font-style: italic; margin-top: 5px; display: block; }
         .header { background: #ffffff; color: #1e3a8a; padding: 15px; border-radius: 15px; margin-bottom: 10px; border: 2px solid #1e3a8a; }
         .nav-tabs { display: flex; gap: 10px; margin-bottom: 15px; }
         .tab-btn { flex: 1; padding: 15px; border-radius: 12px; border: 1px solid #cbd5e1; font-weight: bold; font-size: 14px; cursor: pointer; background: #f8fafc; color: #64748b; }
@@ -48,10 +46,10 @@
     <div id="licenseOverlay">
         <div class="license-box">
             <h2 style="margin:0; color:#1e3a8a;">Akses Terkunci</h2>
-            <p style="font-size:14px; margin-top:10px;">Silahkan masukkan kode lisensi Premium Bapak Nur Wahyudi untuk melanjutkan.</p>
-            <input type="text" id="licenseKey" placeholder="KODE LISENSI">
+            <p style="font-size:14px; margin-top:10px;">Gacoan Call Pro Premium - By Nur Wahyudi</p>
+            <input type="text" id="licenseKey" placeholder="MASUKKAN LISENSI">
             <button class="btn-call bg-orange" id="btnCheck" onclick="verifyLicense()">AKTIFKAN APLIKASI</button>
-            <p id="msg" style="font-size:12px; color:red; margin-top:10px;"></p>
+            <p id="msg" style="font-size:12px; color:red; margin-top:10px; font-weight:bold;"></p>
         </div>
     </div>
 
@@ -86,12 +84,12 @@
                 <button class="btn-music-ctrl bg-pause" onclick="manualPauseMusic()">⏸ PAUSE</button>
                 <button class="btn-music-ctrl bg-cek" onclick="bc('ini adalah Suara sistem. Cek Suara sistem Berhasil.', true)">⚙️ CEK SUARA SISTEM</button>
             </div>
-            <span id="statusMusic">Musik: Off</span>
+            <span id="statusMusic" style="font-size: 11px; color: #64748b;">Musik: Off</span>
         </div>
 
         <div class="header">
             <h2 style="margin:0">GACOAN CALL PRO</h2>
-            <div id="antreanInfo" class="status-antrean">Antrean: 0 Panggilan</div>
+            <div id="antreanInfo" class="status-antrean">Antrean: 0</div>
         </div>
 
         <div class="nav-tabs">
@@ -128,73 +126,53 @@
 
     <script>
         /* ========================================================
-           BAGIAN 1: SISTEM LISENSI (TERKONEKSI KE GOOGLE SHEETS)
+           BAGIAN 1: SISTEM LISENSI UPDATE VERSI 2
            ======================================================== */
-        const WEB_APP_URL = "https://script.google.com/macros/s/AKfycbwwaq8trONPqmgMoTzhTu3KBwIXuNB3VfhxnL1wPW2z4wuuyQWQIJq1IHmPCKNke5sSFA/exec";
+        const WEB_APP_URL = "https://script.google.com/macros/s/AKfycbz7texlFMOvWxf9qtweBMFfcrM4zKHHwN3mFOpw8P4zE7EM7gl6uhW9AuwuCaABW0kUqQ/exec";
 
         function checkSavedLicense() {
             const savedKey = localStorage.getItem('gacoan_license');
             if (savedKey) {
                 document.getElementById('licenseKey').value = savedKey;
-                verifyLicense(true);
+                verifyLicense();
             }
         }
 
-        async function verifyLicense(isAuto = false) {
+        async function verifyLicense() {
             const key = document.getElementById('licenseKey').value;
             const btn = document.getElementById('btnCheck');
             const msg = document.getElementById('msg');
-
             if (!key) return;
-            
-            btn.innerText = "MENGECEK...";
-            btn.disabled = true;
-
+            btn.innerText = "MENGECEK..."; btn.disabled = true;
             try {
-                const response = await fetch(WEB_APP_URL + "?key=" + key);
+                const response = await fetch(WEB_APP_URL + "?key=" + encodeURIComponent(key));
                 const result = await response.json();
-
                 if (result.status === "success") {
                     localStorage.setItem('gacoan_license', key);
                     document.getElementById('licenseOverlay').style.display = 'none';
                     document.getElementById('welcomeScreen').style.display = 'flex';
                     document.getElementById('appBody').style.display = 'block';
                     mulaiAplikasi();
-                } else if (result.status === "expired") {
-                    msg.innerText = "LISENSI SUDAH MATI. HUBUNGI PAK YUDI.";
-                    btn.innerText = "AKTIFKAN APLIKASI";
-                    btn.disabled = false;
                 } else {
-                    msg.innerText = "KODE TIDAK TERDAFTAR!";
-                    btn.innerText = "AKTIFKAN APLIKASI";
-                    btn.disabled = false;
+                    msg.innerText = result.status === "expired" ? "LISENSI MATI (HUBUNGI YUDI)" : "LISENSI TIDAK VALID!";
+                    btn.innerText = "AKTIFKAN APLIKASI"; btn.disabled = false;
                 }
             } catch (e) {
-                msg.innerText = "Gagal koneksi ke server lisensi.";
-                btn.disabled = false;
+                msg.innerText = "Gagal koneksi ke database.";
+                btn.innerText = "AKTIFKAN APLIKASI"; btn.disabled = false;
             }
         }
 
         /* ========================================================
-           LOGIKA APLIKASI GACOAN (SAMA SEPERTI SEBELUMNYA)
+           LOGIKA PANGGILAN (TANPA JEDA UNTUK MEJA & OJOL)
            ======================================================== */
         const JEDA_MENIT = 25; 
         const JEDA_ANTREAN_DETIK = 3; 
-        const daftarPengumumanOtomatis = [
-            " PENGUMUMAN Bagi pelanggan yang menemukan atau kehilangan barang, diharapkan untuk segera melapor ke kasir. Terima kasih",
-            " Diharapkan bagi pelanggan yang baru datang atau ingin memesan pastikan untuk duduk sesuai dengan kapasitas meja demi kenyamanan bersama. Terima kasih.",
-            " Mari kita jaga kebersihan bersama dengan membuang sampah pada tempatnya. Terimakasih",
-            " Bagi pelanggan yang ingin mengikuti fotobox digacoan pastikan pembelian minimal diatas 70000, untuk dapat mengikuti Sesi Fotobox Gratis. Terimakasih",
-            " Pengumuman, pastikan selalu barang bawaan anda aman dan tidak tertinggal di area makan, jangan sampai tertinggal karena kelalaian sendiri. terimakasih",
-            " Pastikan pesanan anda sudah selesai dan tidak ada kekurangan ketika diambil dari meja self service. terimakasih"
-        ];
-
         let antreanSuara = [];
         let sedangBicara = false;
         let stepTuto = 0;
         let voices = [];
         let currentMusicId = null;
-        let indexPengumuman = 0;
 
         window.speechSynthesis.onvoiceschanged = () => { voices = window.speechSynthesis.getVoices(); };
 
@@ -228,8 +206,7 @@
         function stopAllMusicInternal() {
             ['bgmSlow', 'bgmSemangat', 'bgmNight', 'bgmUltah'].forEach(id => {
                 const m = document.getElementById(id);
-                m.pause();
-                m.currentTime = 0;
+                m.pause(); m.currentTime = 0;
             });
             currentMusicId = null;
         }
@@ -239,11 +216,8 @@
             const mUltah = document.getElementById('bgmUltah');
             currentMusicId = 'bgmUltah';
             mUltah.volume = 0.3;
-            document.getElementById('statusMusic').innerText = "Musik: Ulang Tahun... 🎂";
             mUltah.play();
-            mUltah.onended = function() {
-                bc("Pemberitahuan. Kami segenap kru Mie Gacoan mengucapkan Selamat Ulang Tahun untuk pelanggan kami yang sedang berbahagia. Semoga panjang umur dan sehat selalu. Mari kita beri tepuk tangan yang meriah!", true);
-            };
+            mUltah.onended = () => bc("Pemberitahuan. Kami segenap kru Mie Gacoan mengucapkan Selamat Ulang Tahun untuk pelanggan kami yang sedang berbahagia. Semoga panjang umur dan sehat selalu. Mari kita beri tepuk tangan yang meriah!", true);
         }
 
         function bc(teks, tanpaJeda = false) {
@@ -267,13 +241,6 @@
                 setTimeout(() => { sedangBicara = false; prosesAntrean(); }, waktuTunggu);
             };
             window.speechSynthesis.speak(u);
-        }
-
-        function jalankanPengumumanOtomatis() {
-            setInterval(() => {
-                bc("  " + daftarPengumumanOtomatis[indexPengumuman], false);
-                indexPengumuman = (indexPengumuman + 1) % daftarPengumumanOtomatis.length;
-            }, JEDA_MENIT * 60 * 1000); 
         }
 
         function tambahAntreanCustomer() {
@@ -309,18 +276,18 @@
 
         function nextTuto() {
             stepTuto++;
-            if(stepTuto === 1) document.getElementById('tutoText').innerText = "Mohon Tunggu aplikasi Mengeluarkan suara ketika sudah menutup pesan ini";
-            else {
+            if(stepTuto === 2) {
                 document.getElementById('tutorialOverlay').style.display = 'none';
-                jalankanPengumumanOtomatis(); 
                 bc(" Suara Panggilan Sistem sudah Aktif. Diharapkan pelanggan bisa mendengarkan dengan bijak. Terimakasih", true);
+            } else {
+                document.getElementById('tutoText').innerText = "Mohon Tunggu aplikasi Mengeluarkan suara.";
             }
         }
 
-        function openTab(tabName) {
+        function openTab(t) {
             document.querySelectorAll('.tab-content').forEach(c => c.classList.remove('active'));
             document.querySelectorAll('.tab-btn').forEach(b => b.classList.remove('active'));
-            document.getElementById(tabName).classList.add('active');
+            document.getElementById(t).classList.add('active');
             event.currentTarget.classList.add('active');
         }
 
