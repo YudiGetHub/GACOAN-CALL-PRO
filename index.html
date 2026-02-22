@@ -3,58 +3,80 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Gacoan Call Pro - Premium By Yudi (Piano Edition)</title>
+    <title>Gacoan Call Pro - Full Version By Yudi</title>
     
     <style>
-        body { font-family: sans-serif; background: #f4f7f9; margin: 0; padding: 0; overflow-x: hidden; color: #333; }
-        .main-app { padding: 15px; text-align: center; display: block; }
-        .info-waktu { background: white; padding: 10px; border-radius: 12px; margin-bottom: 10px; border: 1px solid #e2e8f0; }
+        body { font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif; background: #f0f4f8; margin: 0; padding: 0; color: #333; }
+        .main-app { padding: 15px; max-width: 600px; margin: 0 auto; text-align: center; }
+        
+        /* Info Waktu & Musik */
+        .info-box { background: white; padding: 15px; border-radius: 15px; margin-bottom: 15px; box-shadow: 0 4px 10px rgba(0,0,0,0.05); border: 1px solid #e2e8f0; }
         #hariTxt { font-weight: bold; color: #1e3a8a; font-size: 18px; margin: 0; }
-        #jamTxt { font-size: 22px; font-weight: bold; color: #f97316; margin: 0; }
-        .music-control-box { margin-top: 10px; display: flex; flex-wrap: wrap; align-items: center; justify-content: center; gap: 8px; }
-        .btn-music-ctrl { border: none; padding: 10px 15px; border-radius: 10px; font-size: 11px; font-weight: bold; cursor: pointer; color: white; transition: 0.3s; }
+        #jamTxt { font-size: 24px; font-weight: bold; color: #f97316; margin: 5px 0; }
+        
+        /* Tombol Kontrol Musik */
+        .music-control-box { display: flex; flex-wrap: wrap; justify-content: center; gap: 8px; margin-top: 10px; }
+        .btn-music-ctrl { border: none; padding: 10px 12px; border-radius: 10px; font-size: 11px; font-weight: bold; cursor: pointer; color: white; transition: 0.2s; min-width: 80px; }
         .btn-music-ctrl:active { transform: scale(0.95); }
-        .bg-pause { background: #ef4444; } 
-        .bg-slow { background: #3b82f6; } 
         .bg-energic { background: #10b981; } 
+        .bg-slow { background: #3b82f6; } 
         .bg-night { background: #6366f1; } 
         .bg-ultah { background: #db2777; } 
-        .bg-cek { background: #64748b; margin-top: 10px; width: 85%; }
-        #statusMusic { font-size: 11px; color: #64748b; font-style: italic; margin-top: 5px; display: block; }
-        .header { background: #ffffff; color: #1e3a8a; padding: 15px; border-radius: 15px; margin-bottom: 10px; border: 2px solid #1e3a8a; }
+        .bg-pause { background: #ef4444; }
+        .bg-cek { background: #64748b; width: 90%; margin-top: 5px; }
+        #statusMusic { font-size: 11px; color: #64748b; font-style: italic; margin-top: 8px; display: block; }
+
+        /* Header & Antrean */
+        .header { background: #1e3a8a; color: white; padding: 15px; border-radius: 15px; margin-bottom: 15px; }
+        .status-antrean { font-size: 14px; background: #ffedd5; color: #9a3412; padding: 5px 10px; border-radius: 20px; display: inline-block; margin-top: 5px; font-weight: bold; }
+
+        /* Navigasi Tab */
         .nav-tabs { display: flex; gap: 10px; margin-bottom: 15px; }
-        .tab-btn { flex: 1; padding: 15px; border-radius: 12px; border: 1px solid #cbd5e1; font-weight: bold; font-size: 14px; cursor: pointer; background: #f8fafc; color: #64748b; }
+        .tab-btn { flex: 1; padding: 12px; border-radius: 12px; border: 1px solid #cbd5e1; font-weight: bold; cursor: pointer; background: white; color: #64748b; transition: 0.3s; }
         .tab-btn.active { background: #1e3a8a; color: white; border-color: #1e3a8a; }
-        .card { background: white; padding: 15px; border-radius: 15px; box-shadow: 0 4px 6px rgba(0,0,0,0.05); border: 1px solid #e2e8f0; margin-bottom: 20px; }
-        input { width: 85%; padding: 12px; margin: 5px; border: 1px solid #cbd5e1; border-radius: 10px; font-size: 16px; background: #fdfdfd; }
-        .btn-call { color: white; border: none; padding: 15px; border-radius: 12px; width: 100%; font-weight: bold; margin-top: 10px; font-size: 16px; cursor: pointer; }
-        .bg-orange { background: #f97316; } .bg-grab { background: #00b14f; } .bg-shopee { background: #ee4d2d; } .bg-gojek { background: #00aa13; } .bg-takeaway { background: #3b82f6; }
-        .grid-meja { display: grid; grid-template-columns: repeat(4, 1fr); gap: 8px; margin-top: 20px; }
-        .meja { background: white; border: 1px solid #cbd5e1; padding: 15px 0; border-radius: 10px; font-weight: bold; color: #1e3a8a; cursor: pointer;}
-        .tab-content { display: none; } .tab-content.active { display: block; }
-        .status-antrean { font-size: 12px; color: #10b981; font-weight: bold; margin-top: 5px; }
+
+        /* Kartu Input */
+        .card { background: white; padding: 20px; border-radius: 15px; box-shadow: 0 4px 6px rgba(0,0,0,0.05); border: 1px solid #e2e8f0; margin-bottom: 20px; }
+        input { width: 90%; padding: 12px; margin: 8px 0; border: 1px solid #cbd5e1; border-radius: 10px; font-size: 16px; outline: none; transition: 0.3s; }
+        input:focus { border-color: #f97316; box-shadow: 0 0 0 2px rgba(249, 115, 22, 0.1); }
+        
+        /* Tombol Panggil */
+        .btn-call { color: white; border: none; padding: 15px; border-radius: 12px; width: 100%; font-weight: bold; font-size: 16px; cursor: pointer; margin-top: 10px; transition: 0.3s; }
+        .bg-orange { background: #f97316; }
+        .bg-grab { background: #00b14f; }
+        .bg-shopee { background: #ee4d2d; }
+        .bg-gojek { background: #00aa13; }
+        .bg-takeaway { background: #3b82f6; }
+
+        /* Grid Meja */
+        .grid-meja { display: grid; grid-template-columns: repeat(4, 1fr); gap: 10px; margin-top: 10px; }
+        .meja { background: white; border: 1px solid #cbd5e1; padding: 15px 5px; border-radius: 10px; font-weight: bold; color: #1e3a8a; cursor: pointer; transition: 0.2s; }
+        .meja:hover { background: #e0e7ff; }
+
+        .tab-content { display: none; }
+        .tab-content.active { display: block; }
     </style>
 </head>
 <body onclick="unlockAudio()" onload="mulaiAplikasi()">
 
-    <audio id="bgmSemangat" loop preload="auto"><source src="https://www.soundhelix.com/examples/mp3/SoundHelix-Song-15.mp3" type="audio/mpeg"></audio>
-    <audio id="bgmSlow" loop preload="auto"><source src="https://www.soundhelix.com/examples/mp3/SoundHelix-Song-8.mp3" type="audio/mpeg"></audio>
-    <audio id="bgmNight" loop preload="auto"><source src="https://www.soundhelix.com/examples/mp3/SoundHelix-Song-13.mp3" type="audio/mpeg"></audio>
+    <audio id="bgmSemangat" loop preload="auto"><source src="https://cdn.pixabay.com/audio/2022/10/30/audio_21424a1380.mp3" type="audio/mpeg"></audio>
+    <audio id="bgmSlow" loop preload="auto"><source src="https://www.soundhelix.com/examples/mp3/SoundHelix-Song-15.mp3" type="audio/mpeg"></audio>
+    <audio id="bgmNight" loop preload="auto"><source src="https://cdn.pixabay.com/audio/2022/01/20/audio_d0c9ff336a.mp3" type="audio/mpeg"></audio>
     <audio id="bgmUltah" preload="auto"><source src="https://cdn.pixabay.com/audio/2022/11/22/audio_13854999f3.mp3" type="audio/mpeg"></audio>
 
-    <div class="main-app" id="appBody">
-        <div class="info-waktu">
-            <p id="hariTxt"></p>
-            <p id="jamTxt"></p>
+    <div class="main-app">
+        <div class="info-box">
+            <p id="hariTxt">Memuat...</p>
+            <p id="jamTxt">00.00 WIB</p>
             <div class="music-control-box">
-                <button class="btn-music-ctrl bg-energic" onclick="manualPlayMusic('bgmSemangat', 'Ceria (Piano)')">😊 CERIA</button>
-                <button class="btn-music-ctrl bg-slow" onclick="manualPlayMusic('bgmSlow', 'Santai (Soft)')">☕ SANTAI</button>
-                <button class="btn-music-ctrl bg-night" onclick="manualPlayMusic('bgmNight', 'Solo Piano (Malam)')">🌙 MALAM</button>
+                <button class="btn-music-ctrl bg-energic" onclick="manualPlayMusic('bgmSemangat', 'Piano Ceria', 0.2)">😊 CERIA</button>
+                <button class="btn-music-ctrl bg-slow" onclick="manualPlayMusic('bgmSlow', 'Piano Santai', 0.15)">☕ SANTAI</button>
+                <button class="btn-music-ctrl bg-night" onclick="manualPlayMusic('bgmNight', 'Murni Piano (Malam)', 0.08)">🌙 MALAM</button>
                 <button class="btn-music-ctrl bg-ultah" onclick="modeUltah()">🎂 ULTAH</button>
-                <button class="btn-music-ctrl bg-pause" onclick="manualPauseMusic()">⏸ PAUSE</button>
-                <button class="btn-music-ctrl bg-cek" onclick="bc('Cek Suara Berhasil. Mode Piano Malam Aktif.', true)">⚙️ CEK SISTEM</button>
+                <button class="btn-music-ctrl bg-pause" onclick="manualPauseMusic()">⏸ STOP</button>
+                <button class="btn-music-ctrl bg-cek" onclick="bc('Cek Suara Sistem Berhasil. Musik murni piano aktif.', true)">⚙️ CEK SISTEM</button>
             </div>
-            <span id="statusMusic">Musik: Off (Ketuk layar untuk memulai suara)</span>
+            <span id="statusMusic">Musik: Off (Ketuk layar sekali untuk aktifkan)</span>
         </div>
 
         <div class="header">
@@ -63,18 +85,18 @@
         </div>
 
         <div class="nav-tabs">
-            <button class="tab-btn active" onclick="openTab('customer')">👤 CUSTOMER</button>
-            <button class="tab-btn" onclick="openTab('ojol')">🛵 OJOL & TA</button>
+            <button class="tab-btn active" onclick="openTab('customer', event)">👤 CUSTOMER</button>
+            <button class="tab-btn" onclick="openTab('ojol', event)">🛵 OJOL & TA</button>
         </div>
 
         <div id="customer" class="tab-content active">
             <div class="card">
                 <input type="text" id="nm" placeholder="Nama Pelanggan">
-                <input type="text" id="mj" placeholder="No Meja">
-                <button class="btn-call bg-orange" onclick="tambahAntreanCustomer()">📢 PANGGIL</button>
-                <div style="margin-top:10px;">
-                    <small style="font-weight:bold; color:#1e3a8a;">TEMPO SUARA PANGGILAN</small><br>
-                    <input type="range" id="rate" style="width:90%" min="0.5" max="1.2" step="0.05" value="0.85">
+                <input type="number" id="mj" placeholder="Nomor Meja">
+                <button class="btn-call bg-orange" onclick="tambahAntreanCustomer()">📢 PANGGIL PELANGGAN</button>
+                <div style="margin-top:15px;">
+                    <small style="font-weight:bold; color:#1e3a8a;">TEMPO SUARA</small><br>
+                    <input type="range" id="rate" min="0.5" max="1.2" step="0.05" value="0.85">
                 </div>
             </div>
             <div id="gt" class="grid-meja"></div>
@@ -82,11 +104,12 @@
 
         <div id="ojol" class="tab-content">
             <div class="card">
-                <input type="text" id="oj" placeholder="Nama / Nomor Antrian">
-                <button class="btn-call bg-grab" onclick="tambahOjol('Grab')">🛵 GRABFOOD</button>
-                <button class="btn-call bg-shopee" onclick="tambahOjol('Shopee')">🛵 SHOPEEFOOD</button>
-                <button class="btn-call bg-gojek" onclick="tambahOjol('Gojek')">🛵 GOFOOD</button>
-                <button class="btn-call bg-takeaway" style="margin-top:20px;" onclick="tambahTA()">🥡 TAKE AWAY</button>
+                <h3 style="margin-top:0; color:#1e3a8a;">Panggilan Driver & TA</h3>
+                <input type="text" id="oj" placeholder="Masukkan Nomor Antrean / Nama">
+                <button class="btn-call bg-grab" onclick="tambahOjol('Grab Food')">🛵 GRAB FOOD</button>
+                <button class="btn-call bg-shopee" onclick="tambahOjol('Shopee Food')">🛵 SHOPEE FOOD</button>
+                <button class="btn-call bg-gojek" onclick="tambahOjol('Go Food')">🛵 GO FOOD</button>
+                <button class="btn-call bg-takeaway" style="margin-top:20px;" onclick="tambahTA()">🥡 TAKE AWAY (Bungkus)</button>
             </div>
         </div>
     </div>
@@ -97,7 +120,9 @@
         let voices = [];
         let currentMusicId = null;
         let isAudioUnlocked = false;
+        let defaultMusicVol = 0.15;
 
+        // Load Voice Bahasa Indonesia
         window.speechSynthesis.onvoiceschanged = () => { voices = window.speechSynthesis.getVoices(); };
 
         function unlockAudio() {
@@ -107,10 +132,12 @@
                 audio.play().then(() => { audio.pause(); audio.currentTime = 0; }).catch(e => {});
             });
             isAudioUnlocked = true;
+            console.log("Audio siap!");
         }
 
         function mulaiAplikasi() {
             mulaiJam();
+            // Pancing TTS agar aktif
             window.speechSynthesis.speak(new SpeechSynthesisUtterance(""));
         }
 
@@ -122,13 +149,15 @@
             }, 1000);
         }
 
-        function manualPlayMusic(id, label) {
+        // FUNGSI MUSIK
+        function manualPlayMusic(id, label, vol) {
             unlockAudio();
             stopAllMusicInternal();
             currentMusicId = id;
+            defaultMusicVol = vol;
             const m = document.getElementById(id);
-            m.volume = 0.25; // Sedikit lebih kencang karena piano solo cenderung lembut
-            m.play().catch(err => console.log("Klik layar diperlukan"));
+            m.volume = vol;
+            m.play().catch(err => console.log("Perlu interaksi layar"));
             document.getElementById('statusMusic').innerText = "Musik: " + label;
         }
 
@@ -149,12 +178,14 @@
             stopAllMusicInternal();
             const mUltah = document.getElementById('bgmUltah');
             currentMusicId = 'bgmUltah';
-            mUltah.volume = 0.4;
-            document.getElementById('statusMusic').innerText = "Musik: Ulang Tahun 🎂";
+            defaultMusicVol = 0.3;
+            mUltah.volume = 0.3;
+            document.getElementById('statusMusic').innerText = "Musik: Perayaan Ulang Tahun 🎂";
             mUltah.play();
             mUltah.onended = () => bc("Pemberitahuan, Kami segenap kru Mie Gacoan mengucapkan selamat ulang tahun untuk pelanggan yang sedang berbahagia. Semoga panjang umur dan sehat selalu!", true);
         }
 
+        // FUNGSI SUARA PANGGILAN (TTS)
         function bc(teks, tanpaJeda = false) {
             antreanSuara.push({ teks: teks, tanpaJeda: tanpaJeda });
             prosesAntrean();
@@ -163,7 +194,9 @@
         function prosesAntrean() {
             if (sedangBicara || antreanSuara.length === 0) return;
             sedangBicara = true;
-            if (currentMusicId) document.getElementById(currentMusicId).volume = 0.05;
+            
+            // Ducking (Musik pelan saat suara panggil muncul)
+            if (currentMusicId) document.getElementById(currentMusicId).volume = 0.02;
             
             let item = antreanSuara.shift();
             document.getElementById('antreanInfo').innerText = "Antrean: " + antreanSuara.length;
@@ -172,12 +205,14 @@
             u.voice = voices.find(v => v.lang.includes('id')) || voices[0];
             u.rate = document.getElementById('rate').value;
             u.onend = () => { 
-                if (currentMusicId) document.getElementById(currentMusicId).volume = 0.25;
-                setTimeout(() => { sedangBicara = false; prosesAntrean(); }, 2000);
+                // Balikkan volume musik
+                if (currentMusicId) document.getElementById(currentMusicId).volume = defaultMusicVol;
+                setTimeout(() => { sedangBicara = false; prosesAntrean(); }, 1500);
             };
             window.speechSynthesis.speak(u);
         }
 
+        // FUNGSI INPUT
         function tambahAntreanCustomer() {
             let n = document.getElementById('nm').value;
             let m = document.getElementById('mj').value;
@@ -190,7 +225,7 @@
         function tambahOjol(brand) {
             let input = document.getElementById('oj').value;
             if(input) {
-                bc("Pesanan " + brand + " nomor " + input + " sudah siap. Silahkan menuju meja take away.", true);
+                bc("Pesanan " + brand + " nomor antrean " + input + " sudah siap. Silahkan menuju meja take away.", true);
                 document.getElementById('oj').value = "";
             }
         }
@@ -203,13 +238,14 @@
             }
         }
 
-        function openTab(tabName) {
+        function openTab(tabName, event) {
             document.querySelectorAll('.tab-content').forEach(c => c.classList.remove('active'));
             document.querySelectorAll('.tab-btn').forEach(b => b.classList.remove('active'));
             document.getElementById(tabName).classList.add('active');
             event.currentTarget.classList.add('active');
         }
 
+        // Render 100 Meja Otomatis
         const container = document.getElementById('gt');
         for (let i = 1; i <= 100; i++) {
             let b = document.createElement('button');
