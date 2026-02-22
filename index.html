@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Gacoan Call Pro - Fix Ultah By Yudi</title>
+    <title>Gacoan Call Pro - Update By Yudi</title>
     
     <style>
         body { font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif; background: #f0f4f8; margin: 0; padding: 0; color: #333; }
@@ -37,20 +37,19 @@
 </head>
 <body onclick="unlockAudio()" onload="mulaiAplikasi()">
 
-    <audio id="bgmSemangat" loop preload="auto"><source src="https://www.soundhelix.com/examples/mp3/SoundHelix-Song-13.mp3" type="audio/mpeg"></audio>
-    <audio id="bgmSlow" loop preload="auto"><source src="https://www.soundhelix.com/examples/mp3/SoundHelix-Song-15.mp3" type="audio/mpeg"></audio>
-    <audio id="bgmNight" loop preload="auto"><source src="https://cdn.pixabay.com/audio/2022/01/20/audio_d0c9ff336a.mp3" type="audio/mpeg"></audio>
-    
-    <audio id="bgmUltah" preload="auto"><source src="https://cdn.pixabay.com/audio/2022/11/22/audio_13854999f3.mp3" type="audio/mpeg"></audio>
+    <audio id="bgmSemangat" loop preload="auto"><source src="https://actions.google.com/sounds/v1/foley/wind_chimes_short.ogg" type="audio/mpeg"></audio>
+    <audio id="bgmSlow" loop preload="auto"><source src="https://actions.google.com/sounds/v1/ambiences/coffee_shop.ogg" type="audio/mpeg"></audio>
+    <audio id="bgmNight" loop preload="auto"><source src="https://actions.google.com/sounds/v1/weather/rain_on_roof.ogg" type="audio/mpeg"></audio>
+    <audio id="bgmUltah" preload="auto"><source src="https://www.soundboard.com/handler/DownLoadTrack.ashx?cliptitle=Happy+Birthday+Piano&filename=mt/mtkzntm0odkyndkzode2_I2_2fK_2b6pE8O0.MP3" type="audio/mpeg"></audio>
 
     <div class="main-app">
         <div class="info-box">
             <p id="hariTxt">Memuat...</p>
             <p id="jamTxt">00.00 WIB</p>
             <div class="music-control-box">
-                <button class="btn-music-ctrl bg-energic" onclick="manualPlayMusic('bgmSemangat', 'Piano Ceria', 0.2)">😊 CERIA</button>
-                <button class="btn-music-ctrl bg-slow" onclick="manualPlayMusic('bgmSlow', 'Piano Santai', 0.15)">☕ SANTAI</button>
-                <button class="btn-music-ctrl bg-night" onclick="manualPlayMusic('bgmNight', 'Solo Piano', 0.08)">🌙 MALAM</button>
+                <button class="btn-music-ctrl bg-energic" onclick="manualPlayMusic('bgmSemangat', 'Suara Ceria', 0.2)">😊 CERIA</button>
+                <button class="btn-music-ctrl bg-slow" onclick="manualPlayMusic('bgmSlow', 'Suara Santai', 0.15)">☕ SANTAI</button>
+                <button class="btn-music-ctrl bg-night" onclick="manualPlayMusic('bgmNight', 'Suara Malam', 0.08)">🌙 MALAM</button>
                 <button class="btn-music-ctrl bg-ultah" onclick="modeUltah()">🎂 ULTAH</button>
                 <button class="btn-music-ctrl bg-pause" onclick="manualPauseMusic()">⏸ STOP</button>
                 <br>
@@ -102,9 +101,10 @@
 
         function unlockAudio() {
             if (isAudioUnlocked) return;
-            ['bgmSlow', 'bgmSemangat', 'bgmNight', 'bgmUltah'].forEach(id => {
+            const audios = ['bgmSlow', 'bgmSemangat', 'bgmNight', 'bgmUltah'];
+            audios.forEach(id => {
                 const audio = document.getElementById(id);
-                audio.play().then(() => { audio.pause(); audio.currentTime = 0; }).catch(e => {});
+                audio.play().then(() => { audio.pause(); audio.currentTime = 0; }).catch(e => console.log("Unlock audio failed"));
             });
             isAudioUnlocked = true;
             bc("Sistem Panggilan Suara siap digunakan, Diharapkan pelanggan dapat mendengar dengan baik. Terimakasih", true);
@@ -144,7 +144,7 @@
             defaultMusicVol = vol;
             const m = document.getElementById(id);
             m.volume = vol;
-            m.play();
+            m.play().catch(e => console.log("Play failed"));
             document.getElementById('statusMusic').innerText = "Musik: " + label;
         }
 
@@ -165,15 +165,14 @@
             stopAllMusicInternal();
             const mUltah = document.getElementById('bgmUltah');
             currentMusicId = 'bgmUltah';
-            defaultMusicVol = 0.4; 
-            mUltah.volume = 0.4;
+            defaultMusicVol = 0.5; 
+            mUltah.volume = 0.5;
             document.getElementById('statusMusic').innerText = "Musik: Ultah 🎂";
             
             mUltah.play().catch(e => {
-                alert("Gagal memutar lagu ultah. Pastikan koneksi internet aktif.");
+                console.log("Gagal memutar lagu ultah.");
             });
 
-            // Setelah lagu selesai, baru suara robot bicara
             mUltah.onended = () => {
                 bc("Keluarga besar Mie Gacoan mengucapkan selamat ulang tahun!", true);
             };
