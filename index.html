@@ -37,19 +37,19 @@
 </head>
 <body onclick="unlockAudio()" onload="mulaiAplikasi()">
 
-    <audio id="bgmSemangat" loop preload="auto"><source src="https://actions.google.com/sounds/v1/foley/wind_chimes_short.ogg" type="audio/mpeg"></audio>
-    <audio id="bgmSlow" loop preload="auto"><source src="https://actions.google.com/sounds/v1/ambiences/coffee_shop.ogg" type="audio/mpeg"></audio>
-    <audio id="bgmNight" loop preload="auto"><source src="https://actions.google.com/sounds/v1/weather/rain_on_roof.ogg" type="audio/mpeg"></audio>
-    <audio id="bgmUltah" preload="auto"><source src="https://www.soundboard.com/handler/DownLoadTrack.ashx?cliptitle=Happy+Birthday+Piano&filename=mt/mtkzntm0odkyndkzode2_I2_2fK_2b6pE8O0.MP3" type="audio/mpeg"></audio>
+    <audio id="bgmSemangat" loop preload="auto"><source src="https://raw.githubusercontent.com/rafael-m-lopes/Music-Streaming-App/master/music/Cante-Cante.mp3" type="audio/mpeg"></audio>
+    <audio id="bgmSlow" loop preload="auto"><source src="https://upload.wikimedia.org/wikipedia/commons/4/4c/Beethoven_-_Piano_Sonata_No._14_%28Moonlight%29_-_I._Adagio_sostenuto.ogg" type="audio/ogg"></audio>
+    <audio id="bgmNight" loop preload="auto"><source src="https://upload.wikimedia.org/wikipedia/commons/e/e6/Gnossienne_No._1.ogg" type="audio/ogg"></audio>
+    <audio id="bgmUltah" preload="auto"><source src="https://upload.wikimedia.org/wikipedia/commons/b/b2/Happy_Birthday_to_You_on_organ.ogg" type="audio/ogg"></audio>
 
     <div class="main-app">
         <div class="info-box">
             <p id="hariTxt">Memuat...</p>
             <p id="jamTxt">00.00 WIB</p>
             <div class="music-control-box">
-                <button class="btn-music-ctrl bg-energic" onclick="manualPlayMusic('bgmSemangat', 'Suara Ceria', 0.2)">😊 CERIA</button>
-                <button class="btn-music-ctrl bg-slow" onclick="manualPlayMusic('bgmSlow', 'Suara Santai', 0.15)">☕ SANTAI</button>
-                <button class="btn-music-ctrl bg-night" onclick="manualPlayMusic('bgmNight', 'Suara Malam', 0.08)">🌙 MALAM</button>
+                <button class="btn-music-ctrl bg-energic" onclick="manualPlayMusic('bgmSemangat', 'Musik Ceria', 0.2)">😊 CERIA</button>
+                <button class="btn-music-ctrl bg-slow" onclick="manualPlayMusic('bgmSlow', 'Musik Santai', 0.2)">☕ SANTAI</button>
+                <button class="btn-music-ctrl bg-night" onclick="manualPlayMusic('bgmNight', 'Musik Malam', 0.15)">🌙 MALAM</button>
                 <button class="btn-music-ctrl bg-ultah" onclick="modeUltah()">🎂 ULTAH</button>
                 <button class="btn-music-ctrl bg-pause" onclick="manualPauseMusic()">⏸ STOP</button>
                 <br>
