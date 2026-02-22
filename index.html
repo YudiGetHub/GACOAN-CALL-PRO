@@ -3,58 +3,35 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Gacoan Call Pro - Full Version By Yudi</title>
+    <title>Gacoan Call Pro - Update Pengumuman By Yudi</title>
     
     <style>
         body { font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif; background: #f0f4f8; margin: 0; padding: 0; color: #333; }
         .main-app { padding: 15px; max-width: 600px; margin: 0 auto; text-align: center; }
-        
-        /* Info Waktu & Musik */
         .info-box { background: white; padding: 15px; border-radius: 15px; margin-bottom: 15px; box-shadow: 0 4px 10px rgba(0,0,0,0.05); border: 1px solid #e2e8f0; }
         #hariTxt { font-weight: bold; color: #1e3a8a; font-size: 18px; margin: 0; }
         #jamTxt { font-size: 24px; font-weight: bold; color: #f97316; margin: 5px 0; }
-        
-        /* Tombol Kontrol Musik */
         .music-control-box { display: flex; flex-wrap: wrap; justify-content: center; gap: 8px; margin-top: 10px; }
         .btn-music-ctrl { border: none; padding: 10px 12px; border-radius: 10px; font-size: 11px; font-weight: bold; cursor: pointer; color: white; transition: 0.2s; min-width: 80px; }
-        .btn-music-ctrl:active { transform: scale(0.95); }
         .bg-energic { background: #10b981; } 
         .bg-slow { background: #3b82f6; } 
         .bg-night { background: #6366f1; } 
         .bg-ultah { background: #db2777; } 
         .bg-pause { background: #ef4444; }
-        .bg-cek { background: #64748b; width: 90%; margin-top: 5px; }
+        .bg-announcement { background: #8b5cf6; width: 90%; margin-top: 5px; }
         #statusMusic { font-size: 11px; color: #64748b; font-style: italic; margin-top: 8px; display: block; }
-
-        /* Header & Antrean */
         .header { background: #1e3a8a; color: white; padding: 15px; border-radius: 15px; margin-bottom: 15px; }
         .status-antrean { font-size: 14px; background: #ffedd5; color: #9a3412; padding: 5px 10px; border-radius: 20px; display: inline-block; margin-top: 5px; font-weight: bold; }
-
-        /* Navigasi Tab */
         .nav-tabs { display: flex; gap: 10px; margin-bottom: 15px; }
-        .tab-btn { flex: 1; padding: 12px; border-radius: 12px; border: 1px solid #cbd5e1; font-weight: bold; cursor: pointer; background: white; color: #64748b; transition: 0.3s; }
+        .tab-btn { flex: 1; padding: 12px; border-radius: 12px; border: 1px solid #cbd5e1; font-weight: bold; cursor: pointer; background: white; color: #64748b; }
         .tab-btn.active { background: #1e3a8a; color: white; border-color: #1e3a8a; }
-
-        /* Kartu Input */
         .card { background: white; padding: 20px; border-radius: 15px; box-shadow: 0 4px 6px rgba(0,0,0,0.05); border: 1px solid #e2e8f0; margin-bottom: 20px; }
-        input { width: 90%; padding: 12px; margin: 8px 0; border: 1px solid #cbd5e1; border-radius: 10px; font-size: 16px; outline: none; transition: 0.3s; }
-        input:focus { border-color: #f97316; box-shadow: 0 0 0 2px rgba(249, 115, 22, 0.1); }
-        
-        /* Tombol Panggil */
-        .btn-call { color: white; border: none; padding: 15px; border-radius: 12px; width: 100%; font-weight: bold; font-size: 16px; cursor: pointer; margin-top: 10px; transition: 0.3s; }
-        .bg-orange { background: #f97316; }
-        .bg-grab { background: #00b14f; }
-        .bg-shopee { background: #ee4d2d; }
-        .bg-gojek { background: #00aa13; }
-        .bg-takeaway { background: #3b82f6; }
-
-        /* Grid Meja */
+        input { width: 90%; padding: 12px; margin: 8px 0; border: 1px solid #cbd5e1; border-radius: 10px; font-size: 16px; outline: none; }
+        .btn-call { color: white; border: none; padding: 15px; border-radius: 12px; width: 100%; font-weight: bold; font-size: 16px; cursor: pointer; margin-top: 10px; }
+        .bg-orange { background: #f97316; } .bg-grab { background: #00b14f; } .bg-shopee { background: #ee4d2d; } .bg-gojek { background: #00aa13; } .bg-takeaway { background: #3b82f6; }
         .grid-meja { display: grid; grid-template-columns: repeat(4, 1fr); gap: 10px; margin-top: 10px; }
-        .meja { background: white; border: 1px solid #cbd5e1; padding: 15px 5px; border-radius: 10px; font-weight: bold; color: #1e3a8a; cursor: pointer; transition: 0.2s; }
-        .meja:hover { background: #e0e7ff; }
-
-        .tab-content { display: none; }
-        .tab-content.active { display: block; }
+        .meja { background: white; border: 1px solid #cbd5e1; padding: 15px 5px; border-radius: 10px; font-weight: bold; color: #1e3a8a; cursor: pointer; }
+        .tab-content { display: none; } .tab-content.active { display: block; }
     </style>
 </head>
 <body onclick="unlockAudio()" onload="mulaiAplikasi()">
@@ -71,12 +48,12 @@
             <div class="music-control-box">
                 <button class="btn-music-ctrl bg-energic" onclick="manualPlayMusic('bgmSemangat', 'Piano Ceria', 0.2)">😊 CERIA</button>
                 <button class="btn-music-ctrl bg-slow" onclick="manualPlayMusic('bgmSlow', 'Piano Santai', 0.15)">☕ SANTAI</button>
-                <button class="btn-music-ctrl bg-night" onclick="manualPlayMusic('bgmNight', 'Murni Piano (Malam)', 0.08)">🌙 MALAM</button>
+                <button class="btn-music-ctrl bg-night" onclick="manualPlayMusic('bgmNight', 'Solo Piano', 0.08)">🌙 MALAM</button>
                 <button class="btn-music-ctrl bg-ultah" onclick="modeUltah()">🎂 ULTAH</button>
                 <button class="btn-music-ctrl bg-pause" onclick="manualPauseMusic()">⏸ STOP</button>
-                <button class="btn-music-ctrl bg-cek" onclick="bc('Cek Suara Sistem Berhasil. Musik murni piano aktif.', true)">⚙️ CEK SISTEM</button>
+                <button class="btn-music-ctrl bg-announcement" onclick="panggilImbauanManual()">📢 IMBAUAN</button>
             </div>
-            <span id="statusMusic">Musik: Off (Ketuk layar sekali untuk aktifkan)</span>
+            <span id="statusMusic">Musik: Off (Klik layar sekali)</span>
         </div>
 
         <div class="header">
@@ -94,22 +71,17 @@
                 <input type="text" id="nm" placeholder="Nama Pelanggan">
                 <input type="number" id="mj" placeholder="Nomor Meja">
                 <button class="btn-call bg-orange" onclick="tambahAntreanCustomer()">📢 PANGGIL PELANGGAN</button>
-                <div style="margin-top:15px;">
-                    <small style="font-weight:bold; color:#1e3a8a;">TEMPO SUARA</small><br>
-                    <input type="range" id="rate" min="0.5" max="1.2" step="0.05" value="0.85">
-                </div>
             </div>
             <div id="gt" class="grid-meja"></div>
         </div>
 
         <div id="ojol" class="tab-content">
             <div class="card">
-                <h3 style="margin-top:0; color:#1e3a8a;">Panggilan Driver & TA</h3>
-                <input type="text" id="oj" placeholder="Masukkan Nomor Antrean / Nama">
+                <input type="text" id="oj" placeholder="Nomor Antrean / Nama">
                 <button class="btn-call bg-grab" onclick="tambahOjol('Grab Food')">🛵 GRAB FOOD</button>
                 <button class="btn-call bg-shopee" onclick="tambahOjol('Shopee Food')">🛵 SHOPEE FOOD</button>
                 <button class="btn-call bg-gojek" onclick="tambahOjol('Go Food')">🛵 GO FOOD</button>
-                <button class="btn-call bg-takeaway" style="margin-top:20px;" onclick="tambahTA()">🥡 TAKE AWAY (Bungkus)</button>
+                <button class="btn-call bg-takeaway" style="margin-top:20px;" onclick="tambahTA()">🥡 TAKE AWAY</button>
             </div>
         </div>
     </div>
@@ -122,7 +94,6 @@
         let isAudioUnlocked = false;
         let defaultMusicVol = 0.15;
 
-        // Load Voice Bahasa Indonesia
         window.speechSynthesis.onvoiceschanged = () => { voices = window.speechSynthesis.getVoices(); };
 
         function unlockAudio() {
@@ -132,13 +103,25 @@
                 audio.play().then(() => { audio.pause(); audio.currentTime = 0; }).catch(e => {});
             });
             isAudioUnlocked = true;
-            console.log("Audio siap!");
         }
 
         function mulaiAplikasi() {
             mulaiJam();
-            // Pancing TTS agar aktif
             window.speechSynthesis.speak(new SpeechSynthesisUtterance(""));
+            // Pengumuman otomatis tiap 15 menit
+            setInterval(panggilImbauanManual, 900000); 
+        }
+
+        function panggilImbauanManual() {
+            const pesan = [
+                "Pemberitahuan kepada pelanggan yang baru datang dan ingin memesan, mohon untuk memastikan duduk sesuai dengan kapasitas meja. Terima kasih.",
+                "Pemberitahuan bagi pelanggan yang selesai makan, dimohon untuk selalu mengecek kembali barang bawaannya agar tidak tertinggal di area makan. Terima kasih.",
+                "Pemberitahuan bagi pelanggan yang baru datang diharapkan mengisi meja yang kosong terlebih dahulu. Terima kasih.",
+                "Pemberitahuan kepada seluruh pelanggan Mie Gacoan, dimohon untuk selalu menjaga barang bawaan anda dan pastikan kendaraan anda terkunci dengan aman.",
+                "Pemberitahuan demi kenyamanan bersama, mohon untuk tidak merokok di area makan dan buanglah sampah tisu pada tempatnya. Terima kasih."
+            ];
+            const randomPesan = pesan[Math.floor(Math.random() * pesan.length)];
+            bc(randomPesan, true);
         }
 
         function mulaiJam() {
@@ -149,7 +132,6 @@
             }, 1000);
         }
 
-        // FUNGSI MUSIK
         function manualPlayMusic(id, label, vol) {
             unlockAudio();
             stopAllMusicInternal();
@@ -157,7 +139,7 @@
             defaultMusicVol = vol;
             const m = document.getElementById(id);
             m.volume = vol;
-            m.play().catch(err => console.log("Perlu interaksi layar"));
+            m.play();
             document.getElementById('statusMusic').innerText = "Musik: " + label;
         }
 
@@ -180,12 +162,11 @@
             currentMusicId = 'bgmUltah';
             defaultMusicVol = 0.3;
             mUltah.volume = 0.3;
-            document.getElementById('statusMusic').innerText = "Musik: Perayaan Ulang Tahun 🎂";
+            document.getElementById('statusMusic').innerText = "Musik: Ultah 🎂";
             mUltah.play();
-            mUltah.onended = () => bc("Pemberitahuan, Kami segenap kru Mie Gacoan mengucapkan selamat ulang tahun untuk pelanggan yang sedang berbahagia. Semoga panjang umur dan sehat selalu!", true);
+            mUltah.onended = () => bc("Keluarga besar Mie Gacoan mengucapkan selamat ulang tahun!", true);
         }
 
-        // FUNGSI SUARA PANGGILAN (TTS)
         function bc(teks, tanpaJeda = false) {
             antreanSuara.push({ teks: teks, tanpaJeda: tanpaJeda });
             prosesAntrean();
@@ -194,8 +175,6 @@
         function prosesAntrean() {
             if (sedangBicara || antreanSuara.length === 0) return;
             sedangBicara = true;
-            
-            // Ducking (Musik pelan saat suara panggil muncul)
             if (currentMusicId) document.getElementById(currentMusicId).volume = 0.02;
             
             let item = antreanSuara.shift();
@@ -203,21 +182,19 @@
 
             const u = new SpeechSynthesisUtterance(item.teks);
             u.voice = voices.find(v => v.lang.includes('id')) || voices[0];
-            u.rate = document.getElementById('rate').value;
+            u.rate = 0.85;
             u.onend = () => { 
-                // Balikkan volume musik
                 if (currentMusicId) document.getElementById(currentMusicId).volume = defaultMusicVol;
                 setTimeout(() => { sedangBicara = false; prosesAntrean(); }, 1500);
             };
             window.speechSynthesis.speak(u);
         }
 
-        // FUNGSI INPUT
         function tambahAntreanCustomer() {
             let n = document.getElementById('nm').value;
             let m = document.getElementById('mj').value;
             if(n && m) {
-                bc("Panggilan untuk Kak " + n + ", meja nomor " + m + ". Pesanan anda sudah siap. Silahkan ambil di meja self service. Terima kasih.", true);
+                bc("Panggilan untuk Kak " + n + ", meja nomor " + m + ". Pesanan anda sudah siap.", true);
                 document.getElementById('nm').value = ""; document.getElementById('mj').value = "";
             }
         }
@@ -225,7 +202,7 @@
         function tambahOjol(brand) {
             let input = document.getElementById('oj').value;
             if(input) {
-                bc("Pesanan " + brand + " nomor antrean " + input + " sudah siap. Silahkan menuju meja take away.", true);
+                bc("Pesanan " + brand + " nomor antrean " + input + " sudah siap.", true);
                 document.getElementById('oj').value = "";
             }
         }
@@ -233,7 +210,7 @@
         function tambahTA() {
             let input = document.getElementById('oj').value;
             if(input) {
-                bc("Pesanan Take Away atas nama Kak " + input + " sudah siap. Silahkan ambil di meja take away.", true);
+                bc("Pesanan Take Away atas nama Kak " + input + " sudah siap.", true);
                 document.getElementById('oj').value = "";
             }
         }
@@ -245,7 +222,6 @@
             event.currentTarget.classList.add('active');
         }
 
-        // Render 100 Meja Otomatis
         const container = document.getElementById('gt');
         for (let i = 1; i <= 100; i++) {
             let b = document.createElement('button');
