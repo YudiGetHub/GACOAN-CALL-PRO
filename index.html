@@ -3,8 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Gacoan Call Pro</title>
-    <title>By Yudi</title>
+    <title>Gacoan Call Pro - Fix Ultah By Yudi</title>
     
     <style>
         body { font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif; background: #f0f4f8; margin: 0; padding: 0; color: #333; }
@@ -38,9 +37,10 @@
 </head>
 <body onclick="unlockAudio()" onload="mulaiAplikasi()">
 
-    <audio id="bgmSemangat" loop preload="auto"><source src="https://cdn.pixabay.com/audio/2022/10/30/audio_21424a1380.mp3" type="audio/mpeg"></audio>
+    <audio id="bgmSemangat" loop preload="auto"><source src="https://www.soundhelix.com/examples/mp3/SoundHelix-Song-13.mp3" type="audio/mpeg"></audio>
     <audio id="bgmSlow" loop preload="auto"><source src="https://www.soundhelix.com/examples/mp3/SoundHelix-Song-15.mp3" type="audio/mpeg"></audio>
     <audio id="bgmNight" loop preload="auto"><source src="https://cdn.pixabay.com/audio/2022/01/20/audio_d0c9ff336a.mp3" type="audio/mpeg"></audio>
+    
     <audio id="bgmUltah" preload="auto"><source src="https://cdn.pixabay.com/audio/2022/11/22/audio_13854999f3.mp3" type="audio/mpeg"></audio>
 
     <div class="main-app">
@@ -107,7 +107,6 @@
                 audio.play().then(() => { audio.pause(); audio.currentTime = 0; }).catch(e => {});
             });
             isAudioUnlocked = true;
-            // Sapaan otomatis saat klik pertama
             bc("Sistem Panggilan Suara siap digunakan, Diharapkan pelanggan dapat mendengar dengan baik. Terimakasih", true);
         }
 
@@ -166,11 +165,18 @@
             stopAllMusicInternal();
             const mUltah = document.getElementById('bgmUltah');
             currentMusicId = 'bgmUltah';
-            defaultMusicVol = 0.3;
-            mUltah.volume = 0.3;
+            defaultMusicVol = 0.4; 
+            mUltah.volume = 0.4;
             document.getElementById('statusMusic').innerText = "Musik: Ultah 🎂";
-            mUltah.play();
-            mUltah.onended = () => bc("Keluarga besar Mie Gacoan mengucapkan selamat ulang tahun!", true);
+            
+            mUltah.play().catch(e => {
+                alert("Gagal memutar lagu ultah. Pastikan koneksi internet aktif.");
+            });
+
+            // Setelah lagu selesai, baru suara robot bicara
+            mUltah.onended = () => {
+                bc("Keluarga besar Mie Gacoan mengucapkan selamat ulang tahun!", true);
+            };
         }
 
         function bc(teks, tanpaJeda = false) {
