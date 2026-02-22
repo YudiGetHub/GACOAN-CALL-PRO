@@ -12,8 +12,14 @@
         #hariTxt { font-weight: bold; color: #1e3a8a; font-size: 18px; margin: 0; }
         #jamTxt { font-size: 22px; font-weight: bold; color: #f97316; margin: 0; }
         .music-control-box { margin-top: 10px; display: flex; flex-wrap: wrap; align-items: center; justify-content: center; gap: 8px; }
-        .btn-music-ctrl { border: none; padding: 8px 12px; border-radius: 10px; font-size: 11px; font-weight: bold; cursor: pointer; color: white; }
-        .bg-pause { background: #ef4444; } .bg-slow { background: #3b82f6; } .bg-energic { background: #f97316; } .bg-night { background: #6366f1; } .bg-ultah { background: #db2777; } .bg-cek { background: #64748b; margin-top: 10px; width: 80%; }
+        .btn-music-ctrl { border: none; padding: 10px 15px; border-radius: 10px; font-size: 11px; font-weight: bold; cursor: pointer; color: white; transition: 0.3s; }
+        .btn-music-ctrl:active { transform: scale(0.95); }
+        .bg-pause { background: #ef4444; } 
+        .bg-slow { background: #3b82f6; } 
+        .bg-energic { background: #10b981; } /* Warna Hijau Ceria */
+        .bg-night { background: #6366f1; } 
+        .bg-ultah { background: #db2777; } 
+        .bg-cek { background: #64748b; margin-top: 10px; width: 85%; }
         #statusMusic { font-size: 11px; color: #64748b; font-style: italic; margin-top: 5px; display: block; }
         .header { background: #ffffff; color: #1e3a8a; padding: 15px; border-radius: 15px; margin-bottom: 10px; border: 2px solid #1e3a8a; }
         .nav-tabs { display: flex; gap: 10px; margin-bottom: 15px; }
@@ -22,8 +28,7 @@
         .card { background: white; padding: 15px; border-radius: 15px; box-shadow: 0 4px 6px rgba(0,0,0,0.05); border: 1px solid #e2e8f0; margin-bottom: 20px; }
         input { width: 85%; padding: 12px; margin: 5px; border: 1px solid #cbd5e1; border-radius: 10px; font-size: 16px; background: #fdfdfd; }
         .btn-call { color: white; border: none; padding: 15px; border-radius: 12px; width: 100%; font-weight: bold; margin-top: 10px; font-size: 16px; cursor: pointer; }
-        .btn-ann { color: white; border: none; padding: 12px 5px; border-radius: 10px; width: 100%; font-weight: bold; font-size: 11px; cursor: pointer; height: 60px; display: flex; align-items: center; justify-content: center; }
-        .bg-orange { background: #f97316; } .bg-red { background: #ef4444; } .bg-grab { background: #00b14f; } .bg-shopee { background: #ee4d2d; } .bg-gojek { background: #00aa13; } .bg-takeaway { background: #3b82f6; }
+        .bg-orange { background: #f97316; } .bg-grab { background: #00b14f; } .bg-shopee { background: #ee4d2d; } .bg-gojek { background: #00aa13; } .bg-takeaway { background: #3b82f6; }
         .grid-meja { display: grid; grid-template-columns: repeat(4, 1fr); gap: 8px; margin-top: 20px; }
         .meja { background: white; border: 1px solid #cbd5e1; padding: 15px 0; border-radius: 10px; font-weight: bold; color: #1e3a8a; cursor: pointer;}
         .tab-content { display: none; } .tab-content.active { display: block; }
@@ -32,9 +37,9 @@
 </head>
 <body onclick="unlockAudio()" onload="mulaiAplikasi()">
 
+    <audio id="bgmSemangat" loop preload="auto"><source src="https://www.soundhelix.com/examples/mp3/SoundHelix-Song-2.mp3" type="audio/mpeg"></audio>
     <audio id="bgmSlow" loop preload="auto"><source src="https://www.soundhelix.com/examples/mp3/SoundHelix-Song-8.mp3" type="audio/mpeg"></audio>
-    <audio id="bgmSemangat" loop preload="auto"><source src="https://www.soundhelix.com/examples/mp3/SoundHelix-Song-1.mp3" type="audio/mpeg"></audio>
-    <audio id="bgmNight" loop preload="auto"><source src="https://www.soundhelix.com/examples/mp3/SoundHelix-Song-3.mp3" type="audio/mpeg"></audio>
+    <audio id="bgmNight" loop preload="auto"><source src="https://www.soundhelix.com/examples/mp3/SoundHelix-Song-10.mp3" type="audio/mpeg"></audio>
     <audio id="bgmUltah" preload="auto"><source src="https://cdn.pixabay.com/audio/2022/11/22/audio_13854999f3.mp3" type="audio/mpeg"></audio>
 
     <div class="main-app" id="appBody">
@@ -42,14 +47,14 @@
             <p id="hariTxt"></p>
             <p id="jamTxt"></p>
             <div class="music-control-box">
-                <button class="btn-music-ctrl bg-energic" onclick="manualPlayMusic('bgmSemangat', 'Energik')">⚡ ENERGIK</button>
+                <button class="btn-music-ctrl bg-energic" onclick="manualPlayMusic('bgmSemangat', 'Ceria (Ramai)')">😊 CERIA</button>
                 <button class="btn-music-ctrl bg-slow" onclick="manualPlayMusic('bgmSlow', 'Santai')">🍃 SANTAI</button>
                 <button class="btn-music-ctrl bg-night" onclick="manualPlayMusic('bgmNight', 'Malam')">🌙 MALAM</button>
                 <button class="btn-music-ctrl bg-ultah" onclick="modeUltah()">🎂 ULTAH</button>
                 <button class="btn-music-ctrl bg-pause" onclick="manualPauseMusic()">⏸ PAUSE</button>
-                <button class="btn-music-ctrl bg-cek" onclick="bc('Cek Suara sistem Berhasil.', true)">⚙️ CEK SUARA</button>
+                <button class="btn-music-ctrl bg-cek" onclick="bc('Cek Suara sistem Berhasil. Musik Ceria Aktif.', true)">⚙️ CEK SISTEM</button>
             </div>
-            <span id="statusMusic">Musik: Off (Klik layar sekali jika musik tak bunyi)</span>
+            <span id="statusMusic">Musik: Off (Klik layar sekali untuk aktifkan)</span>
         </div>
 
         <div class="header">
@@ -95,18 +100,13 @@
 
         window.speechSynthesis.onvoiceschanged = () => { voices = window.speechSynthesis.getVoices(); };
 
-        // FUNGSI PENTING: Membuka blokir audio browser
         function unlockAudio() {
             if (isAudioUnlocked) return;
             ['bgmSlow', 'bgmSemangat', 'bgmNight', 'bgmUltah'].forEach(id => {
                 const audio = document.getElementById(id);
-                audio.play().then(() => {
-                    audio.pause();
-                    audio.currentTime = 0;
-                }).catch(e => console.log("Menunggu interaksi..."));
+                audio.play().then(() => { audio.pause(); audio.currentTime = 0; }).catch(e => {});
             });
             isAudioUnlocked = true;
-            console.log("Audio Unlocked!");
         }
 
         function mulaiAplikasi() {
@@ -123,13 +123,13 @@
         }
 
         function manualPlayMusic(id, label) {
-            unlockAudio(); // Pastikan sudah unlock
+            unlockAudio();
             stopAllMusicInternal();
             currentMusicId = id;
             const m = document.getElementById(id);
             m.volume = 0.2;
-            m.play().catch(err => alert("Klik layar dulu agar musik bisa berputar!"));
-            document.getElementById('statusMusic').innerText = "Musik: Mode " + label;
+            m.play().catch(err => console.log("Interaksi diperlukan"));
+            document.getElementById('statusMusic').innerText = "Musik: " + label;
         }
 
         function manualPauseMusic() {
@@ -150,9 +150,9 @@
             const mUltah = document.getElementById('bgmUltah');
             currentMusicId = 'bgmUltah';
             mUltah.volume = 0.4;
-            document.getElementById('statusMusic').innerText = "Musik: Merayakan Ulang Tahun... 🎂";
+            document.getElementById('statusMusic').innerText = "Musik: Ulang Tahun 🎂";
             mUltah.play();
-            mUltah.onended = () => bc("Selamat ulang tahun dari kami krew mie gacoan!", true);
+            mUltah.onended = () => bc("Pemberitahuan, Kami segenap kru Mie Gacoan mengucapkan selamat ulang tahun untuk pelanggan yang sedang berbahagia. Semoga panjang umur dan sehat selalu!", true);
         }
 
         function bc(teks, tanpaJeda = false) {
@@ -182,7 +182,7 @@
             let n = document.getElementById('nm').value;
             let m = document.getElementById('mj').value;
             if(n && m) {
-                bc("Panggilan untuk Kak " + n + " di meja " + m + ". Pesanan sudah siap.", true);
+                bc("Panggilan untuk Kak " + n + ", meja nomor " + m + ". Pesanan anda sudah siap. Silahkan ambil di meja self service. Terima kasih.", true);
                 document.getElementById('nm').value = ""; document.getElementById('mj').value = "";
             }
         }
@@ -190,7 +190,7 @@
         function tambahOjol(brand) {
             let input = document.getElementById('oj').value;
             if(input) {
-                bc("Pesanan " + brand + " nomor " + input + " sudah siap.", true);
+                bc("Pesanan " + brand + " nomor " + input + " sudah siap. Silahkan menuju meja take away.", true);
                 document.getElementById('oj').value = "";
             }
         }
@@ -198,7 +198,7 @@
         function tambahTA() {
             let input = document.getElementById('oj').value;
             if(input) {
-                bc("Take Away atas nama " + input + " sudah siap.", true);
+                bc("Pesanan Take Away atas nama Kak " + input + " sudah siap. Silahkan ambil di meja take away.", true);
                 document.getElementById('oj').value = "";
             }
         }
@@ -214,7 +214,7 @@
         for (let i = 1; i <= 100; i++) {
             let b = document.createElement('button');
             b.className = 'meja'; b.innerText = i;
-            b.onclick = () => bc("Meja " + i + " pesanan sudah siap.", true);
+            b.onclick = () => bc("Meja nomor " + i + ", pesanan sudah siap.", true);
             container.appendChild(b);
         }
     </script>
