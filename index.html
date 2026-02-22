@@ -8,18 +8,20 @@
     <style>
         body { font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif; background: #f0f4f8; margin: 0; padding: 0; color: #333; }
         
-        /* Tombol Start Overlay agar suara bisa otomatis */
+        /* Overlay untuk memicu suara otomatis */
         #overlay {
             position: fixed; top: 0; left: 0; width: 100%; height: 100%;
-            background: rgba(30, 58, 138, 0.95); z-index: 9999;
+            background: rgba(30, 58, 138, 0.98); z-index: 9999;
             display: flex; flex-direction: column; justify-content: center; align-items: center;
             color: white; text-align: center;
         }
         .btn-start-app {
-            padding: 20px 40px; font-size: 20px; font-weight: bold;
+            padding: 22px 45px; font-size: 22px; font-weight: bold;
             background: #f97316; color: white; border: none; border-radius: 50px;
-            cursor: pointer; box-shadow: 0 10px 20px rgba(0,0,0,0.2);
+            cursor: pointer; box-shadow: 0 10px 25px rgba(0,0,0,0.3);
+            transition: 0.3s;
         }
+        .btn-start-app:active { transform: scale(0.95); }
 
         .main-app { padding: 15px; max-width: 600px; margin: 0 auto; text-align: center; }
         .info-box { background: white; padding: 15px; border-radius: 15px; margin-bottom: 15px; box-shadow: 0 4px 10px rgba(0,0,0,0.05); border: 1px solid #e2e8f0; }
@@ -53,24 +55,24 @@
 
     <div id="overlay">
         <h2>GACOAN CALL PRO</h2>
-        <p>Klik tombol di bawah untuk mengaktifkan sistem suara</p>
+        <p>Aplikasi siap digunakan.<br>Ketuk tombol di bawah untuk memulai suara.</p>
         <br>
-        <button class="btn-start-app" onclick="aktifkanSistem()">MULAI SISTEM</button>
+        <button class="btn-start-app" onclick="aktifkanSistem()">AKTIFKAN SUARA</button>
     </div>
 
-    <audio id="bgmSemangat" loop preload="auto"><source src="https://upload.wikimedia.org/wikipedia/commons/5/5e/Guitare_Acoustique.mp3" type="audio/mpeg"></audio>
-    <audio id="bgmSlow" loop preload="auto"><source src="https://upload.wikimedia.org/wikipedia/commons/5/5f/F_Major_Piano_Arpeggio.mp3" type="audio/mpeg"></audio>
-    <audio id="bgmNight" loop preload="auto"><source src="https://upload.wikimedia.org/wikipedia/commons/3/33/Satie_-_Gymnop%C3%A9die_No._1.mp3" type="audio/mpeg"></audio>
-    <audio id="bgmUltah" preload="auto"><source src="https://upload.wikimedia.org/wikipedia/commons/b/b2/Happy_Birthday_to_You_on_organ.ogg" type="audio/ogg"></audio>
+    <audio id="bgmSemangat" loop preload="auto"><source src="https://www.soundhelix.com/examples/mp3/SoundHelix-Song-1.mp3" type="audio/mpeg"></audio>
+    <audio id="bgmSlow" loop preload="auto"><source src="https://www.soundhelix.com/examples/mp3/SoundHelix-Song-2.mp3" type="audio/mpeg"></audio>
+    <audio id="bgmNight" loop preload="auto"><source src="https://www.soundhelix.com/examples/mp3/SoundHelix-Song-3.mp3" type="audio/mpeg"></audio>
+    <audio id="bgmUltah" preload="auto"><source src="https://cdn.pixabay.com/audio/2022/05/27/audio_180873748b.mp3" type="audio/mpeg"></audio>
 
     <div class="main-app">
         <div class="info-box">
             <p id="hariTxt">Memuat...</p>
             <p id="jamTxt">00.00 WIB</p>
             <div class="music-control-box">
-                <button class="btn-music-ctrl bg-energic" onclick="manualPlayMusic('bgmSemangat', 'Gitar Akustik', 0.4)">😊 CERIA</button>
-                <button class="btn-music-ctrl bg-slow" onclick="manualPlayMusic('bgmSlow', 'Piano Arpeggio', 0.4)">☕ SANTAI</button>
-                <button class="btn-music-ctrl bg-night" onclick="manualPlayMusic('bgmNight', 'Piano Satie', 0.3)">🌙 MALAM</button>
+                <button class="btn-music-ctrl bg-energic" onclick="manualPlayMusic('bgmSemangat', 'Gitar Ceria', 0.4)">😊 CERIA</button>
+                <button class="btn-music-ctrl bg-slow" onclick="manualPlayMusic('bgmSlow', 'Piano Santai', 0.4)">☕ SANTAI</button>
+                <button class="btn-music-ctrl bg-night" onclick="manualPlayMusic('bgmNight', 'Piano Malam', 0.3)">🌙 MALAM</button>
                 <button class="btn-music-ctrl bg-ultah" onclick="modeUltah()">🎂 ULTAH</button>
                 <button class="btn-music-ctrl bg-pause" onclick="manualPauseMusic()">⏸ STOP</button>
                 <br>
@@ -120,15 +122,15 @@
         function aktifkanSistem() {
             document.getElementById('overlay').style.display = 'none';
             
-            // Unlocking all audio
+            // Pancing izin audio browser
             const audios = ['bgmSlow', 'bgmSemangat', 'bgmNight', 'bgmUltah'];
             audios.forEach(id => {
                 const a = document.getElementById(id);
-                a.play().then(() => { a.pause(); a.currentTime = 0; }).catch(e => {});
+                a.play().then(() => { a.pause(); a.currentTime = 0; }).catch(e => console.log(e));
             });
 
-            // Langsung panggil suara pembuka
-            bc("Sistem Panggilan Suara siap digunakan, Diharapkan pelanggan dapat mendengar dengan baik. Terimakasih", true);
+            // Langsung panggil suara pembuka otomatis setelah klik tombol overlay
+            bc("Sistem Panggilan Suara siap digunakan. Selamat bekerja Pak Yudi, Diharapkan pelanggan dapat mendengar dengan baik. Terimakasih", true);
         }
 
         function mulaiAplikasi() {
@@ -166,7 +168,7 @@
             defaultMusicVol = vol;
             const m = document.getElementById(id);
             m.volume = vol;
-            m.play().catch(e => alert("Gagal memutar musik. Refresh halaman."));
+            m.play().catch(e => console.log("Gagal putar: " + e));
             document.getElementById('statusMusic').innerText = "Musik: " + label;
         }
 
@@ -189,7 +191,7 @@
             currentMusicId = 'bgmUltah';
             defaultMusicVol = 0.6; 
             mUltah.volume = 0.6;
-            document.getElementById('statusMusic').innerText = "Musik: Happy Birthday";
+            document.getElementById('statusMusic').innerText = "Musik: Selamat Ulang Tahun 🎂";
             mUltah.play();
             mUltah.onended = () => {
                 bc("Keluarga besar Mie Gacoan mengucapkan selamat ulang tahun!", true);
