@@ -195,7 +195,7 @@
             let n = document.getElementById('nm').value;
             let m = document.getElementById('mj').value;
             if(n && m) {
-                bc("Panggilan untuk Kak " + n + ", meja nomor " + m + ". Pesanan anda sudah siap.", true);
+                bc("Panggilan untuk Kak " + n + ",dengan meja nomor " + m + ". Pesanan anda sudah siap. Harap Menuju Meja Self Service Sekarang juga, Terima Kasih.", true);
                 document.getElementById('nm').value = ""; document.getElementById('mj').value = "";
             }
         }
@@ -203,7 +203,7 @@
         function tambahOjol(brand) {
             let input = document.getElementById('oj').value;
             if(input) {
-                bc("Pesanan " + brand + " nomor antrean " + input + " sudah siap.", true);
+                bc("Pesanan " + brand + " dengan nomor antrean " + input + " sudah siap. Pesanan anda sudah siap. Harap Menuju Meja TakeAway Sekarang juga, Terima Kasih.", true);
                 document.getElementById('oj').value = "";
             }
         }
@@ -211,7 +211,7 @@
         function tambahTA() {
             let input = document.getElementById('oj').value;
             if(input) {
-                bc("Pesanan Take Away atas nama Kak " + input + " sudah siap.", true);
+                bc("Pesanan Take Away atas nama Kak " + input + " sudah siap. Pesanan anda sudah siap. Harap Menuju Meja TakeAway Sekarang juga, Terima Kasih.", true);
                 document.getElementById('oj').value = "";
             }
         }
@@ -227,7 +227,7 @@
         for (let i = 1; i <= 100; i++) {
             let b = document.createElement('button');
             b.className = 'meja'; b.innerText = i;
-            b.onclick = () => bc("Meja nomor " + i + ", pesanan sudah siap.", true);
+            b.onclick = () => bc("Panggilan Untuk Meja nomor " + i + ", Pesanan anda sudah siap. Harap Menuju Meja Self Service Sekarang juga, Terima Kasih.", true);
             container.appendChild(b);
         }
     </script>
