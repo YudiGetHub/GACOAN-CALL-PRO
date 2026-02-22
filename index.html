@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Gacoan Call Pro - Premium By Yudi (Customer Mood Version)</title>
+    <title>Gacoan Call Pro - Premium By Yudi (Piano Edition)</title>
     
     <style>
         body { font-family: sans-serif; background: #f4f7f9; margin: 0; padding: 0; overflow-x: hidden; color: #333; }
@@ -37,9 +37,9 @@
 </head>
 <body onclick="unlockAudio()" onload="mulaiAplikasi()">
 
-    <audio id="bgmSemangat" loop preload="auto"><source src="https://www.soundhelix.com/examples/mp3/SoundHelix-Song-1.mp3" type="audio/mpeg"></audio>
+    <audio id="bgmSemangat" loop preload="auto"><source src="https://www.soundhelix.com/examples/mp3/SoundHelix-Song-15.mp3" type="audio/mpeg"></audio>
     <audio id="bgmSlow" loop preload="auto"><source src="https://www.soundhelix.com/examples/mp3/SoundHelix-Song-8.mp3" type="audio/mpeg"></audio>
-    <audio id="bgmNight" loop preload="auto"><source src="https://www.soundhelix.com/examples/mp3/SoundHelix-Song-16.mp3" type="audio/mpeg"></audio>
+    <audio id="bgmNight" loop preload="auto"><source src="https://www.soundhelix.com/examples/mp3/SoundHelix-Song-13.mp3" type="audio/mpeg"></audio>
     <audio id="bgmUltah" preload="auto"><source src="https://cdn.pixabay.com/audio/2022/11/22/audio_13854999f3.mp3" type="audio/mpeg"></audio>
 
     <div class="main-app" id="appBody">
@@ -47,12 +47,12 @@
             <p id="hariTxt"></p>
             <p id="jamTxt"></p>
             <div class="music-control-box">
-                <button class="btn-music-ctrl bg-energic" onclick="manualPlayMusic('bgmSemangat', 'Ceria (Ramai)')">😊 CERIA</button>
-                <button class="btn-music-ctrl bg-slow" onclick="manualPlayMusic('bgmSlow', 'Hangat (Santai)')">☕ SANTAI</button>
-                <button class="btn-music-ctrl bg-night" onclick="manualPlayMusic('bgmNight', 'Rileks (Malam)')">🌙 MALAM</button>
+                <button class="btn-music-ctrl bg-energic" onclick="manualPlayMusic('bgmSemangat', 'Ceria (Piano)')">😊 CERIA</button>
+                <button class="btn-music-ctrl bg-slow" onclick="manualPlayMusic('bgmSlow', 'Santai (Soft)')">☕ SANTAI</button>
+                <button class="btn-music-ctrl bg-night" onclick="manualPlayMusic('bgmNight', 'Solo Piano (Malam)')">🌙 MALAM</button>
                 <button class="btn-music-ctrl bg-ultah" onclick="modeUltah()">🎂 ULTAH</button>
                 <button class="btn-music-ctrl bg-pause" onclick="manualPauseMusic()">⏸ PAUSE</button>
-                <button class="btn-music-ctrl bg-cek" onclick="bc('Cek Suara Berhasil. Musik Suasana Aktif.', true)">⚙️ CEK SISTEM</button>
+                <button class="btn-music-ctrl bg-cek" onclick="bc('Cek Suara Berhasil. Mode Piano Malam Aktif.', true)">⚙️ CEK SISTEM</button>
             </div>
             <span id="statusMusic">Musik: Off (Ketuk layar untuk memulai suara)</span>
         </div>
@@ -127,7 +127,7 @@
             stopAllMusicInternal();
             currentMusicId = id;
             const m = document.getElementById(id);
-            m.volume = 0.2;
+            m.volume = 0.25; // Sedikit lebih kencang karena piano solo cenderung lembut
             m.play().catch(err => console.log("Klik layar diperlukan"));
             document.getElementById('statusMusic').innerText = "Musik: " + label;
         }
@@ -172,7 +172,7 @@
             u.voice = voices.find(v => v.lang.includes('id')) || voices[0];
             u.rate = document.getElementById('rate').value;
             u.onend = () => { 
-                if (currentMusicId) document.getElementById(currentMusicId).volume = 0.2;
+                if (currentMusicId) document.getElementById(currentMusicId).volume = 0.25;
                 setTimeout(() => { sedangBicara = false; prosesAntrean(); }, 2000);
             };
             window.speechSynthesis.speak(u);
@@ -182,7 +182,7 @@
             let n = document.getElementById('nm').value;
             let m = document.getElementById('mj').value;
             if(n && m) {
-                bc("Panggilan untuk Kak " + n + ", meja nomor " + m + ". Pesanan sudah siap. Silahkan ambil di meja self service. Terima kasih.", true);
+                bc("Panggilan untuk Kak " + n + ", meja nomor " + m + ". Pesanan anda sudah siap. Silahkan ambil di meja self service. Terima kasih.", true);
                 document.getElementById('nm').value = ""; document.getElementById('mj').value = "";
             }
         }
