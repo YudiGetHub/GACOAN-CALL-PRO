@@ -115,10 +115,11 @@
         function panggilImbauanManual() {
             const pesan = [
                 "Pemberitahuan kepada pelanggan yang baru datang dan ingin memesan, mohon untuk memastikan duduk sesuai dengan kapasitas meja. Terima kasih.",
-                "Pemberitahuan bagi pelanggan yang selesai makan, dimohon untuk selalu mengecek kembali barang bawaannya agar tidak tertinggal di area makan. Terima kasih.",
+                "Pemberitahuan bagi pelanggan yang sudah selesai makan, diharapkan untuk selalu mengecek kembali barang bawaannya agar tidak tertinggal di area makan. Terima kasih.",
                 "Pemberitahuan bagi pelanggan yang baru datang diharapkan mengisi meja yang kosong terlebih dahulu. Terima kasih.",
-                "Pemberitahuan kepada seluruh pelanggan Mie Gacoan, dimohon untuk selalu menjaga barang bawaan anda dan pastikan kendaraan anda terkunci dengan aman.",
-                "Pemberitahuan demi kenyamanan bersama, mohon untuk tidak merokok di area makan dan buanglah sampah tisu pada tempatnya. Terima kasih."
+                "Pemberitahuan kepada seluruh pelanggan, dimohon untuk selalu menjaga barang bawaan anda dan pastikan kendaraan anda terkunci dengan aman.",
+                "Pemberitahuan demi kenyamanan bersama, dimohon untuk pelanggan yang ingin merokok pastikan tidak duduk berdampingan dengan anak anak. Terima kasih.",
+                "Pemberitahuan untuk Tisu dan Alat makan lainnya, sudah tersedia di Meja Self Service kami. Terima kasih."
             ];
             const randomPesan = pesan[Math.floor(Math.random() * pesan.length)];
             bc(randomPesan, true);
