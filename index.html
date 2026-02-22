@@ -8,10 +8,7 @@
     <style>
         /* CSS ASLI TETAP SAMA */
         body { font-family: sans-serif; background: #f4f7f9; margin: 0; padding: 0; overflow-x: hidden; color: #333; }
-        #welcomeScreen { position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: radial-gradient(circle, #ffffff, #e2e8f0); display: flex; flex-direction: column; align-items: center; justify-content: center; z-index: 9999; transition: transform 1s ease-in-out; }
-        .logo-gacoan { width: 180px; height: 180px; margin-bottom: 20px; border-radius: 50%; border: 5px solid #1e3a8a; box-shadow: 0 4px 15px rgba(0,0,0,0.1); background: white; object-fit: contain; }
-        .btn-mulai { padding: 15px 40px; background: #1e3a8a; color: white; border: none; border-radius: 30px; font-weight: bold; font-size: 18px; cursor: pointer; box-shadow: 0 5px 15px rgba(30,58,138,0.3); }
-        .main-app { padding: 15px; text-align: center; display: none; }
+        .main-app { padding: 15px; text-align: center; display: block; } /* DIUBAH: Langsung tampil */
         .info-waktu { background: white; padding: 10px; border-radius: 12px; margin-bottom: 10px; border: 1px solid #e2e8f0; }
         #hariTxt { font-weight: bold; color: #1e3a8a; font-size: 18px; margin: 0; }
         #jamTxt { font-size: 22px; font-weight: bold; color: #f97316; margin: 0; }
@@ -29,36 +26,17 @@
         .btn-ann { color: white; border: none; padding: 12px 5px; border-radius: 10px; width: 100%; font-weight: bold; font-size: 11px; cursor: pointer; height: 60px; display: flex; align-items: center; justify-content: center; }
         .bg-orange { background: #f97316; } .bg-red { background: #ef4444; } .bg-grab { background: #00b14f; } .bg-shopee { background: #ee4d2d; } .bg-gojek { background: #00aa13; } .bg-takeaway { background: #3b82f6; }
         .grid-meja { display: grid; grid-template-columns: repeat(4, 1fr); gap: 8px; margin-top: 20px; }
-        .meja { background: white; border: 1px solid #cbd5e1; padding: 15px 0; border-radius: 10px; font-weight: bold; color: #1e3a8a; }
+        .meja { background: white; border: 1px solid #cbd5e1; padding: 15px 0; border-radius: 10px; font-weight: bold; color: #1e3a8a; cursor: pointer;}
         .tab-content { display: none; } .tab-content.active { display: block; }
         .status-antrean { font-size: 12px; color: #10b981; font-weight: bold; margin-top: 5px; }
-        #tutorialOverlay { position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: rgba(0,0,0,0.7); display: none; z-index: 10000; color: white; padding: 20px; text-align: center; justify-content: center; align-items: center; flex-direction: column; }
-        .tuto-box { background: white; color: #333; padding: 20px; border-radius: 15px; width: 80%; max-width: 300px; }
-        .license-input { margin-bottom: 20px; width: 250px; text-align: center; border: 2px solid #1e3a8a; }
     </style>
 </head>
-<body onload="mulaiJam()">
+<body onload="mulaiAplikasi()">
 
     <audio id="bgmSlow" loop preload="auto"><source src="https://www.bensound.com/bensound-music/bensound-betterdays.mp3" type="audio/mpeg"></audio>
     <audio id="bgmSemangat" loop preload="auto"><source src="https://www.bensound.com/bensound-music/bensound-energy.mp3" type="audio/mpeg"></audio>
     <audio id="bgmNight" loop preload="auto"><source src="https://www.bensound.com/bensound-music/bensound-memories.mp3" type="audio/mpeg"></audio>
     <audio id="bgmUltah" preload="auto"><source src="https://cdn.pixabay.com/audio/2022/11/22/audio_13854999f3.mp3" type="audio/mpeg"></audio>
-
-    <div id="welcomeScreen">
-        <img src="https://i.ibb.co.com/ycrmLMHf/Logo-Mie-Gacoan-1.png" class="logo-gacoan">
-        <h1 style="color:#1e3a8a; margin-bottom:10px;">Gacoan Call Pro</h1>
-        <p id="msgLisensi" style="color:#64748b; margin-bottom: 20px;">Masukkan Kode Lisensi Untuk Memulai</p>
-        <input type="text" id="kodeLisensi" class="license-input" placeholder="KODE LISENSI">
-        <button class="btn-mulai" id="btnProses" onclick="jalankanCekLisensi()">BUKA LAYAR PANGGILAN</button>
-        <p style="color:#64748b; font-size:12px; margin-top:20px;">Versi Premium - By : Nur Wahyudi</p>
-    </div>
-
-    <div id="tutorialOverlay">
-        <div class="tuto-box">
-            <p id="tutoText">Selamat datang!</p>
-            <button onclick="nextTuto()" style="background:#1e3a8a; color:white; border:none; padding:10px 20px; border-radius:10px; font-weight:bold;">Lanjut</button>
-        </div>
-    </div>
 
     <div class="main-app" id="appBody">
         <div class="info-waktu">
@@ -70,9 +48,9 @@
                 <button class="btn-music-ctrl bg-night" onclick="manualPlayMusic('bgmNight', 'Malam')">🌙 MALAM</button>
                 <button class="btn-music-ctrl bg-ultah" onclick="modeUltah()">🎂 ULTAH</button>
                 <button class="btn-music-ctrl bg-pause" onclick="manualPauseMusic()">⏸ PAUSE</button>
-                <button class="btn-music-ctrl bg-cek" onclick="bc('ini adalah Suara sistem. Cek Suara sistem Berhasil.', true)">⚙️ CEK SUARA SISTEM</button>
+                <button class="btn-music-ctrl bg-cek" onclick="bc('Cek Suara sistem Berhasil.', true)">⚙️ CEK SUARA</button>
             </div>
-            <span id="statusMusic">Musik: Off (Pilih mode untuk memulai)</span>
+            <span id="statusMusic">Musik: Off</span>
         </div>
 
         <div class="header">
@@ -89,9 +67,9 @@
             <div class="card">
                 <input type="text" id="nm" placeholder="Nama Pelanggan">
                 <input type="text" id="mj" placeholder="No Meja">
-                <button class="btn-call bg-orange" onclick="tambahAntreanCustomer()">📢 PANGGIL (MULTI-CALL)</button>
+                <button class="btn-call bg-orange" onclick="tambahAntreanCustomer()">📢 PANGGIL</button>
                 <div style="margin-top:10px;">
-                    <small style="font-weight:bold; color:#1e3a8a;">PENGATURAN TEMPO SUARA</small><br>
+                    <small style="font-weight:bold; color:#1e3a8a;">TEMPO SUARA</small><br>
                     <input type="range" id="rate" style="width:90%" min="0.5" max="1.2" step="0.05" value="0.85">
                 </div>
             </div>
@@ -113,34 +91,7 @@
     </div>
 
     <script>
-        const URL_SCRIPT = "https://script.google.com/macros/s/AKfycbwM1qwSAfsjeFAcQGzda0WS-n-jLp5FTVn7q7POKc2_x6azvzHUHU3l9bQLaDCb5BOR/exec";
-
-        async function jalankanCekLisensi() {
-            const kode = document.getElementById('kodeLisensi').value;
-            if(!kode) return alert("Masukkan Kode Lisensi!");
-            document.getElementById('msgLisensi').innerText = "Memverifikasi...";
-            document.getElementById('btnProses').disabled = true;
-
-            try {
-                const response = await fetch(`${URL_SCRIPT}?action=check&kode=${kode}`);
-                const status = await response.text();
-
-                if (status.trim() === "Aktif") {
-                    startTutorial();
-                } else if(status.trim() === "Expired") {
-                    alert("MASA BERLAKU HABIS (EXPIRED)!");
-                    location.reload();
-                } else {
-                    alert("LISENSI TIDAK AKTIF ATAU KODE SALAH!");
-                    location.reload();
-                }
-            } catch (err) {
-                alert("Gagal koneksi ke server!");
-                document.getElementById('btnProses').disabled = false;
-            }
-        }
-
-        /* LOGIKA PANGGILAN & MUSIK ASLI (TIDAK BERUBAH) */
+        /* LOGIKA STANDALONE MURNI */
         const JEDA_MENIT = 25; 
         const JEDA_ANTREAN_DETIK = 3; 
         const daftarPengumumanOtomatis = [
@@ -154,12 +105,18 @@
 
         let antreanSuara = [];
         let sedangBicara = false;
-        let stepTuto = 0;
         let voices = [];
         let currentMusicId = null;
         let indexPengumuman = 0;
 
         window.speechSynthesis.onvoiceschanged = () => { voices = window.speechSynthesis.getVoices(); };
+
+        function mulaiAplikasi() {
+            mulaiJam();
+            jalankanPengumumanOtomatis();
+            // Pancing suara sistem agar aktif
+            window.speechSynthesis.speak(new SpeechSynthesisUtterance(""));
+        }
 
         function mulaiJam() {
             setInterval(() => {
@@ -199,7 +156,6 @@
             document.getElementById('statusMusic').innerText = "Musik: Merayakan Ulang Tahun... 🎂";
             mUltah.play();
             mUltah.onended = function() {
-                document.getElementById('statusMusic').innerText = "Musik Selesai. Mengucapkan Selamat...";
                 bc("Pemberitahuan. Kami segenap kru Mie Gacoan mengucapkan Selamat Ulang Tahun untuk pelanggan kami yang sedang berbahagia. Semoga panjang umur dan sehat selalu. Mari kita beri tepuk tangan yang meriah!", true);
             };
         }
@@ -216,7 +172,7 @@
             let item = antreanSuara.shift();
             document.getElementById('antreanInfo').innerText = "Antrean: " + antreanSuara.length + " Panggilan";
             const u = new SpeechSynthesisUtterance(item.teks);
-            u.voice = voices.find(v => v.lang.includes('id') && v.name.includes('Google')) || voices.find(v => v.lang.includes('id'));
+            u.voice = voices.find(v => v.lang.includes('id'));
             u.lang = 'id-ID';
             u.rate = document.getElementById('rate').value;
             u.onend = function() { 
@@ -256,23 +212,6 @@
             if(input) {
                 bc("Pesanan Take Away atas nama Kak " + input + ". Pesanan anda sudah siap. Silahkan menuju meja take away sekarang juga, terimakasih", true);
                 document.getElementById('oj').value = "";
-            }
-        }
-
-        function startTutorial() {
-            document.getElementById('welcomeScreen').style.transform = 'translateY(-100%)';
-            document.getElementById('appBody').style.display = 'block';
-            window.speechSynthesis.speak(new SpeechSynthesisUtterance(""));
-            setTimeout(() => { document.getElementById('tutorialOverlay').style.display = 'flex'; }, 1000);
-        }
-
-        function nextTuto() {
-            stepTuto++;
-            if(stepTuto === 1) document.getElementById('tutoText').innerText = "Mohon Tunggu aplikasi Mengeluarkan suara ketika sudah menutup pesan ini";
-            else {
-                document.getElementById('tutorialOverlay').style.display = 'none';
-                jalankanPengumumanOtomatis(); 
-                bc(" Suara Panggilan Sistem sudah Aktif. Diharapkan pelanggan bisa mendengarkan dengan bijak. Terimakasih", true);
             }
         }
 
