@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Gacoan Call Pro - Update By Yudi</title>
+    <title>Gacoan Call Pro - Acoustic Update By Yudi</title>
     
     <style>
         body { font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif; background: #f0f4f8; margin: 0; padding: 0; color: #333; }
@@ -37,26 +37,26 @@
 </head>
 <body onclick="unlockAudio()" onload="mulaiAplikasi()">
 
-    <audio id="bgmSemangat" loop preload="auto"><source src="https://raw.githubusercontent.com/rafael-m-lopes/Music-Streaming-App/master/music/Cante-Cante.mp3" type="audio/mpeg"></audio>
-    <audio id="bgmSlow" loop preload="auto"><source src="https://upload.wikimedia.org/wikipedia/commons/4/4c/Beethoven_-_Piano_Sonata_No._14_%28Moonlight%29_-_I._Adagio_sostenuto.ogg" type="audio/ogg"></audio>
-    <audio id="bgmNight" loop preload="auto"><source src="https://upload.wikimedia.org/wikipedia/commons/e/e6/Gnossienne_No._1.ogg" type="audio/ogg"></audio>
-    <audio id="bgmUltah" preload="auto"><source src="https://upload.wikimedia.org/wikipedia/commons/b/b2/Happy_Birthday_to_You_on_organ.ogg" type="audio/ogg"></audio>
+    <audio id="bgmSemangat" loop preload="auto"><source src="https://www.bensound.com/bensound-music/bensound-acousticbreeze.mp3" type="audio/mpeg"></audio>
+    <audio id="bgmSlow" loop preload="auto"><source src="https://www.bensound.com/bensound-music/bensound-love.mp3" type="audio/mpeg"></audio>
+    <audio id="bgmNight" loop preload="auto"><source src="https://www.bensound.com/bensound-music/bensound-tenderness.mp3" type="audio/mpeg"></audio>
+    <audio id="bgmUltah" preload="auto"><source src="https://cdn.pixabay.com/audio/2022/11/22/audio_13854999f3.mp3" type="audio/mpeg"></audio>
 
     <div class="main-app">
         <div class="info-box">
             <p id="hariTxt">Memuat...</p>
             <p id="jamTxt">00.00 WIB</p>
             <div class="music-control-box">
-                <button class="btn-music-ctrl bg-energic" onclick="manualPlayMusic('bgmSemangat', 'Musik Ceria', 0.2)">😊 CERIA</button>
-                <button class="btn-music-ctrl bg-slow" onclick="manualPlayMusic('bgmSlow', 'Musik Santai', 0.2)">☕ SANTAI</button>
-                <button class="btn-music-ctrl bg-night" onclick="manualPlayMusic('bgmNight', 'Musik Malam', 0.15)">🌙 MALAM</button>
+                <button class="btn-music-ctrl bg-energic" onclick="manualPlayMusic('bgmSemangat', 'Gitar Ceria', 0.25)">😊 CERIA</button>
+                <button class="btn-music-ctrl bg-slow" onclick="manualPlayMusic('bgmSlow', 'Piano Santai', 0.25)">☕ SANTAI</button>
+                <button class="btn-music-ctrl bg-night" onclick="manualPlayMusic('bgmNight', 'Gitar Malam', 0.2)">🌙 MALAM</button>
                 <button class="btn-music-ctrl bg-ultah" onclick="modeUltah()">🎂 ULTAH</button>
                 <button class="btn-music-ctrl bg-pause" onclick="manualPauseMusic()">⏸ STOP</button>
                 <br>
                 <button class="btn-music-ctrl bg-cek" onclick="bc('Ini adalah Suara Sistem. Cek Suara sistem Berhasil', true)">⚙️ CEK SUARA</button>
                 <button class="btn-music-ctrl bg-announcement" onclick="panggilImbauanManual()">📢 IMBAUAN</button>
             </div>
-            <span id="statusMusic">Musik: Off (Klik layar sekali)</span>
+            <span id="statusMusic">Status: Menunggu Klik Pertama Layar...</span>
         </div>
 
         <div class="header">
@@ -95,23 +95,36 @@
         let voices = [];
         let currentMusicId = null;
         let isAudioUnlocked = false;
-        let defaultMusicVol = 0.15;
+        let defaultMusicVol = 0.2;
 
-        window.speechSynthesis.onvoiceschanged = () => { voices = window.speechSynthesis.getVoices(); };
+        // Mendapatkan list suara sistem
+        function loadVoices() {
+            voices = window.speechSynthesis.getVoices();
+        }
+        window.speechSynthesis.onvoiceschanged = loadVoices;
 
+        // Fungsi utama untuk mengaktifkan suara (Hanya butuh 1x klik di mana saja)
         function unlockAudio() {
             if (isAudioUnlocked) return;
+            
             const audios = ['bgmSlow', 'bgmSemangat', 'bgmNight', 'bgmUltah'];
             audios.forEach(id => {
                 const audio = document.getElementById(id);
-                audio.play().then(() => { audio.pause(); audio.currentTime = 0; }).catch(e => console.log("Unlock audio failed"));
+                audio.play().then(() => { 
+                    audio.pause(); 
+                    audio.currentTime = 0; 
+                }).catch(e => console.log("Init audio: user interaction needed"));
             });
+
             isAudioUnlocked = true;
+            document.getElementById('statusMusic').innerText = "Sistem Aktif";
             bc("Sistem Panggilan Suara siap digunakan, Diharapkan pelanggan dapat mendengar dengan baik. Terimakasih", true);
         }
 
         function mulaiAplikasi() {
             mulaiJam();
+            loadVoices();
+            // Pancing TTS agar siap
             window.speechSynthesis.speak(new SpeechSynthesisUtterance(""));
             setInterval(panggilImbauanManual, 900000); 
         }
@@ -144,7 +157,9 @@
             defaultMusicVol = vol;
             const m = document.getElementById(id);
             m.volume = vol;
-            m.play().catch(e => console.log("Play failed"));
+            m.play().catch(e => {
+                alert("Klik layar terlebih dahulu untuk memutar musik.");
+            });
             document.getElementById('statusMusic').innerText = "Musik: " + label;
         }
 
@@ -167,10 +182,10 @@
             currentMusicId = 'bgmUltah';
             defaultMusicVol = 0.5; 
             mUltah.volume = 0.5;
-            document.getElementById('statusMusic').innerText = "Musik: Ultah 🎂";
+            document.getElementById('statusMusic').innerText = "Musik: Acoustic Birthday 🎂";
             
             mUltah.play().catch(e => {
-                console.log("Gagal memutar lagu ultah.");
+                console.log("Interaction needed for birthday music");
             });
 
             mUltah.onended = () => {
@@ -186,18 +201,31 @@
         function prosesAntrean() {
             if (sedangBicara || antreanSuara.length === 0) return;
             sedangBicara = true;
-            if (currentMusicId) document.getElementById(currentMusicId).volume = 0.02;
+            
+            // Kecilkan volume musik saat robot bicara
+            if (currentMusicId) document.getElementById(currentMusicId).volume = 0.03;
             
             let item = antreanSuara.shift();
             document.getElementById('antreanInfo').innerText = "Antrean: " + antreanSuara.length;
 
             const u = new SpeechSynthesisUtterance(item.teks);
+            // Pilih suara Bahasa Indonesia
             u.voice = voices.find(v => v.lang.includes('id')) || voices[0];
-            u.rate = 0.85;
+            u.rate = 0.88; // Kecepatan bicara pas
+            u.pitch = 1;
+            
             u.onend = () => { 
+                // Kembalikan volume musik semula
                 if (currentMusicId) document.getElementById(currentMusicId).volume = defaultMusicVol;
                 setTimeout(() => { sedangBicara = false; prosesAntrean(); }, 1500);
             };
+            
+            u.onerror = (e) => {
+                console.error("Speech error", e);
+                sedangBicara = false;
+                prosesAntrean();
+            };
+
             window.speechSynthesis.speak(u);
         }
 
@@ -205,7 +233,7 @@
             let n = document.getElementById('nm').value;
             let m = document.getElementById('mj').value;
             if(n && m) {
-                bc("Panggilan untuk Kak " + n + ",dengan meja nomor " + m + ". Pesanan anda sudah siap. Harap Menuju Meja Self Service Sekarang juga, Terima Kasih.", true);
+                bc("Panggilan untuk Kak " + n + ", dengan meja nomor " + m + ". Pesanan anda sudah siap. Harap Menuju Meja Self Service Sekarang juga, Terima Kasih.", true);
                 document.getElementById('nm').value = ""; document.getElementById('mj').value = "";
             }
         }
@@ -213,7 +241,7 @@
         function tambahOjol(brand) {
             let input = document.getElementById('oj').value;
             if(input) {
-                bc("Pesanan " + brand + " dengan nomor antrean " + input + " sudah siap. Pesanan anda sudah siap. Harap Menuju Meja TakeAway Sekarang juga, Terima Kasih.", true);
+                bc("Pesanan " + brand + " dengan nomor antrean " + input + " sudah siap. Harap Menuju Meja Take Away Sekarang juga, Terima Kasih.", true);
                 document.getElementById('oj').value = "";
             }
         }
@@ -221,7 +249,7 @@
         function tambahTA() {
             let input = document.getElementById('oj').value;
             if(input) {
-                bc("Pesanan Take Away atas nama Kak " + input + " sudah siap. Pesanan anda sudah siap. Harap Menuju Meja TakeAway Sekarang juga, Terima Kasih.", true);
+                bc("Pesanan Take Away atas nama Kak " + input + " sudah siap. Harap Menuju Meja Take Away Sekarang juga, Terima Kasih.", true);
                 document.getElementById('oj').value = "";
             }
         }
