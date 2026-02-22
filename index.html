@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Gacoan Call Pro - Premium By Yudi</title>
+    <title>Gacoan Call Pro - Premium By Yudi (Slow Version)</title>
     
     <style>
         body { font-family: sans-serif; background: #f4f7f9; margin: 0; padding: 0; overflow-x: hidden; color: #333; }
@@ -16,7 +16,7 @@
         .btn-music-ctrl:active { transform: scale(0.95); }
         .bg-pause { background: #ef4444; } 
         .bg-slow { background: #3b82f6; } 
-        .bg-energic { background: #10b981; } /* Warna Hijau Ceria */
+        .bg-energic { background: #10b981; } 
         .bg-night { background: #6366f1; } 
         .bg-ultah { background: #db2777; } 
         .bg-cek { background: #64748b; margin-top: 10px; width: 85%; }
@@ -37,9 +37,9 @@
 </head>
 <body onclick="unlockAudio()" onload="mulaiAplikasi()">
 
-    <audio id="bgmSemangat" loop preload="auto"><source src="https://www.soundhelix.com/examples/mp3/SoundHelix-Song-2.mp3" type="audio/mpeg"></audio>
+    <audio id="bgmSemangat" loop preload="auto"><source src="https://www.soundhelix.com/examples/mp3/SoundHelix-Song-15.mp3" type="audio/mpeg"></audio>
     <audio id="bgmSlow" loop preload="auto"><source src="https://www.soundhelix.com/examples/mp3/SoundHelix-Song-8.mp3" type="audio/mpeg"></audio>
-    <audio id="bgmNight" loop preload="auto"><source src="https://www.soundhelix.com/examples/mp3/SoundHelix-Song-10.mp3" type="audio/mpeg"></audio>
+    <audio id="bgmNight" loop preload="auto"><source src="https://www.soundhelix.com/examples/mp3/SoundHelix-Song-12.mp3" type="audio/mpeg"></audio>
     <audio id="bgmUltah" preload="auto"><source src="https://cdn.pixabay.com/audio/2022/11/22/audio_13854999f3.mp3" type="audio/mpeg"></audio>
 
     <div class="main-app" id="appBody">
@@ -47,14 +47,14 @@
             <p id="hariTxt"></p>
             <p id="jamTxt"></p>
             <div class="music-control-box">
-                <button class="btn-music-ctrl bg-energic" onclick="manualPlayMusic('bgmSemangat', 'Ceria (Ramai)')">😊 CERIA</button>
-                <button class="btn-music-ctrl bg-slow" onclick="manualPlayMusic('bgmSlow', 'Santai')">🍃 SANTAI</button>
-                <button class="btn-music-ctrl bg-night" onclick="manualPlayMusic('bgmNight', 'Malam')">🌙 MALAM</button>
+                <button class="btn-music-ctrl bg-energic" onclick="manualPlayMusic('bgmSemangat', 'Ceria Slow')">😊 CERIA SLOW</button>
+                <button class="btn-music-ctrl bg-slow" onclick="manualPlayMusic('bgmSlow', 'Acoustic Slow')">🍃 SANTAI</button>
+                <button class="btn-music-ctrl bg-night" onclick="manualPlayMusic('bgmNight', 'Deep Relax')">🌙 MALAM</button>
                 <button class="btn-music-ctrl bg-ultah" onclick="modeUltah()">🎂 ULTAH</button>
                 <button class="btn-music-ctrl bg-pause" onclick="manualPauseMusic()">⏸ PAUSE</button>
-                <button class="btn-music-ctrl bg-cek" onclick="bc('Cek Suara sistem Berhasil. Musik Ceria Aktif.', true)">⚙️ CEK SISTEM</button>
+                <button class="btn-music-ctrl bg-cek" onclick="bc('Cek Suara Berhasil. Musik Slow Aktif.', true)">⚙️ CEK SISTEM</button>
             </div>
-            <span id="statusMusic">Musik: Off (Klik layar sekali untuk aktifkan)</span>
+            <span id="statusMusic">Musik: Off (Ketuk layar sekali untuk memancing suara)</span>
         </div>
 
         <div class="header">
@@ -73,7 +73,7 @@
                 <input type="text" id="mj" placeholder="No Meja">
                 <button class="btn-call bg-orange" onclick="tambahAntreanCustomer()">📢 PANGGIL</button>
                 <div style="margin-top:10px;">
-                    <small style="font-weight:bold; color:#1e3a8a;">TEMPO SUARA</small><br>
+                    <small style="font-weight:bold; color:#1e3a8a;">TEMPO SUARA PANGGILAN</small><br>
                     <input type="range" id="rate" style="width:90%" min="0.5" max="1.2" step="0.05" value="0.85">
                 </div>
             </div>
@@ -107,6 +107,7 @@
                 audio.play().then(() => { audio.pause(); audio.currentTime = 0; }).catch(e => {});
             });
             isAudioUnlocked = true;
+            console.log("Audio Unlocked");
         }
 
         function mulaiAplikasi() {
@@ -128,7 +129,9 @@
             currentMusicId = id;
             const m = document.getElementById(id);
             m.volume = 0.2;
-            m.play().catch(err => console.log("Interaksi diperlukan"));
+            m.play().catch(err => {
+                console.log("Menunggu interaksi user...");
+            });
             document.getElementById('statusMusic').innerText = "Musik: " + label;
         }
 
@@ -163,15 +166,19 @@
         function prosesAntrean() {
             if (sedangBicara || antreanSuara.length === 0) return;
             sedangBicara = true;
+            
+            // DUCKING EFFECT: Musik pelan saat ada suara panggilan
             if (currentMusicId) document.getElementById(currentMusicId).volume = 0.05;
             
             let item = antreanSuara.shift();
             document.getElementById('antreanInfo').innerText = "Antrean: " + antreanSuara.length;
 
             const u = new SpeechSynthesisUtterance(item.teks);
+            // Pilih suara bahasa Indonesia
             u.voice = voices.find(v => v.lang.includes('id')) || voices[0];
             u.rate = document.getElementById('rate').value;
             u.onend = () => { 
+                // Balikkan volume musik setelah bicara selesai
                 if (currentMusicId) document.getElementById(currentMusicId).volume = 0.2;
                 setTimeout(() => { sedangBicara = false; prosesAntrean(); }, 2000);
             };
