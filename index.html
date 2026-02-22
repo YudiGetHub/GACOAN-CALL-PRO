@@ -3,12 +3,11 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Gacoan Call Pro - Acoustic Update By Yudi</title>
+    <title>Gacoan Call Pro - YouTube Edition By Yudi</title>
     
     <style>
         body { font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif; background: #f0f4f8; margin: 0; padding: 0; color: #333; }
         
-        /* Overlay untuk memicu suara otomatis */
         #overlay {
             position: fixed; top: 0; left: 0; width: 100%; height: 100%;
             background: rgba(30, 58, 138, 0.98); z-index: 9999;
@@ -49,6 +48,9 @@
         .grid-meja { display: grid; grid-template-columns: repeat(4, 1fr); gap: 10px; margin-top: 10px; }
         .meja { background: white; border: 1px solid #cbd5e1; padding: 15px 5px; border-radius: 10px; font-weight: bold; color: #1e3a8a; cursor: pointer; }
         .tab-content { display: none; } .tab-content.active { display: block; }
+        
+        /* Sembunyikan Player YouTube */
+        #ytPlayer { position: absolute; top: -9999px; left: -9999px; }
     </style>
 </head>
 <body onload="mulaiAplikasi()">
@@ -60,23 +62,20 @@
         <button class="btn-start-app" onclick="aktifkanSistem()">AKTIFKAN SUARA</button>
     </div>
 
-    <audio id="bgmSemangat" loop preload="auto"><source src="https://www.soundhelix.com/examples/mp3/SoundHelix-Song-1.mp3" type="audio/mpeg"></audio>
-    <audio id="bgmSlow" loop preload="auto"><source src="https://www.soundhelix.com/examples/mp3/SoundHelix-Song-2.mp3" type="audio/mpeg"></audio>
-    <audio id="bgmNight" loop preload="auto"><source src="https://www.soundhelix.com/examples/mp3/SoundHelix-Song-3.mp3" type="audio/mpeg"></audio>
-    <audio id="bgmUltah" preload="auto"><source src="https://cdn.pixabay.com/audio/2022/05/27/audio_180873748b.mp3" type="audio/mpeg"></audio>
+    <div id="ytPlayer"></div>
 
     <div class="main-app">
         <div class="info-box">
             <p id="hariTxt">Memuat...</p>
             <p id="jamTxt">00.00 WIB</p>
             <div class="music-control-box">
-                <button class="btn-music-ctrl bg-energic" onclick="manualPlayMusic('bgmSemangat', 'Gitar Ceria', 0.4)">😊 CERIA</button>
-                <button class="btn-music-ctrl bg-slow" onclick="manualPlayMusic('bgmSlow', 'Piano Santai', 0.4)">☕ SANTAI</button>
-                <button class="btn-music-ctrl bg-night" onclick="manualPlayMusic('bgmNight', 'Piano Malam', 0.3)">🌙 MALAM</button>
-                <button class="btn-music-ctrl bg-ultah" onclick="modeUltah()">🎂 ULTAH</button>
-                <button class="btn-music-ctrl bg-pause" onclick="manualPauseMusic()">⏸ STOP</button>
+                <button class="btn-music-ctrl bg-energic" onclick="playYT('JZFk21OGU2Y', 'Gitar Ceria (YouTube)')">😊 CERIA</button>
+                <button class="btn-music-ctrl bg-slow" onclick="playYT('sAcj8me7wGI', 'Piano Santai (YouTube)')">☕ SANTAI</button>
+                <button class="btn-music-ctrl bg-night" onclick="playYT('Kh0tq5VTQd4', 'Piano Malam (YouTube)')">🌙 MALAM</button>
+                <button class="btn-music-ctrl bg-ultah" onclick="modeUltahYT('C7xYjdvxeas')">🎂 ULTAH</button>
+                <button class="btn-music-ctrl bg-pause" onclick="stopYT()">⏸ STOP</button>
                 <br>
-                <button class="btn-music-ctrl bg-cek" onclick="bc('Ini adalah Suara Sistem. Cek Suara sistem Berhasil', true)">⚙️ CEK SUARA</button>
+                <button class="btn-music-ctrl bg-cek" onclick="bc('Sistem musik YouTube siap. Cek Suara Berhasil Pak Yudi.', true)">⚙️ CEK SUARA</button>
                 <button class="btn-music-ctrl bg-announcement" onclick="panggilImbauanManual()">📢 IMBAUAN</button>
             </div>
             <span id="statusMusic">Musik: Off</span>
@@ -112,25 +111,50 @@
         </div>
     </div>
 
+    <script src="https://www.youtube.com/iframe_api"></script>
     <script>
         let antreanSuara = [];
         let sedangBicara = false;
         let voices = [];
-        let currentMusicId = null;
-        let defaultMusicVol = 0.2;
+        let player;
+        let ytReady = false;
+        let defaultVol = 40;
+
+        // Inisialisasi Player YouTube
+        function onYouTubeIframeAPIReady() {
+            player = new YT.Player('ytPlayer', {
+                height: '0', width: '0',
+                videoId: 'JZFk21OGU2Y', // Default
+                playerVars: { 'autoplay': 0, 'controls': 0, 'disablekb': 1, 'loop': 1 },
+                events: { 'onReady': () => { ytReady = true; } }
+            });
+        }
 
         function aktifkanSistem() {
             document.getElementById('overlay').style.display = 'none';
-            
-            // Pancing izin audio browser
-            const audios = ['bgmSlow', 'bgmSemangat', 'bgmNight', 'bgmUltah'];
-            audios.forEach(id => {
-                const a = document.getElementById(id);
-                a.play().then(() => { a.pause(); a.currentTime = 0; }).catch(e => console.log(e));
-            });
+            bc("Sistem Panggilan Suara dan Musik YouTube siap digunakan. Selamat bekerja Pak Yudi. Terimakasih", true);
+        }
 
-            // Langsung panggil suara pembuka otomatis setelah klik tombol overlay
-            bc("Sistem Panggilan Suara siap digunakan. Selamat bekerja Pak Yudi, Diharapkan pelanggan dapat mendengar dengan baik. Terimakasih", true);
+        function playYT(id, label) {
+            if (!ytReady) return;
+            player.loadVideoById(id);
+            player.setVolume(defaultVol);
+            player.playVideo();
+            document.getElementById('statusMusic').innerText = "Musik: " + label;
+        }
+
+        function stopYT() {
+            if (ytReady) {
+                player.stopVideo();
+                document.getElementById('statusMusic').innerText = "Musik Dimatikan";
+            }
+        }
+
+        function modeUltahYT(id) {
+            playYT(id, "Selamat Ulang Tahun 🎂");
+            setTimeout(() => {
+                bc("Keluarga besar Mie Gacoan mengucapkan selamat ulang tahun untuk Kakak yang berulang tahun hari ini! Semoga panjang umur dan sehat selalu!", true);
+            }, 3000);
         }
 
         function mulaiAplikasi() {
@@ -143,12 +167,8 @@
 
         function panggilImbauanManual() {
             const pesan = [
-                "Pemberitahuan kepada pelanggan yang baru datang dan ingin memesan, mohon untuk memastikan duduk sesuai dengan kapasitas meja. Terima kasih.",
-                "Pemberitahuan bagi pelanggan yang sudah selesai makan, diharapkan untuk selalu mengecek kembali barang bawaannya agar tidak tertinggal di area makan. Terima kasih.",
-                "Pemberitahuan bagi pelanggan yang baru datang diharapkan mengisi meja yang kosong terlebih dahulu. Terima kasih.",
-                "Pemberitahuan kepada seluruh pelanggan, dimohon untuk selalu menjaga barang bawaan anda dan pastikan kendaraan anda terkunci dengan aman. Terima kasih",
-                "Pemberitahuan demi kenyamanan bersama, dimohon untuk pelanggan yang ingin merokok untuk tidak di area bebas tanpa asap rokok dan tidak duduk berdampingan dengan anak kecil. Terima kasih.",
-                "Pemberitahuan untuk Tisu dan Alat makan lainnya, sudah tersedia di Meja Self Service kami. Terima kasih."
+                "Pemberitahuan kepada pelanggan yang baru datang, mohon duduk sesuai kapasitas meja. Terima kasih.",
+                "Pemberitahuan bagi pelanggan, dimohon mengecek kembali barang bawaan anda sebelum meninggalkan meja. Terima kasih."
             ];
             const randomPesan = pesan[Math.floor(Math.random() * pesan.length)];
             bc(randomPesan, true);
@@ -162,42 +182,6 @@
             }, 1000);
         }
 
-        function manualPlayMusic(id, label, vol) {
-            stopAllMusicInternal();
-            currentMusicId = id;
-            defaultMusicVol = vol;
-            const m = document.getElementById(id);
-            m.volume = vol;
-            m.play().catch(e => console.log("Gagal putar: " + e));
-            document.getElementById('statusMusic').innerText = "Musik: " + label;
-        }
-
-        function manualPauseMusic() {
-            stopAllMusicInternal();
-            document.getElementById('statusMusic').innerText = "Musik Dimatikan";
-        }
-
-        function stopAllMusicInternal() {
-            ['bgmSlow', 'bgmSemangat', 'bgmNight', 'bgmUltah'].forEach(id => {
-                const m = document.getElementById(id);
-                m.pause(); 
-            });
-            currentMusicId = null;
-        }
-
-        function modeUltah() {
-            stopAllMusicInternal();
-            const mUltah = document.getElementById('bgmUltah');
-            currentMusicId = 'bgmUltah';
-            defaultMusicVol = 0.6; 
-            mUltah.volume = 0.6;
-            document.getElementById('statusMusic').innerText = "Musik: Selamat Ulang Tahun 🎂";
-            mUltah.play();
-            mUltah.onended = () => {
-                bc("Keluarga besar Mie Gacoan mengucapkan selamat ulang tahun!", true);
-            };
-        }
-
         function bc(teks, tanpaJeda = false) {
             antreanSuara.push({ teks: teks, tanpaJeda: tanpaJeda });
             prosesAntrean();
@@ -206,7 +190,9 @@
         function prosesAntrean() {
             if (sedangBicara || antreanSuara.length === 0) return;
             sedangBicara = true;
-            if (currentMusicId) document.getElementById(currentMusicId).volume = 0.05;
+
+            // Ducking: Turunkan volume YouTube saat bicara
+            if (ytReady && player.getPlayerState() === 1) player.setVolume(5);
             
             let item = antreanSuara.shift();
             document.getElementById('antreanInfo').innerText = "Antrean: " + antreanSuara.length;
@@ -215,7 +201,8 @@
             u.voice = voices.find(v => v.lang.includes('id')) || voices[0];
             u.rate = 0.85;
             u.onend = () => { 
-                if (currentMusicId) document.getElementById(currentMusicId).volume = defaultMusicVol;
+                // Restore volume YouTube
+                if (ytReady && player.getPlayerState() === 1) player.setVolume(defaultVol);
                 setTimeout(() => { sedangBicara = false; prosesAntrean(); }, 1500);
             };
             window.speechSynthesis.speak(u);
