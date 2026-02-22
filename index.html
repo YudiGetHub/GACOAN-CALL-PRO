@@ -3,7 +3,8 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Gacoan Call Pro - Update Pengumuman By Yudi</title>
+    <title>Gacoan Call Pro</title>
+    <title>By Yudi</title>
     
     <style>
         body { font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif; background: #f0f4f8; margin: 0; padding: 0; color: #333; }
@@ -18,7 +19,8 @@
         .bg-night { background: #6366f1; } 
         .bg-ultah { background: #db2777; } 
         .bg-pause { background: #ef4444; }
-        .bg-announcement { background: #8b5cf6; width: 90%; margin-top: 5px; }
+        .bg-cek { background: #64748b; width: 45%; margin-top: 5px; }
+        .bg-announcement { background: #8b5cf6; width: 45%; margin-top: 5px; }
         #statusMusic { font-size: 11px; color: #64748b; font-style: italic; margin-top: 8px; display: block; }
         .header { background: #1e3a8a; color: white; padding: 15px; border-radius: 15px; margin-bottom: 15px; }
         .status-antrean { font-size: 14px; background: #ffedd5; color: #9a3412; padding: 5px 10px; border-radius: 20px; display: inline-block; margin-top: 5px; font-weight: bold; }
@@ -51,6 +53,8 @@
                 <button class="btn-music-ctrl bg-night" onclick="manualPlayMusic('bgmNight', 'Solo Piano', 0.08)">🌙 MALAM</button>
                 <button class="btn-music-ctrl bg-ultah" onclick="modeUltah()">🎂 ULTAH</button>
                 <button class="btn-music-ctrl bg-pause" onclick="manualPauseMusic()">⏸ STOP</button>
+                <br>
+                <button class="btn-music-ctrl bg-cek" onclick="bc('Cek suara berhasil. Sistem panggil siap digunakan, Pak Yudi.', true)">⚙️ CEK SUARA</button>
                 <button class="btn-music-ctrl bg-announcement" onclick="panggilImbauanManual()">📢 IMBAUAN</button>
             </div>
             <span id="statusMusic">Musik: Off (Klik layar sekali)</span>
@@ -103,12 +107,13 @@
                 audio.play().then(() => { audio.pause(); audio.currentTime = 0; }).catch(e => {});
             });
             isAudioUnlocked = true;
+            // Sapaan otomatis saat klik pertama
+            bc("Sistem Panggilan Suara siap digunakan, Diharapkan pelanggan dapat mendengar dengan baik. Terimakasih", true);
         }
 
         function mulaiAplikasi() {
             mulaiJam();
             window.speechSynthesis.speak(new SpeechSynthesisUtterance(""));
-            // Pengumuman otomatis tiap 15 menit
             setInterval(panggilImbauanManual, 900000); 
         }
 
@@ -117,8 +122,8 @@
                 "Pemberitahuan kepada pelanggan yang baru datang dan ingin memesan, mohon untuk memastikan duduk sesuai dengan kapasitas meja. Terima kasih.",
                 "Pemberitahuan bagi pelanggan yang sudah selesai makan, diharapkan untuk selalu mengecek kembali barang bawaannya agar tidak tertinggal di area makan. Terima kasih.",
                 "Pemberitahuan bagi pelanggan yang baru datang diharapkan mengisi meja yang kosong terlebih dahulu. Terima kasih.",
-                "Pemberitahuan kepada seluruh pelanggan, dimohon untuk selalu menjaga barang bawaan anda dan pastikan kendaraan anda terkunci dengan aman.",
-                "Pemberitahuan demi kenyamanan bersama, dimohon untuk pelanggan yang ingin merokok pastikan tidak duduk berdampingan dengan anak anak. Terima kasih.",
+                "Pemberitahuan kepada seluruh pelanggan, dimohon untuk selalu menjaga barang bawaan anda dan pastikan kendaraan anda terkunci dengan aman. Terima kasih",
+                "Pemberitahuan demi kenyamanan bersama, dimohon untuk pelanggan yang ingin merokok untuk tidak di area bebas tanpa asap rokok dan tidak duduk berdampingan dengan anak kecil. Terima kasih.",
                 "Pemberitahuan untuk Tisu dan Alat makan lainnya, sudah tersedia di Meja Self Service kami. Terima kasih."
             ];
             const randomPesan = pesan[Math.floor(Math.random() * pesan.length)];
